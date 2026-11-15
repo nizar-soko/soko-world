@@ -456,7 +456,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .sito button:active{transform:translateY(2px)}.sito button.off{opacity:.3}.sito button.good{background:var(--sk-green)}.sito button.bad{background:#ff6b7d;animation:sitsh .3s}
 @keyframes sitin{from{transform:translateY(10px) scale(.96);opacity:0}}@keyframes sitsh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .sitg .gtime{visibility:hidden}
-.alpha #test{display:none!important}
+.alpha #test,.noadm #test{display:none!important}
 #alpha{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:radial-gradient(120% 80% at 50% 0%,#3b0f18,#170408 70%);padding:24px}
 #alpha.on{display:flex}#alpha .alw{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;animation:situp .35s both}
 #alpha .alb{font-weight:900;font-size:11px;letter-spacing:.22em;color:var(--sk-yellow)}
@@ -1575,7 +1575,7 @@ function alphaStart(){start();alphaShow('market')}
 function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
  $('#done').classList.remove('on');$('#done').innerHTML='';L_off();$('#hover').style.opacity='';$('#prog').classList.add('hide');drawProg();$('#bottom').classList.add('hide');
  app.classList.remove('l1','l2','l3');side(0);applyLang(false)}
-S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
+S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
 const QP={age:qs.get('age'),vibe:qs.get('vibe'),look:qs.get('look'),play:qs.get('play')==='1'};
 let rzT;addEventListener('resize',()=>{fxSize();clearTimeout(rzT);rzT=setTimeout(paintBg,150)});fxSize();drawMute();theme();drawTest();start();
 if(QP.play){S.age=QP.age==='o'?'o':'u';S.ans=[{k:'c1',v:S.age==='u'?'a':'b'},{k:'c2',v:QP.vibe==='surprise'?'b':'a'},{k:'c3',v:QP.look==='someone'?'b':'a'}];S.phase='game';stack.innerHTML='';setTimeout(startGame,60)}
