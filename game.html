@@ -1606,14 +1606,14 @@ function uslMount(card){clearInterval(S.uslT);if(!UNK())return;const u=USLT[S.la
  tr.onclick=e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();i=bs.indexOf(b);clearInterval(S.uslT);S.uslLock=true;el.classList.add('lock');show();buzz(6)}}
 
 /* ---------- Reward disclaimer + WhatsApp signup ---------- */
-const SOKO_WA='15557461669';// Soko WhatsApp agent number, digits only with country code (e.g. 3519xxxxxxxx). Empty = falls back to soko.fyi/get
+const SOKO_WAM={lis:'351934554251',cdmx:'15558572400',br:'5521990252594'};const SOKO_WA=()=>SOKO_WAM[S.m]||'';// Soko WhatsApp agent number, digits only with country code (e.g. 3519xxxxxxxx). Empty = falls back to soko.fyi/get
 const QM={en:{h:'Quick thing',a:'Your reward is tied to your phone number after signup. One reward per person (for now 😉).',b:'To lock it in, tap below. Soko’s WhatsApp agent signs you up in one step.',c:'Open Soko on WhatsApp',m:'Hi Soko! I want my reward: {g}'},
  pt:{h:'Só uma coisa',a:'A recompensa fica associada ao teu número depois do registo. Uma por pessoa (por agora 😉).',b:'Para a garantir, toca abaixo. O agente da Soko no WhatsApp regista-te num só passo.',c:'Abrir a Soko no WhatsApp',m:'Olá Soko! Quero a minha recompensa: {g}'},
  br:{h:'Só um detalhe',a:'A recompensa fica vinculada ao seu número depois do cadastro. Uma por pessoa (por enquanto 😉).',b:'Pra garantir, toca aqui embaixo. O agente da Soko no WhatsApp faz seu cadastro em 1 passo.',c:'Abrir a Soko no WhatsApp',m:'Oi Soko! Quero minha recompensa: {g}'},
  es:{h:'Un detalle',a:'Tu recompensa queda ligada a tu número al registrarte. Una por persona (por ahora 😉).',b:'Para asegurarla, toca abajo. El agente de Soko en WhatsApp te registra en un solo paso.',c:'Abrir Soko en WhatsApp',m:'¡Hola Soko! Quiero mi recompensa: {g}'}};
-window.__t={showReveal:q=>showReveal(q),recoB:()=>recoB(),vname:x=>vname(x),orbLines:()=>orbLines()};
+window.__t={showReveal:q=>showReveal(q),recoB:()=>recoB(),vname:x=>vname(x),orbLines:()=>orbLines(),waOpen:()=>waOpen()};
 function waOpen(){const q=QM[S.lang]||QM.en,msg=q.m.replace('{g}',giftLabel()+' · '+vname(S.plan||{})+' · '+(G.id||''));
- const u=SOKO_WA?'https://wa.me/'+SOKO_WA+'?text='+encodeURIComponent(msg):'https://soko.fyi/get/?utm_source=soko-world&utm_medium=qr&utm_campaign='+encodeURIComponent(S.m);
+ const w=SOKO_WA(),u=w?'https://wa.me/'+w+'?text='+encodeURIComponent(msg):'https://soko.fyi/get/?utm_source=soko-world&utm_medium=qr&utm_campaign='+encodeURIComponent(S.m);
  try{window.open(u,'_blank')||(location.href=u)}catch(e){location.href=u}}
 function qmShow(){let o=$('#qmpop');if(!o){o=document.createElement('div');o.id='qmpop';app.appendChild(o)}const q=QM[S.lang]||QM.en;
  o.innerHTML=`<div class="qmc"><button class="qmx" aria-label="close">×</button><b>${q.h}</b><p>${q.a}</p><p>${q.b}</p><button class="cta" id="qmwa">💬 ${q.c}</button></div>`;o.classList.add('on');
