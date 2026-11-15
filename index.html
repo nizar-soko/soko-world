@@ -1,0 +1,5 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Soko World</title>
+<script>addEventListener('hashchange',function(){location.reload()});(function(){var h=((location.hash||'').slice(1)||'ALPHA').toUpperCase(),M={L:'lis',C:'cdmx',B:'br'},SO=['waiter','tasting','museum','play','karaoke','gig','club','barcrush','flea','sunset','blinddate','groupchat'],KO=['restore','fog','pour','seat','beat','echo','ride','crowd','sun','signal'],m;
+if((m=h.match(/^([SK])(\d\d)([LCB])(PT|ES|BR|EN)$/))){var g=(m[1]==='S'?SO:KO)[+m[2]-1];if(g){location.replace('game.html?m='+M[m[3]]+'&lang='+m[4].toLowerCase()+'&set='+(m[1]==='S'?'sit':'classic')+'&game='+g);return}}
+if(h==='ALPHA'){location.replace('game.html?alpha=1');return}
+if((m=h.match(/^([LCB])(\d\d)(PT|ES|BR|EN)$/))){location.replace('game.html?m='+M[m[1]]+'&lang='+m[3].toLowerCase()+'&set=sit');}})();</script></head><body style="background:#170408"></body></html>
