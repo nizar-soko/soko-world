@@ -4,4 +4,4 @@ if(h==='ALPHA')return 'game.html?alpha=1';if(h==='ADMIN')return 'game.html?admin
 if((m=h.match(/^([SK])(\d\d)([LCB])(PT|ES|BR|EN)$/))){var g=(m[1]==='S'?SO:KO)[+m[2]-1];if(g)return 'game.html?m='+M[m[3]]+'&lang='+m[4].toLowerCase()+'&set='+(m[1]==='S'?'sit':'classic')+'&game='+g+'&ph='+((m[1]==='S'?0:12)+(+m[2])-1)}
 if((m=h.match(/^([LCB])(\d\d)(PT|ES|BR|EN)$/))){var z=VZ[m[1]+m[2]];return 'game.html?m='+M[m[1]]+'&lang='+m[3].toLowerCase()+'&set=sit'+(z?'&zone='+z:'')+'&ph='+(21+(+m[2]))}
 return null};
-(function(){var u=QROUTE(((location.hash||'').slice(1)||'ALPHA'));if(u)location.replace(u)})();</script></head><body style="background:#170408"></body></html>
+(function(){var c=((location.hash||'').slice(1)||'ALPHA').toUpperCase(),u=QROUTE(c);if(u)location.replace(u+'&qr='+encodeURIComponent(c))})();</script></head><body style="background:#170408"></body></html>
