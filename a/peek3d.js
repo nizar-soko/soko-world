@@ -84,11 +84,11 @@ export function mountPeek(host, { onTap, onBubble } = {}) {
   // ---------- motion ----------
   const ease = t => t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3);
   const back = t => { t = Math.min(1, Math.max(0, t)); const c = 1.9; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
-  const LOOP = 7.2; let t0 = performance.now(), raf = 0, alive = true, tapT = -9, bubble = false, hidden = false;
+  const LOOP = 7.2; let t0 = performance.now(), raf = 0, alive = true, tapT = -9, bubble = false, hidden = false, stay = false;
   function frame(now) {
     if (!alive) return; raf = requestAnimationFrame(frame);
     if (hidden) return;
-    const T = (now - t0) / 1000, t = T % LOOP, k = T - tapT;
+    const T = (now - t0) / 1000, t = stay ? 1.95 + (T % 3.5) : T % LOOP, k = T - tapT;
     // body: climb up (0.4-1.2s), hold, sink (6.2-7s)
     const up = t < 6.2 ? back((t - .4) / .8) : 1 - ease((t - 6.2) / .8);
     root.position.y = -2.9 + up * 2.9;
@@ -117,6 +117,7 @@ export function mountPeek(host, { onTap, onBubble } = {}) {
     el: renderer.domElement,
     hop() { tapT = (performance.now() - t0) / 1000; },
     setHidden(v) { hidden = v; },
+    setStay(v) { stay = v; },
     destroy() { alive = false; cancelAnimationFrame(raf); renderer.domElement.remove(); renderer.dispose(); }
   };
 }
