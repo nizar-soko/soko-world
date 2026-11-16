@@ -1629,12 +1629,15 @@ function wheel(host,keys,o){const N=keys.length,st=360/N,disc=host.querySelector
  const loop=t=>{const dt=Math.min(.05,(t-last)/1000);last=t;
   if(mode==='idle')R+=o.idle*dt;
   else if(mode==='spin'){R+=v*dt;v*=Math.exp(-1.25*dt);if(Math.abs(v)<40){mode='snap';const i=idx(),tgt=R+(((-i*st-R)%360+540)%360-180);snap={a:R,b:tgt,t0:t}}}
-  else if(mode==='snap'){const k=Math.min(1,(t-snap.t0)/320),e=1-Math.pow(1-k,3);R=snap.a+(snap.b-snap.a)*e;if(k>=1){mode='still';paint();o.land&&o.land(idx());}}
+  else if(mode==='snap'){const k=Math.min(1,(t-snap.t0)/Math.min(650,220+Math.abs(snap.b-snap.a)*2.2)),e=1-Math.pow(1-k,3);R=snap.a+(snap.b-snap.a)*e;if(k>=1){mode='still';paint();o.land&&o.land(idx());}}
   paint();if(host.isConnected)raf=requestAnimationFrame(loop)};
  const ang=e=>{const r=host.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI};
- host.addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();host.setPointerCapture(e.pointerId);drag={a:ang(e),t:performance.now(),v:0,moved:0};mode='drag';o.start_&&o.start_()});
+ host.addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();host.setPointerCapture(e.pointerId);drag={a:ang(e),t:performance.now(),v:0,moved:0,x:e.clientX,y:e.clientY};mode='drag';o.start_&&o.start_()});
  host.addEventListener('pointermove',e=>{if(!drag)return;const a=ang(e);let d=a-drag.a;if(d>180)d-=360;if(d<-180)d+=360;const now=performance.now(),dt=Math.max(1,now-drag.t);R+=d;drag.v=drag.v*.6+(d/dt*1000)*.4;drag.moved+=Math.abs(d);drag.a=a;drag.t=now});
- const up=e=>{if(!drag)return;e.stopPropagation();let sv=drag.v;if(drag.moved<6||Math.abs(sv)<300)sv=(sv<0?-1:1)*(700+Math.random()*700);v=Math.max(-2200,Math.min(2200,sv));drag=null;mode='spin';o.spun&&o.spun()};
+ const up=e=>{if(!drag)return;e.stopPropagation();const r=host.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=drag.x-cx,dy=drag.y-cy,far=Math.hypot(dx,dy)>r.width*.18;let tgtR;
+  if(drag.moved<6&&far){const th=(Math.atan2(dx,-dy)*180/Math.PI+360)%360,j=((Math.round((((th-R)%360)+360)%360/st))%N+N)%N;tgtR=R+((((-j*st-R)%360)+540)%360-180)}
+  else{const i=idx();tgtR=R+((((-i*st-R)%360)+540)%360-180)}
+  drag=null;mode='snap';snap={a:R,b:tgtR,t0:performance.now()};o.spun&&o.spun()};
  host.addEventListener('pointerup',up);host.addEventListener('pointercancel',up);host.addEventListener('click',e=>e.stopPropagation());
  host._land=k=>{const i=keys.indexOf(k);R=-i*st-720;mode='snap';snap={a:R+400,b:R,t0:performance.now()}};
  paint();raf=requestAnimationFrame(loop);return {get R(){return R},idx}}
@@ -1680,9 +1683,9 @@ function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div'
  if(step==='lang')o.innerHTML=H('Language',LANGS.map(([k,l])=>`<button data-al="${k}">${({pt:'Português (PT)',br:'Português (BR)',es:'Español',en:'English'})[k]||l}</button>`).join(''));
  if(step==='type')o.innerHTML=H('What kind of game?',`<div class="atp"><button data-at="arcade" class="atb arc"><span class="ill"><i class="px p1"></i><i class="px p2"></i><i class="px p3"></i><i class="joy">🕹️</i></span><b>Simple</b><small>Arcade · tap, dodge, score</small></button><button data-at="sit" class="atb spy"><span class="ill"><i class="bb b1">uh…</i><i class="bb b2">RUN.</i><i class="bb b3">no way</i></span><b>Spicy</b><small>Situational · choices get out of hand</small></button></div>`);
  if(step==='venue'){const ks=ALZ.map(x=>x[0]);
-  o.innerHTML=H('Pick the path',`${wheelHTML(ks)}<div class="awv"></div><button class="ago" data-az="" disabled>Spin it first</button><small class="swh">tap or flick the wheel</small>`);
+  o.innerHTML=H('Pick the path',`${wheelHTML(ks)}<div class="awv"></div><button class="ago" data-az="" disabled>Pick one first</button><small class="swh">tap a slice or turn the wheel</small>`);
   const lab=o.querySelector('.awv'),go=o.querySelector('.ago');let landed=false;const name=i=>`<span>${WEMO[ks[i]]}</span>${ALZ[i][1]}`;
-  wheel(o.querySelector('.wh'),ks,{r:80,idle:18,tick:(i,m)=>{lab.innerHTML=name(i);if(m==='spin'||m==='drag'){blip();buzz(3)}},spun:()=>{go.disabled=true;go.textContent='Spinning…'},land:i=>{landed=true;lab.innerHTML=name(i);lab.classList.add('pop');setTimeout(()=>lab.classList.remove('pop'),260);go.disabled=false;go.dataset.az=ks[i];go.textContent='Let’s go →';buzz(12)}})}
+  wheel(o.querySelector('.wh'),ks,{r:80,idle:18,tick:(i,m)=>{lab.innerHTML=name(i);if(m==='spin'||m==='drag'){blip();buzz(3)}},spun:()=>{go.disabled=true;go.textContent='…'},land:i=>{landed=true;lab.innerHTML=name(i);lab.classList.add('pop');setTimeout(()=>lab.classList.remove('pop'),260);go.disabled=false;go.dataset.az=ks[i];go.textContent='Let’s go →';buzz(12)}})}
  o.dataset.t=performance.now();o.onclick=e=>{const b=e.target.closest('button');if(!b||performance.now()-(+o.dataset.t||0)<450)return;audio();blip();buzz(6);
   if(b.dataset.am){S.m=b.dataset.am;S.lang=MK[S.m].lang;theme();alphaShow('lang')}
   else if(b.dataset.al){S.lang=b.dataset.al;alphaShow('type')}
