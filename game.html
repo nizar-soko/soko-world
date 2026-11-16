@@ -478,6 +478,19 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 #alpha .avc .ic{display:grid;place-items:center;width:64px;height:64px;border-radius:18px;background:rgba(0,0,0,.08)}#alpha .avc img{height:52px}
 #alpha .avc em{font-style:normal;font-family:'Season Mix',serif;font-size:42px}#alpha .avc b{font-size:18px;line-height:1.1}
 #alpha .z-culture{background:#F2E58A}#alpha .z-food{background:#F4A08F}#alpha .z-music{background:#F0E27A}#alpha .z-night{background:#C9A2F2}#alpha .z-after{background:#B6EB9C}#alpha .z-fallback{background:#FFF4EA}
+#alpha .awh{position:relative;width:230px;height:230px;margin:14px auto 4px;cursor:pointer}
+#alpha .awh:before{content:'';position:absolute;left:50%;top:-10px;transform:translateX(-50%);border:12px solid transparent;border-top:16px solid var(--sk-pink);border-bottom:0;z-index:3;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+#alpha .awt{position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 5px rgba(255,255,255,.12),0 14px 34px rgba(0,0,0,.45);transform:rotate(var(--r,0deg));transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
+#alpha .awt:after{content:'';position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--sk-pink);box-shadow:0 0 0 6px rgba(255,255,255,.75)}
+#alpha .awt button{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;padding:0;border-radius:50%;background:transparent;box-shadow:none;display:grid;place-items:center;opacity:.55;transform:rotate(var(--a)) translateY(-78px) rotate(calc(-1 * var(--a)));transition:opacity .3s}
+#alpha .awt button.on{opacity:1}
+#alpha .awt img{height:40px;transition:transform .75s cubic-bezier(.3,1.35,.45,1)}
+#alpha .awt em{font-style:normal;font-family:'Season Mix',serif;font-size:36px;color:var(--sk-ink);transition:transform .75s cubic-bezier(.3,1.35,.45,1);display:block}
+#alpha .awv{align-self:center;border-radius:999px;padding:9px 18px;background:var(--sk-pink);color:var(--sk-ink);font-weight:900;font-size:18px;white-space:nowrap;transition:transform .25s}
+#alpha .awv.pop{transform:scale(1.08)}
+#alpha .awh.lock+.awv{box-shadow:0 0 0 3px #ede77d}
+#alpha .ago{text-align:center!important;background:linear-gradient(90deg,#FEAE68,#E74479);color:#1C0A10;margin-top:6px}
+#alpha .swh{text-align:center}
 #alpha .swh{color:#FEAE68;font-weight:800;letter-spacing:.1em}
 /* unknown path activity slider */.usl .ul{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px}.usl button.on{opacity:1;transform:scale(1.08);background:#E74479;color:#fff}.usl.lock button.on{box-shadow:0 0 0 3px #ede77d}
 .alpha #test,.noadm #test{display:none!important}
@@ -1646,18 +1659,23 @@ function qmShow(){track('sw_reward_info_open');let o=$('#qmpop');if(!o){o=docume
 /* ---------- Alpha path: team testing flow (market → language → pre-game → game type → venue) ---------- */
 const ALP={on:qs.get('alpha')==='1'};
 const ZPIN={culture:'art',food:'eat_drink',music:'music',night:'nightlife',after:'outdoors'};
-const ALZ=[['culture','Culture & art','🎨'],['food','Food, markets & bars','🍽️'],['music','Music & fun','🎤'],['night','Nightlife','🪩'],['after','After hours','🌅'],['fallback','Unknown Path','❓']];
+const ALZ=[['culture','I stare at paintings','🎨'],['food','Feed me','🍽️'],['music','What’s poppin?','🎤'],['night','Bad decisions','🪩'],['after','Touch grass','🌅'],['fallback','Unknown Path','❓']];
 function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div');o.id='alpha';app.appendChild(o)}o.classList.add('on');
  const H=(t,b)=>`<div class="alw"><div class="alb">SOKO WORLD · ALPHA</div><h2>${t}</h2>${b}</div>`;
  if(step==='market')o.innerHTML=H('Pick your market',Object.keys(MK).map(k=>`<button data-am="${k}">${MK[k].name}</button>`).join(''));
  if(step==='lang')o.innerHTML=H('Language',LANGS.map(([k,l])=>`<button data-al="${k}">${({pt:'Português (PT)',br:'Português (BR)',es:'Español',en:'English'})[k]||l}</button>`).join(''));
  if(step==='type')o.innerHTML=H('What kind of game?',`<div class="atp"><button data-at="arcade" class="atb arc"><span class="ill"><i class="px p1"></i><i class="px p2"></i><i class="px p3"></i><i class="joy">🕹️</i></span><b>Simple</b><small>Arcade · tap, dodge, score</small></button><button data-at="sit" class="atb spy"><span class="ill"><i class="bb b1">uh…</i><i class="bb b2">RUN.</i><i class="bb b3">no way</i></span><b>Spicy</b><small>Situational · choices get out of hand</small></button></div>`);
- if(step==='venue')o.innerHTML=H('Pick the path',`<div class="avz">${ALZ.map(([k,n,e])=>`<button data-az="${k}" class="avc z-${k}"><span class="ic">${ZPIN[k]?`<img src="a/pin-${ZPIN[k]}.png" alt="">`:'<em>?</em>'}</span><b>${n}</b></button>`).join('')}</div><small class="swh">swipe →</small>`);
+ if(step==='venue'){const CL={culture:'#F2E58A',food:'#F4A08F',music:'#F0E27A',night:'#C9A2F2',after:'#B6EB9C',fallback:'#FFF4EA'},N=ALZ.length,st=360/N;
+  o.innerHTML=H('Pick the path',`<div class="awh"><div class="awt" style="background:conic-gradient(from ${-st/2}deg,${ALZ.map(([k],j)=>`${CL[k]} ${j*st}deg ${(j+1)*st}deg`).join(',')})">${ALZ.map(([k,n],j)=>`<button data-wz="${k}" style="--a:${j*st}deg" aria-label="${n}">${ZPIN[k]?`<img src="a/pin-${ZPIN[k]}.png" alt="">`:'<em>?</em>'}</button>`).join('')}</div></div><div class="awv"></div><button class="ago" data-az="">Let’s go →</button><small class="swh">tap the wheel to stop it</small>`);
+  const tr=o.querySelector('.awt'),bs=[...tr.children],lab=o.querySelector('.awv'),go=o.querySelector('.ago');let i=Math.floor(Math.random()*N),rot=-i*st,lock=false;
+  const show=()=>{bs.forEach((b,j)=>{b.classList.toggle('on',j===i);b.firstChild.style.transform=`rotate(${-rot}deg)${j===i?' scale(1.2)':''}`});tr.style.setProperty('--r',rot+'deg');lab.textContent=ALZ[i][1];lab.classList.add('pop');setTimeout(()=>lab.classList.remove('pop'),220);go.dataset.az=ALZ[i][0]};
+  show();clearInterval(S.alT);S.alT=setInterval(()=>{i=(i+1)%N;rot-=st;show()},1000);
+  o.querySelector('.awh').onclick=e=>{e.stopPropagation();const b=e.target.closest('button'),t=b?bs.indexOf(b):i;clearInterval(S.alT);rot-=((t-i+N)%N)*st+(lock&&t===i?0:360);i=t;lock=true;o.querySelector('.awh').classList.add('lock');audio();blip();buzz(6);show()}}
  o.dataset.t=performance.now();o.onclick=e=>{const b=e.target.closest('button');if(!b||performance.now()-(+o.dataset.t||0)<450)return;audio();blip();buzz(6);
   if(b.dataset.am){S.m=b.dataset.am;S.lang=MK[S.m].lang;theme();alphaShow('lang')}
   else if(b.dataset.al){S.lang=b.dataset.al;alphaShow('type')}
   else if(b.dataset.at){S.classic=b.dataset.at==='arcade';alphaShow('venue')}
-  else if(b.dataset.az){S.zone=b.dataset.az;S.forceGame=null;o.classList.remove('on');start();applyLang()}}}
+  else if(b.dataset.az){clearInterval(S.alT);S.zone=b.dataset.az;S.forceGame=null;o.classList.remove('on');start();applyLang()}}}
 function alphaStart(){start();alphaShow('market')}
 
 function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
