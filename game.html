@@ -517,10 +517,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .usl button{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;padding:0;border:0;border-radius:50%;background:transparent;display:grid;place-items:center;opacity:.5;transform:rotate(var(--a)) translateY(-31px) rotate(calc(-1 * var(--a)));transition:opacity .3s}
 .usl button img{height:19px;transition:transform .7s cubic-bezier(.3,1.35,.45,1)}
 .usl button.on{opacity:1}
-.usl .uv{display:inline-flex;align-items:center;gap:6px;margin-top:6px;border-radius:999px;padding:6px 12px;background:#E74479;color:#fff;font:800 13px/1 inherit;transition:transform .25s}
+.usl .uv{display:inline-flex;align-items:center;gap:6px;margin-top:6px;border-radius:999px;padding:6px 12px;white-space:nowrap;max-width:100%;background:#E74479;color:#fff;font:800 13px/1 inherit;transition:transform .25s}
 .usl .uv.pop{transform:scale(1.1)}
 .usl.lock .uv{box-shadow:0 0 0 3px #ede77d}
-@media (max-height:630px){.face.hasusl .mascot{display:none}.face.hasusl .snd{display:none}.face.hasusl .kick{margin-bottom:4px}.usl .uwh{width:84px;height:84px}.usl button{transform:rotate(var(--a)) translateY(-27px) rotate(calc(-1 * var(--a)))}.usl .uv{margin-top:4px}}
+@media (max-height:630px){.face.hasusl .mascot{display:none}.face.hasusl .snd{display:none}.face.hasusl .kick{margin-bottom:4px}.usl .uwh{width:84px;height:84px}.usl button{transform:rotate(var(--a)) translateY(-27px) rotate(calc(-1 * var(--a)))}.usl .uv{margin-top:4px;font-size:12px;padding:6px 10px}}
 @media (max-height:600px){.face.hasusl .sub{display:none}}
 </style>
 </head>
@@ -1605,10 +1605,10 @@ GM.signal={init(){const CS=[['#FFC93C','#FF8A1F'],['#3BE0E0','#3B6BE0'],['#FF2E8
 
 /* ---------- Start ---------- */
 
-const USLT={en:['What pulls you lately?',{culture:'Culture & art',food:'Food & bars',music:'Live music',night:'Nightlife',after:'Outside, late'}],
- pt:['O que te puxa ultimamente?',{culture:'Cultura e arte',food:'Comida e bares',music:'Música ao vivo',night:'Noite',after:'Ao ar livre'}],
- br:['O que te puxa ultimamente?',{culture:'Cultura e arte',food:'Comida e bares',music:'Música ao vivo',night:'Balada',after:'Ao ar livre'}],
- es:['¿Qué te jala últimamente?',{culture:'Cultura y arte',food:'Comida y bares',music:'Música en vivo',night:'Noche',after:'Al aire libre'}]};
+const USLT={en:['What pulls you lately?',{culture:'I stare at paintings',food:'Feed me',music:'What’s poppin?',night:'Bad decisions',after:'Touch grass'}],
+ pt:['O que te puxa ultimamente?',{culture:'Fico a olhar para quadros',food:'Dá-me de comer',music:'O que é que há?',night:'Más decisões',after:'Tocar na relva'}],
+ br:['O que te puxa ultimamente?',{culture:'Fico encarando quadros',food:'Me alimenta',music:'Qual é a boa?',night:'Decisões ruins',after:'Tocar na grama'}],
+ es:['¿Qué te jala últimamente?',{culture:'Me quedo viendo cuadros',food:'Dame de comer',music:'¿Qué onda?',night:'Malas decisiones',after:'Tocar pasto'}]};
 const UNK=()=>!ALP.on&&qs.get('admin')!=='1'&&qs.get('zone')==='fallback'&&!qs.get('game');
 function uslMount(card){clearInterval(S.uslT);if(!UNK())return;const u=USLT[S.lang]||USLT.en,ks=['culture','food','music','night','after'];
  const el=document.createElement('div');el.className='usl';el.innerHTML=`<div class="ul">${u[0]}</div><div class="uwh"><div class="ut">${ks.map((k,j)=>`<button data-uz="${k}" style="--a:${j*72}deg" aria-label="${u[1][k]}"><img src="a/pin-${ZPIN[k]}.png" alt=""></button>`).join('')}</div></div><div class="uv"></div>`;
