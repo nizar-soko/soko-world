@@ -10,7 +10,7 @@
 <style>
 :root{
   --bg:#09090B;--ink:#FAF3EC;--muted:rgba(250,243,236,.62);
-  --grad:linear-gradient(100deg,#FEAE68 0%,#FE7042 45%,#E74479 100%);
+  --grad:linear-gradient(100deg,#ffb8cb 0%,#ef8ea8 50%,#e08efb 100%);
   --ca:#3B6BE0;--cb:#FE7042;--ta:0;--tb:0;--px:0;--py:0;
   --f:"Season Sans","Inter",-apple-system,"SF Pro Display","Helvetica Neue",Roboto,Arial,sans-serif;
   --spring:cubic-bezier(.2,1.45,.4,1);
@@ -54,8 +54,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .logo{display:flex;align-items:center;line-height:1;color:var(--sk-pink)}.logo .wm{height:19px;width:auto;display:block}
 .logo small{font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);-webkit-text-fill-color:var(--muted);margin-left:5px;vertical-align:2px}
 .langs{margin-left:auto;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
-.langs button{font-weight:800;font-size:11px;letter-spacing:.04em;padding:7px 9px;border-radius:999px;color:var(--muted);transition:color .2s,background .2s,transform .2s var(--spring)}
-.langs button.on{background:var(--grad);color:#120806}
+.langs button{font-weight:800;font-size:11px;letter-spacing:.04em;padding:7px 9px;border-radius:6px;color:var(--muted);transition:color .2s,background .2s,transform .2s var(--spring)}
+.langs button.on{background:var(--sk-pink);color:#160407}
 .langs button:active{transform:scale(.9)}
 .mute{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .2s var(--spring)}
 .mute:active{transform:scale(.88)}
@@ -161,7 +161,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 @keyframes bob{50%{transform:translateY(-8px) rotate(-3deg)}}
 .phrase{font-weight:900;font-size:clamp(25px,7vw,31px);line-height:1.05;letter-spacing:-.03em;margin:auto 0;text-wrap:balance}
 .sub{font-weight:600;font-size:13.5px;opacity:.75;margin-bottom:14px}
-.cta{width:100%;min-height:56px;border-radius:18px;background:var(--grad);color:#140806;font-weight:900;font-size:18px;letter-spacing:-.01em;box-shadow:0 12px 30px -8px rgba(254,112,66,.7);transition:transform .2s var(--spring)}
+.cta{width:100%;min-height:56px;border-radius:6px;background:var(--sk-yellow);color:#160407;font-family:'Season Sans',system-ui,sans-serif;font-weight:400;font-size:18px;letter-spacing:.02em;box-shadow:none;transition:transform .2s var(--spring)}
 .cta:active{transform:scale(.95)}
 .snd{font-size:11px;font-weight:700;opacity:.55;margin-top:10px;letter-spacing:.06em}
 .portal.out{transform:scale(1.35) translateY(-20px);opacity:0;filter:blur(10px)}
@@ -169,7 +169,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 /* Loader + done */
 .loader,.done{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s}
 .loader.on,.done.on{opacity:1;pointer-events:auto}
-.orb{width:170px;height:170px;border-radius:50%;position:relative;background:conic-gradient(from 0deg,var(--ca),#FEAE68,#FE7042,#E74479,var(--cb),var(--ca));animation:spin 1.1s linear infinite;filter:blur(.3px);box-shadow:0 0 80px color-mix(in srgb,var(--cb) 60%,transparent)}
+.orb{width:170px;height:170px;border-radius:50%;position:relative;background:conic-gradient(from 0deg,var(--ca),#ede77d,#ffb8cb,#e08efb,var(--cb),var(--ca));animation:spin 1.1s linear infinite;filter:blur(.3px);box-shadow:0 0 80px color-mix(in srgb,var(--cb) 60%,transparent)}
 .orb::after{content:"";position:absolute;inset:14px;border-radius:50%;background:var(--bgc,#09090B)}
 .orb i{position:absolute;inset:-18px;border-radius:50%;border:2px solid rgba(255,255,255,.25);animation:ring 1.1s ease-out infinite}
 .orb i:nth-child(2){animation-delay:.37s}.orb i:nth-child(3){animation-delay:.74s}
@@ -249,7 +249,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .half{position:absolute;top:0;bottom:0;width:50%;background-size:200% 100%;transition:transform .8s cubic-bezier(.5,0,.2,1)}
 .half.l{left:0;background-position:0 0}.half.r{right:0;background-position:100% 0}
 .crack.go .half.l{transform:translateX(-105%) rotate(-6deg)}.crack.go .half.r{transform:translateX(105%) rotate(6deg)}
-.giftc{padding:16px 18px;border-radius:18px;background:var(--grad);color:#140806;font-weight:900;font-size:18px;text-align:center;max-width:80%;transform:scale(.6);opacity:0;transition:.5s .35s var(--spring);box-shadow:0 0 60px rgba(254,112,66,.7)}
+.giftc{padding:16px 18px;border-radius:6px;background:var(--sk-yellow);color:#160407;font-weight:900;font-size:18px;text-align:center;max-width:80%;transform:scale(.6);opacity:0;transition:.5s .35s var(--spring);box-shadow:0 0 60px rgba(237,231,125,.45)}
 .crack.go .giftc{transform:none;opacity:1}
 /* Fog */
 .fscene,.ffig,#fogc{position:absolute;inset:0;width:100%;height:100%}
@@ -277,8 +277,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .how svg{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .45s}
 .how svg.on{opacity:1}
 .how .ln{fill:none;stroke:var(--fink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.how .ac{fill:#FE7042}.how .ph{fill:color-mix(in srgb,var(--fink) 6%,transparent);stroke:var(--fink);stroke-width:2.5}.how .soft{fill:color-mix(in srgb,var(--fink) 14%,transparent)}.how .ink{fill:var(--fink)}.how .fld{fill:none;stroke:var(--fink);stroke-width:2;opacity:.6}.how .aw{fill:#FE7042}
-.how text{text-anchor:middle;font-weight:900;font-family:Inter,system-ui,sans-serif}.how .num{font-size:14px;fill:#fff}.how .wm{font-size:15px;fill:#fff;letter-spacing:-.04em}.how .acs{fill:none;stroke:#FE7042;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.how .ac{fill:#ef8ea8}.how .ph{fill:color-mix(in srgb,var(--fink) 6%,transparent);stroke:var(--fink);stroke-width:2.5}.how .soft{fill:color-mix(in srgb,var(--fink) 14%,transparent)}.how .ink{fill:var(--fink)}.how .fld{fill:none;stroke:var(--fink);stroke-width:2;opacity:.6}.how .aw{fill:#ef8ea8}
+.how text{text-anchor:middle;font-weight:900;font-family:Inter,system-ui,sans-serif}.how .num{font-size:14px;fill:#fff}.how .wm{font-size:15px;fill:#fff;letter-spacing:-.04em}.how .acs{fill:none;stroke:#ef8ea8;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .how .gr{fill:none;stroke:#2fbf71;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .how svg *{transform-box:fill-box;transform-origin:center}
 .how .on .pop{animation:hpop 3.4s var(--spring) infinite both}
@@ -429,7 +429,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
 .flip .rv{background:var(--sk-paper);color:var(--sk-ink);box-shadow:0 30px 60px -18px rgba(0,0,0,.75),0 0 0 9px var(--sk-pink);--fink:var(--sk-ink)}
 .flip .rv h2.gift{font-family:'Season Mix',Georgia,serif;font-weight:400;background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--sk-ink);font-size:34px;letter-spacing:-.02em}
-.flip .rv .cta{background:var(--sk-pink);color:var(--sk-ink);box-shadow:0 10px 24px -10px rgba(239,142,168,.9)}
+.flip .rv .cta{background:var(--sk-pink);color:#160407;box-shadow:none}
 .flip .rv .row{background:rgba(59,15,24,.06)}
 .flip .how{height:84px}
 .rv .row.plan{align-items:center;background:var(--sk-pink)!important}
@@ -444,7 +444,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 
 .glives{color:#ff4d6d;font-size:15px;letter-spacing:1px;font-weight:900}.glives .x{opacity:.18}
 .ggoal{font-size:11px;font-weight:900;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.1);white-space:nowrap;transition:.3s}
-.ggoal.on{background:var(--grad);color:#140806;transform:scale(1.08)}
+.ggoal.on{background:var(--sk-yellow);color:#160407;transform:scale(1.08)}
 #gc{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
 .sit{position:absolute;inset:0;display:flex;flex-direction:column;padding:10px;gap:7px;z-index:2}
 .sitsc{flex:1;min-height:84px;pointer-events:none}
@@ -458,13 +458,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .sitg .gtime{visibility:hidden}
 .qm{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:6px;border-radius:50%;border:0;background:var(--sk-yellow,#ede77d);color:#1c0a10;font:900 13px/1 inherit;cursor:pointer;vertical-align:middle}
 #qmpop{position:absolute;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center;background:rgba(10,2,6,.6);padding:18px}#qmpop.on{display:flex}
-#qmpop .qmc{position:relative;width:100%;max-width:380px;background:#FFF4EA;color:#1C0A10;border-radius:22px;padding:22px 20px 18px;box-shadow:0 10px 0 #E74479;animation:situp .3s both}
+#qmpop .qmc{position:relative;width:100%;max-width:380px;background:#FFF4EA;color:#1C0A10;border-radius:22px;padding:22px 20px 18px;box-shadow:0 10px 0 var(--sk-pinkm);animation:situp .3s both}
 #qmpop b{font-family:'Season Mix','Season Sans',serif;font-weight:400;font-size:28px;display:block;margin-bottom:7px}#qmpop p{margin:0 0 10px;font-size:15px;line-height:1.35}
 #qmpop .cta{width:100%;margin-top:6px}#qmpop .qmx{position:absolute;top:10px;right:12px;border:0;background:none;font-size:26px;color:#1C0A10;cursor:pointer}
 #alpha .atp{display:flex;flex-direction:column;gap:14px}
-#alpha .atb{flex-direction:column;align-items:flex-start;gap:4px;min-height:170px;padding:18px 18px 16px;border-radius:24px;position:relative;overflow:hidden}
+#alpha .atb{flex-direction:column;align-items:flex-start;gap:4px;min-height:170px;padding:18px 18px 16px;border-radius:6px;position:relative;overflow:hidden}
 #alpha .atb b{font-family:'Season Mix','Season Sans',serif;font-weight:400;font-size:40px;line-height:1;margin-top:auto}#alpha .atb small{font-size:13px;opacity:.75}
-#alpha .atb.arc{background:linear-gradient(135deg,#FEAE68,#FE7042)}#alpha .atb.spy{background:linear-gradient(135deg,#E74479,#8A3FFC);color:#fff}
+#alpha .atb.arc{background:var(--sk-yellow);color:#160407}#alpha .atb.spy{background:var(--sk-lilac);color:#160407}
 #alpha .ill{position:absolute;right:14px;top:12px;width:130px;height:90px}
 #alpha .px{position:absolute;width:14px;height:14px;background:#1C0A10;border-radius:3px;animation:pxb 1.1s ease-in-out infinite}
 #alpha .p1{left:10px;top:50px}#alpha .p2{left:40px;top:50px;animation-delay:.18s}#alpha .p3{left:70px;top:50px;animation-delay:.36s}
@@ -480,16 +480,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 #alpha .z-culture{background:#F2E58A}#alpha .z-food{background:#F4A08F}#alpha .z-music{background:#F0E27A}#alpha .z-night{background:#C9A2F2}#alpha .z-after{background:#B6EB9C}#alpha .z-fallback{background:#FFF4EA}
 #alpha .awv{align-self:center;border-radius:999px;padding:9px 18px;background:var(--sk-pink);color:var(--sk-ink);font-weight:900;font-size:18px;white-space:nowrap;transition:transform .25s}
 #alpha .awv.pop{transform:scale(1.08)}
-#alpha .ago{text-align:center!important;justify-content:center;display:flex;background:linear-gradient(90deg,#FEAE68,#E74479);color:#1C0A10;margin-top:6px}
+#alpha .ago{text-align:center!important;justify-content:center;display:flex;background:var(--sk-yellow);color:#160407;border-radius:6px;margin-top:6px}
 #alpha .swh{text-align:center}
-#alpha .swh{color:#FEAE68;font-weight:800;letter-spacing:.1em}
-/* unknown path activity slider */.usl .ul{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px}.usl button.on{opacity:1;transform:scale(1.08);background:#E74479;color:#fff}.usl.lock button.on{box-shadow:0 0 0 3px #ede77d}
+#alpha .swh{color:var(--sk-yellow);font-weight:800;letter-spacing:.1em}
+/* unknown path activity slider */.usl .ul{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px}.usl button.on{opacity:1;transform:scale(1.08);background:var(--sk-pink);color:#160407}.usl.lock button.on{box-shadow:0 0 0 3px #ede77d}
 .alpha #test,.noadm #test{display:none!important}
 #alpha{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:radial-gradient(120% 80% at 50% 0%,#3b0f18,#170408 70%);padding:24px}
 #alpha.on{display:flex}#alpha .alw{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;animation:situp .35s both}
 #alpha .alb{font-weight:900;font-size:11px;letter-spacing:.22em;color:var(--sk-yellow)}
 #alpha h2{margin:0 0 8px;font-family:'Season Mix','Season Sans',serif;font-weight:400;font-size:40px;line-height:1;color:var(--sk-pink)}
-#alpha button{font:inherit;text-align:left;padding:15px 16px;border-radius:16px;border:0;background:var(--sk-paper);color:var(--sk-ink);font-weight:800;font-size:17px;box-shadow:0 4px 0 rgba(0,0,0,.35);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+#alpha button{font:inherit;text-align:left;padding:15px 16px;border-radius:6px;border:0;background:var(--sk-paper);color:var(--sk-ink);font-weight:800;font-size:17px;box-shadow:0 4px 0 rgba(0,0,0,.35);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 #alpha button.hi{background:var(--sk-pink)}#alpha button small{font-size:13px;font-weight:700;opacity:.6}#alpha button:active{transform:translateY(2px)}
 .sitact{position:absolute;inset:0;z-index:3;pointer-events:none;display:flex;align-items:flex-end;opacity:0;transition:opacity .25s}
 .sitact::before,.sitact::after{content:'';position:absolute;left:0;right:0;height:9%;background:#000;transition:transform .35s cubic-bezier(.3,1,.4,1)}
@@ -514,7 +514,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .face.hasusl .mascot{width:28%;max-height:none;margin:4px 0 0}
 .face.hasusl .phrase{font-size:clamp(21px,5.6vw,25px)}
 .usl .ul{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:7px}
-.usl .uv{display:inline-flex;align-items:center;gap:6px;margin-top:6px;border-radius:999px;padding:6px 12px;white-space:nowrap;max-width:100%;background:#E74479;color:#fff;font:800 13px/1 inherit;transition:transform .25s}
+.usl .uv{display:inline-flex;align-items:center;gap:6px;margin-top:6px;border-radius:999px;padding:6px 12px;white-space:nowrap;max-width:100%;background:var(--sk-pink);color:#160407;font:800 13px/1 inherit;transition:transform .25s}
 .usl .uv.pop{transform:scale(1.1)}
 .usl.lock .uv{box-shadow:0 0 0 3px #ede77d}
 @media (max-height:630px){.face.hasusl .mascot{display:none}.face.hasusl .snd{display:none}.face.hasusl .kick{margin-bottom:4px}.usl .wh{width:88px;height:88px}.usl .wh .wd i{font-size:20px}.usl .uv{margin-top:4px;font-size:12px;padding:6px 10px}}
@@ -524,8 +524,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .wh .wd{position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 3px rgba(0,0,0,.12),0 8px 22px rgba(0,0,0,.18);will-change:transform}
 .wh .wd i{position:absolute;left:50%;top:50%;font-style:normal;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25));opacity:.8}
 .wh .wd i.on{opacity:1}
-.wh .wp{position:absolute;left:50%;top:-8px;transform:translateX(-50%);border:9px solid transparent;border-top:13px solid #E74479;border-bottom:0;z-index:3;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
-.wh .wc{position:absolute;left:50%;top:50%;border-radius:50%;background:#E74479;box-shadow:0 0 0 4px rgba(255,255,255,.8);transform:translate(-50%,-50%);z-index:2}
+.wh .wp{position:absolute;left:50%;top:-8px;transform:translateX(-50%);border:9px solid transparent;border-top:13px solid var(--sk-pinkm);border-bottom:0;z-index:3;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+.wh .wc{position:absolute;left:50%;top:50%;border-radius:50%;background:var(--sk-pinkm);box-shadow:0 0 0 4px rgba(255,255,255,.8);transform:translate(-50%,-50%);z-index:2}
 .usl .wh{width:104px;height:104px}.usl .wh .wd i{font-size:24px}.usl .wh .wc{width:22px;height:22px}
 #alpha .wh{width:236px;height:236px;margin:12px auto 4px}#alpha .wh .wd i{font-size:44px}#alpha .wh .wc{width:44px;height:44px;box-shadow:0 0 0 6px rgba(255,255,255,.8)}#alpha .wh .wp{top:-11px;border-width:13px;border-top-width:18px;border-bottom-width:0}
 .usl .uv span{font-size:16px}
@@ -541,7 +541,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .strg .gcap,.strg .ghint{pointer-events:none}
 .strg .gcap em{font-family:'Season Mix',serif;font-style:italic;font-weight:400}
 .sdlg{position:absolute;left:10px;right:10px;bottom:10px;z-index:6;background:rgba(14,10,12,.92);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;animation:situp .35s both;color:#f5efe4}
-.sdlg .sdw{font-weight:900;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#E74479}
+.sdlg .sdw{font-weight:900;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sk-pinkm)}
 .sdlg .sdq{font-family:'Season Mix',serif;font-size:21px;line-height:1.15;margin-bottom:4px}
 .sdlg button{font:inherit;font-weight:800;font-size:15px;text-align:left;border:0;border-radius:12px;padding:12px 14px;background:#f5efe4;color:#1C0A10;box-shadow:0 3px 0 rgba(0,0,0,.4)}
 .sdlg button:active{transform:translateY(2px)}
@@ -629,102 +629,83 @@ const MK={
 const LANGS=[['pt','PT','pt-PT'],['br','PT-BR','pt-BR'],['es','ES','es'],['en','EN','en']];
 
 /* ---------- LINGO MODULE (age voice, decided on card 1) ----------
-   Under 25 (u): lowercase, Gen Z slang, short.
-     EN ngl / no cap / bet / lowkey / pls · PT-PT bué / tipo / siga / tá-se · PT-BR real oficial / pfv / partiu / é sobre isso
-     ES Spain literal / en plan / god / me renta · ES Mexico neta / cañón / va · ES LatAm posta / re / dale
-   25+ (o): sentence case, dry and self-aware, mature slang only.
-     EN dawg · PT-PT ya, mano / bora · PT-BR demorou, mano · ES Spain tío / venga · ES Mexico carnal / simón · ES LatAm bro
-   Card 1 is shown before age is known: the "Under 25" tooltip speaks u, the "25+" tooltip speaks o.
-   No under-25 slang may appear in a 25+ line and vice versa (checked by an audit script). */
+   Under 25 (u): lowercase, light and playful, no slang.
+   25+ (o): sentence case, calm, direct, informative.
+   Banned everywhere: mano, af, ngl, no cap, bet, lowkey, dawg, bué, tipo, real oficial, pfv, wey, carnal, simón,
+   boludo, bro, posta, literal, god, me renta, neta, cañón, tío, vibe check, side quest.
+   The 3 questions are plain questions; tooltips are 2 to 5 words. */
 /* ---------- Copy: base per language ---------- */
 const BASE={
- en:{intro:{kick:'You found a portal.',sub:'3 swipes. 45 seconds. One surprise at the end.',cta:'Step in',snd:'Best with sound on'},
-   hint:'Swipe to a side. Or tap it.',
-   c1:{a:'Under 25',b:'25+'},
-   c2:{a:'Bored',b:'Surprise me',u:{q:"Vibe check. Right now you're...",ta:'dead inside, ngl',tb:'chaos pls'},o:{q:"Honestly, right now you're...",ta:'Not proud of it.',tb:"I've earned it."}},
-   c3:{a:'Something?',b:'Someone?',u:{q:'Side quest unlocked. Looking for...',ta:'bet, we\'re so back',tb:'lonely. dry af'},o:{q:'Side quest. Looking for...',ta:'Yah, dawg. Let\'s go!',tb:'Yah, dawg. Dry season.'}},
-   load:{u:['reading the room...','lowkey a lot'],o:['Reading your vibe.','Discreetly.']},
-   done:{u:{h:'ok. your game is ready.',cta:"let's cook"},o:{h:'Your game is ready.',cta:'Play'},you:'your swipes',replay:'Replay the pre-game'}},
- pt:{intro:{kick:'Encontraste um portal.',sub:'3 swipes. 45 segundos. Uma surpresa no fim.',cta:'Entrar',snd:'Melhor com som'},
-   hint:'Desliza para um lado. Ou toca.',
-   c1:{a:'Menos de 25',b:'25 ou mais'},
-   c2:{a:'Na seca',b:'Surpreende-me',u:{q:'Vibe check. Agora estás...',ta:'zero bateria, tipo a sério',tb:'caos, bué de caos'},o:{q:'Sinceramente, agora estás...',ta:'Sem orgulho nenhum.',tb:'Mereço.'}},
-   c3:{a:'Alguma coisa?',b:'Alguém?',u:{q:'Missão secundária desbloqueada. Andas à procura de...',ta:'siga, tá-se. é hoje',tb:'tá seco que dói'},o:{q:'Missão secundária. Procuras...',ta:'Ya, mano. Bora!',tb:'Ya, mano. Deserto total.'}},
-   load:{u:['a ler-te...','é muita fruta'],o:['A ler a tua vibe.','Com discrição.']},
-   done:{u:{h:'ya. o teu jogo tá pronto.',cta:'bora'},o:{h:'O teu jogo está pronto.',cta:'Jogar'},you:'os teus swipes',replay:'Repetir o pré-jogo'}},
- br:{intro:{kick:'Você achou um portal.',sub:'3 swipes. 45 segundos. Uma surpresa no final.',cta:'Entrar',snd:'Melhor com som'},
-   hint:'Arrasta pra um lado. Ou toca.',
-   c1:{a:'Menos de 25',b:'25 ou mais'},
-   c2:{a:'De bobeira',b:'Me surpreende',u:{q:'Vibe check. Agora você tá...',ta:'zero bateria, real oficial',tb:'caos pfv, tô surtando'},o:{q:'Sinceramente, agora você tá...',ta:'Sem orgulho nenhum.',tb:'Eu mereço.'}},
-   c3:{a:'Alguma coisa?',b:'Alguém?',u:{q:'Side quest liberada. Tá procurando...',ta:'partiu. é sobre isso',tb:'tá seco, socorro'},o:{q:'Missão extra. Você procura...',ta:'Demorou, mano. Bora!',tb:'Demorou, mano. Temporada de seca.'}},
-   load:{u:['te lendo...','é muita coisa'],o:['Lendo sua vibe.','Com discrição.']},
-   done:{u:{h:'pronto. seu jogo tá on.',cta:'bora'},o:{h:'Seu jogo está pronto.',cta:'Jogar'},you:'seus swipes',replay:'Repetir o pré-jogo'}},
- es:{intro:{kick:'Encontraste un portal.',sub:'3 swipes. 45 segundos. Una sorpresa al final.',cta:'Entrar',snd:'Mejor con sonido'},
-   hint:'Desliza a un lado. O tócalo.',
-   c1:{a:'Menos de 25',b:'25 o más'},
-   c2:{a:'Modo aburrido',b:'Sorpréndeme',u:{q:'Vibe check. Ahora mismo estás...',ta:'cero batería, literal',tb:'caos, porfa'},o:{q:'Sinceramente, ahora mismo estás...',ta:'Sin orgullo ninguno.',tb:'Me lo he ganado.'}},
-   c3:{a:'¿Algo?',b:'¿Alguien?',u:{q:'Misión secundaria desbloqueada. Buscas...',ta:'god. me renta, vamos',tb:'más seco que la mojama'},o:{q:'Misión secundaria. ¿Qué buscas?',ta:'Ya, tío. ¡Vamos!',tb:'Ya, tío. Temporada de sequía.'}},
-   load:{u:['leyéndote...','es mucho, en plan'],o:['Leyendo tu vibra.','Con discreción.']},
-   done:{u:{h:'listo. tu juego está on.',cta:'venga'},o:{h:'Tu juego está listo.',cta:'Jugar'},you:'tus swipes',replay:'Repetir el pre-juego'}},
+  en:{intro:{kick:'You found a portal.',sub:'3 swipes. 45 seconds. One surprise at the end.',cta:'Step in',snd:'Best with sound on'},
+    hint:'Swipe left or right. Or tap.',
+    c1:{q:'How old are you?',a:'Under 25',b:'25+',ta:'out till sunrise',tb:'Home at a decent hour.'},
+    c2:{a:'Bored',b:'Surprise me',u:{q:'Your mood right now?',ta:'low battery',tb:'up for anything'},o:{q:'Your mood right now?',ta:'Need a change.',tb:'Up for something new.'}},
+    c3:{a:'Something?',b:'Someone?',u:{q:'What are you after today?',ta:'a place to go',tb:'people to meet'},o:{q:'What are you after today?',ta:'A place to go.',tb:'People to meet.'}},
+    load:{u:['reading your answers...','almost there'],o:['Reading your answers.','One moment.']},
+    done:{u:{h:'your game is ready.',cta:'play'},o:{h:'Your game is ready.',cta:'Play'},you:'your swipes',replay:'Replay the pre-game'}},
+  pt:{intro:{kick:'Encontraste um portal.',sub:'3 swipes. 45 segundos. Uma surpresa no fim.',cta:'Entrar',snd:'Melhor com som'},
+    hint:'Desliza para a esquerda ou direita. Ou toca.',
+    c1:{q:'Que idade tens?',a:'Menos de 25',b:'25 ou mais',ta:'na rua até de manhã',tb:'Em casa a horas.'},
+    c2:{a:'Na seca',b:'Surpreende-me',u:{q:'Como estás agora?',ta:'sem bateria',tb:'para o que der e vier'},o:{q:'Como estás agora?',ta:'A precisar de mudar.',tb:'Com vontade de algo novo.'}},
+    c3:{a:'Alguma coisa?',b:'Alguém?',u:{q:'O que procuras hoje?',ta:'um sítio para ir',tb:'gente para conhecer'},o:{q:'O que procuras hoje?',ta:'Um sítio para ir.',tb:'Gente para conhecer.'}},
+    load:{u:['a ler as tuas respostas...','quase'],o:['A ler as tuas respostas.','Um momento.']},
+    done:{u:{h:'o teu jogo está pronto.',cta:'bora'},o:{h:'O teu jogo está pronto.',cta:'Jogar'},you:'os teus swipes',replay:'Repetir o pré-jogo'}},
+  br:{intro:{kick:'Você achou um portal.',sub:'3 swipes. 45 segundos. Uma surpresa no final.',cta:'Entrar',snd:'Melhor com som'},
+    hint:'Arrasta pra esquerda ou direita. Ou toca.',
+    c1:{q:'Qual a sua idade?',a:'Menos de 25',b:'25 ou mais',ta:'na rua até o sol nascer',tb:'Em casa num horário decente.'},
+    c2:{a:'De bobeira',b:'Me surpreende',u:{q:'Como você está agora?',ta:'sem bateria',tb:'topando tudo'},o:{q:'Como você está agora?',ta:'Precisando mudar de ares.',tb:'A fim de algo novo.'}},
+    c3:{a:'Alguma coisa?',b:'Alguém?',u:{q:'O que você procura hoje?',ta:'um lugar pra ir',tb:'gente pra conhecer'},o:{q:'O que você procura hoje?',ta:'Um lugar pra ir.',tb:'Gente pra conhecer.'}},
+    load:{u:['lendo suas respostas...','quase lá'],o:['Lendo suas respostas.','Um momento.']},
+    done:{u:{h:'seu jogo está pronto.',cta:'bora'},o:{h:'Seu jogo está pronto.',cta:'Jogar'},you:'seus swipes',replay:'Repetir o pré-jogo'}},
+  es:{intro:{kick:'Encontraste un portal.',sub:'3 swipes. 45 segundos. Una sorpresa al final.',cta:'Entrar',snd:'Mejor con sonido'},
+    hint:'Desliza a la izquierda o derecha. O toca.',
+    c1:{q:'¿Cuántos años tienes?',a:'Menos de 25',b:'25 o más',ta:'de fiesta hasta el amanecer',tb:'En casa a una hora decente.'},
+    c2:{a:'Aburrimiento',b:'Sorpréndeme',u:{q:'¿Cómo estás ahora?',ta:'sin batería',tb:'con ganas de todo'},o:{q:'¿Cómo estás ahora?',ta:'Necesito un cambio.',tb:'Con ganas de algo nuevo.'}},
+    c3:{a:'¿Algo?',b:'¿Alguien?',u:{q:'¿Qué buscas hoy?',ta:'un lugar adonde ir',tb:'gente que conocer'},o:{q:'¿Qué buscas hoy?',ta:'Un lugar adonde ir.',tb:'Gente que conocer.'}},
+    load:{u:['leyendo tus respuestas...','casi'],o:['Leyendo tus respuestas.','Un momento.']},
+    done:{u:{h:'tu juego está listo.',cta:'vamos'},o:{h:'Tu juego está listo.',cta:'Jugar'},you:'tus swipes',replay:'Repetir el pre-juego'}},
 };
 
-/* ---------- Copy: market x language (culture layer) ---------- */
+/* ---------- Copy: market x language (culture layer: phrase, card 1 tooltips, loader line, intro sub) ---------- */
 const LOC={
  lis:{
-  en:{phrase:'The Adamastor saw everything.',c1:{q:'Before the metro shuts at 1. You are...',ta:'miradouro till sunrise, obviously',tb:'In bed by 1. Mostly.'},
-      c2:{u:{ta:'dead inside. fim do mês energy',tb:'chaos pls. rua da bica at 2am'},o:{ta:'Monday. All the tascas shut.',tb:'Earned it. Free esplanada table in April.'}},
+  en:{phrase:'The Adamastor saw everything.',c1:{ta:'miradouro till sunrise',tb:'Home by 1.'},
       l3:{u:'counting the minis',o:'Taking a senha. Please wait.'},
       sub:{u:'45 secs. less than a mini survives in august.',o:'45 seconds. Shorter than the rent talk at every dinner.'}},
-  pt:{phrase:'O Adamastor viu tudo.',c1:{q:'Antes que o metro feche à 1h. Tens...',ta:'miradouro até ao nascer do sol, óbvio',tb:'Na cama à 1h. Quase sempre.'},
-      c2:{u:{ta:'zero bateria. energia de fim do mês',tb:'caos, bué. rua da bica às 2h'},o:{ta:'Segunda-feira, tascas todas fechadas.',tb:'Mereço. Mesa livre na esplanada em abril.'}},
+  pt:{phrase:'O Adamastor viu tudo.',c1:{ta:'miradouro até de manhã',tb:'Em casa à 1h.'},
       l3:{u:'a contar as minis',o:'A tirar senha. Aguarde.'},
       sub:{u:'45 segundos. menos do que uma mini dura em agosto.',o:'45 segundos. Menos do que a conversa da renda em cada jantar.'}},
-  br:{phrase:'O Adamastor viu tudo.',c1:{q:'Antes do metrô fechar à 1h. Você tem...',ta:'miradouro até o sol nascer, óbvio',tb:'Na cama à 1h. Quase sempre.'},
-      c2:{u:{ta:'zero bateria. energia de fim de mês',tb:'caos pfv. rua da bica às 2h'},o:{ta:'Segunda-feira, todas as tascas fechadas.',tb:'Eu mereço. Mesa livre na esplanada em abril.'}},
+  br:{phrase:'O Adamastor viu tudo.',c1:{ta:'miradouro até o sol nascer',tb:'Em casa à 1h.'},
       l3:{u:'contando as minis',o:'Tirando senha. Aguarde.'},
       sub:{u:'45 segundos. menos do que uma mini dura em agosto.',o:'45 segundos. Menos do que o papo do aluguel em todo jantar.'}},
-  es:{phrase:'El Adamastor lo vio todo.',c1:{q:'Antes de que cierre el metro a la 1. Tienes...',ta:'miradouro hasta el amanecer, literal',tb:'En la cama a la 1. Casi siempre.'},
-      c2:{u:{ta:'cero batería. energía de fin de mes',tb:'caos, porfa. rua da bica a las 2'},o:{ta:'Lunes, todas las tascas cerradas.',tb:'Me lo he ganado. Mesa libre en una esplanada en abril.'}},
+  es:{phrase:'El Adamastor lo vio todo.',c1:{ta:'miradouro hasta el amanecer',tb:'En casa a la 1.'},
       l3:{u:'contando las minis',o:'Sacando número. Espere.'},
       sub:{u:'45 segundos. menos de lo que dura una mini en agosto.',o:'45 segundos. Menos que la charla del alquiler en cada cena.'}}},
  cdmx:{
-  es:{phrase:'El ajolote lo vio todo.',c1:{q:'Antes de que cierre el Metro. Tienes...',ta:'aguanto pantitlán en hora pico, fácil',tb:'Taxi. Siempre.'},
-      c2:{a:'Con hueva',u:{q:'Vibe check. Ahorita andas...',ta:'cero pila, neta',tb:'caos, porfa. modo pesero con cumbia al máximo'},o:{q:'Honestamente, ahorita andas...',ta:'En la fila del SAT, otra vez.',tb:'Me lo gané. Cantina con botana gratis.'}},
-      c3:{u:{q:'Misión secundaria desbloqueada. Buscas...',ta:'a darle, que hoy sí',tb:'bien seco, wey'},o:{ta:'Simón, carnal. ¡Vámonos!',tb:'Simón, carnal. Temporada de secas.'}},
-      load:{u:['leyéndote...','está cañón']},
-      done:{u:{h:'listo. tu juego ya está.',cta:'va'}},
+  es:{phrase:'El ajolote lo vio todo.',c1:{ta:'pantitlán en hora pico',tb:'Taxi. Siempre.'},
       l3:{u:'preguntándole al de los tamales oaxaqueños',o:'Esperando que pare la lluvia de las 5.'},
       sub:{u:'45 segundos. más rápido que un taco de canasta.',o:'45 segundos. Menos de lo que avanza Periférico a las 6.'}},
-  en:{phrase:'The axolotl saw everything.',c1:{q:'Before the Metro closes. You are...',ta:'pantitlán at rush hour? light work.',tb:'Taxi. Always.'},
-      c2:{u:{ta:'dead inside, no cap',tb:'chaos pls. pesero blasting cumbia energy'},o:{ta:'Stuck in a line at the SAT. Again.',tb:'Earned it. Cantina, free botanas.'}},
+  en:{phrase:'The axolotl saw everything.',c1:{ta:'pantitlán at rush hour',tb:'Taxi. Always.'},
       l3:{u:'asking the tamales oaxaqueños guy',o:'Waiting for the 5pm rain to stop.'},
       sub:{u:'45 secs. faster than a taco de canasta.',o:'45 seconds. Less than Periférico moves at 6pm.'}},
-  pt:{phrase:'O axolote viu tudo.',c1:{q:'Antes que o metro feche. Tens...',ta:'aguento pantitlán em hora de ponta, tranquilo',tb:'Táxi. Sempre.'},
-      c2:{u:{tb:'caos, bué. pesero com cumbia no máximo'},o:{ta:'Na fila do SAT, outra vez.',tb:'Mereço. Cantina com botana grátis.'}},
+  pt:{phrase:'O axolote viu tudo.',c1:{ta:'pantitlán em hora de ponta',tb:'Táxi. Sempre.'},
       l3:{u:'a perguntar ao senhor dos tamales oaxaqueños',o:'À espera que pare a chuva das 5.'},
       sub:{u:'45 segundos. mais rápido que um taco de canasta.',o:'45 segundos. Menos do que o Periférico anda às 6.'}},
-  br:{phrase:'O axolote viu tudo.',c1:{q:'Antes do metrô fechar. Você tem...',ta:'encaro pantitlán na hora do rush, de boa',tb:'Táxi. Sempre.'},
-      c2:{u:{tb:'caos pfv. pesero com cumbia no talo'},o:{ta:'Na fila do SAT de novo.',tb:'Eu mereço. Cantina com botana de graça.'}},
+  br:{phrase:'O axolote viu tudo.',c1:{ta:'pantitlán na hora do rush',tb:'Táxi. Sempre.'},
       l3:{u:'perguntando pro moço dos tamales oaxaqueños',o:'Esperando a chuva das 5 parar.'},
       sub:{u:'45 segundos. mais rápido que um taco de canasta.',o:'45 segundos. Menos do que o Periférico anda às 6.'}}},
  br:{
-  br:{phrase:'A capivara tá te julgando.',c1:{q:'Antes do esquenta começar. Você tem...',ta:'rolê, after e padaria às 6h',tb:'Já fui do after. Hoje sou do pagode de domingo.'},
-      c2:{u:{ta:'zero bateria, real oficial',tb:'caos pfv. energia de bloquinho'},o:{ta:'Tédio nível grupo da família no zap.',tb:'Eu mereço. Litrão gelado no copo americano.'}},
+  br:{phrase:'A capivara tá te julgando.',c1:{ta:'rolê, after e padaria',tb:'Pagode de domingo.'},
       l3:{u:'perguntando pro tio do isopor',o:"Esperando o 'tô chegando' chegar."},
       sub:{u:'45 segundos. mais rápido que um gole de litrão.',o:'45 segundos. Menos que um áudio de 3 minutos.'}},
-  en:{phrase:'The capybara is judging you.',c1:{q:'Before the esquenta starts. You are...',ta:'rolê, after, padaria at 6am',tb:'Retired from afters. Sunday pagode now.'},
-      c2:{u:{ta:'dead inside, no cap',tb:'chaos pls. bloquinho energy'},o:{ta:'Family-group-chat-at-7am bored.',tb:'Earned it. Cold litrão, copo americano.'}},
+  en:{phrase:'The capybara is judging you.',c1:{ta:'rolê, after, padaria',tb:'Sunday pagode.'},
       l3:{u:'asking the guy with the cooler',o:"Waiting for 'tô chegando' to arrive."},
       sub:{u:'45 secs. faster than a sip of litrão.',o:'45 seconds. Shorter than a 3-minute voice note.'}},
-  pt:{phrase:'A capivara está a julgar-te.',c1:{q:'Antes de o esquenta começar. Tens...',ta:'rolê, after e padaria às 6h',tb:'Já me reformei do after. Agora é pagode ao domingo.'},
-      c2:{u:{tb:'caos, bué. energia de bloquinho'},o:{ta:'Tédio nível grupo da família às 7h.',tb:'Mereço. Litrão gelado no copo americano.'}},
+  pt:{phrase:'A capivara está a julgar-te.',c1:{ta:'rolê, after e padaria',tb:'Pagode ao domingo.'},
       l3:{u:'a perguntar ao tio do isopor',o:"À espera que o 'tô chegando' chegue."},
       sub:{u:'45 segundos. mais rápido do que um gole de litrão.',o:'45 segundos. Menos do que um áudio de 3 minutos.'}},
-  es:{phrase:'La capibara te está juzgando.',
-      c3:{u:{ta:'dale, que pinta',tb:'re seco, boludo'},o:{ta:'Dale, bro. ¡Vamos!',tb:'Dale, bro. Temporada de sequía.'}},c1:{q:'Antes de que empiece el esquenta. Tienes...',ta:'rolê, after y panadería a las 6',tb:'Ya me jubilé del after. Ahora, pagode de domingo.'},
-      c2:{u:{ta:'cero batería, posta',tb:'caos, porfa. energía de bloquinho'},o:{ta:'Nivel grupo familiar a las 7am.',tb:'Me lo gané. Litrão helado en copo americano.'}},
+  es:{phrase:'La capibara te está juzgando.',c1:{ta:'rolê, after y panadería',tb:'Pagode de domingo.'},
       l3:{u:'preguntándole al de la conservadora',o:"Esperando que el 'tô chegando' llegue."},
-      load:{u:['leyéndote...','es re mucho']},done:{u:{cta:'vamos'}},
       sub:{u:'45 segundos. más rápido que un trago de litrão.',o:'45 segundos. Menos que un audio de 3 minutos.'}}},
 };
 function merge(a,b){const o=Array.isArray(a)?a.slice():{...a};for(const k in b){o[k]=(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])&&a&&typeof a[k]==='object')?merge(a[k],b[k]):b[k]}return o}
@@ -955,7 +936,7 @@ addEventListener('keydown',e=>{if(e.key==='ArrowLeft')lean(-1);else if(e.key==='
 function lean(dir){if(S.busy||S.phase!=='cards'||!top())return;audio();S.busy=true;const el=top();clearTimeout(idleT);el.classList.remove('nudge');el.style.transition='transform .3s var(--spring)';el.style.transform=`translate(${dir*34}px,0) rotate(${dir*6}deg)`;side(dir*.75);blip();
  const tip=el.querySelector(`.tip.${dir<0?'a':'b'}`);setTimeout(()=>{S.busy=false;commit(dir,0)},tip?260:180)}
 
-function commit(dir,dy){if(S.busy)return;S.busy=true;clearTimeout(idleT);const el=S.cards[0],lvl=S.i+1,w=fx.w||innerWidth;
+function commit(dir,dy){if(S.busy)return;S.busy=true;clearTimeout(idleT);const el=S.cards[0],lvl=Math.min(S.i+1,S.age==='o'&&S.i>0?2:3),w=fx.w||innerWidth;
  const c=cardCopy(S.i),line=dir<0?c.ta:c.tb,slow=!!line&&!RM;S.ans.push({k:KEYS[S.i],v:dir<0?'a':'b',label:dir<0?c.a:c.b});track('sw_pregame_answer',{q:KEYS[S.i],answer:dir<0?'a':'b',step:S.i+1});if(S.i===0)S.age=dir<0?'u':'o';
  el.querySelectorAll('.tip').forEach(t=>t.classList.remove('on'));el.style.pointerEvents='none';el.style.zIndex=20;
  el.style.transition=slow?'transform .7s cubic-bezier(.05,.9,.2,1),opacity .6s ease-in':'transform .26s cubic-bezier(.2,.6,.35,1),opacity .26s';
@@ -993,8 +974,8 @@ let toastT;function toast(s){const t=$('#toast');t.textContent=s;t.classList.add
 
 
 /* ---------- GAME COPY (u = under 25, o = 25+). Intros are per market, everything else per language ---------- */
-const GC={en:{ui:{time:{u:'time!',o:'Time.'},out:{u:'out of lives. relax, you still win',o:'Out of lives. You still get the surprise.'},head:{u:'ok so you\'re:',o:'Our read on you:'},pick:{u:'go here, tonight',o:'Your pick'},gift:{u:'and the surprise',o:'Your surprise'},lock:{u:'locked to your number. nobody\'s stealing it',o:'Locked to your number.'},cta:{u:'claim it in soko',o:'Unlock it in Soko'},venue:'Partner venue (placeholder)',again:'Play again',box:{u:'better box unlocked 🔓',o:'Better box unlocked.'},goal:'better box at',best:'Venue best this week (demo)',share:{u:'challenge a friend',o:'Challenge a friend'},shareTxt:'{s} pts on Soko World. Beat that.',find:'find',hits:{u:['clean','easy','sheesh','ok go off'],o:['Nice.','Clean.','Well done.','Sharp.']}}},
- pt:{ui:{time:{u:'tempo!',o:'Tempo.'},out:{u:'sem vidas. calma, ganhas na mesma',o:'Sem vidas. A surpresa é tua na mesma.'},head:{u:'ok, então és:',o:'A nossa leitura:'},pick:{u:'vai aqui, hoje',o:'A tua escolha'},gift:{u:'e a surpresa',o:'A tua surpresa'},lock:{u:'fica no teu número. ninguém te rouba isto',o:'Fica associada ao teu número.'},cta:{u:'resgata na soko',o:'Desbloqueia na Soko'},venue:'Espaço parceiro (exemplo)',again:'Jogar outra vez',box:{u:'caixa melhor desbloqueada 🔓',o:'Caixa melhor desbloqueada.'},goal:'caixa melhor aos',best:'Recorde do sítio esta semana (demo)',share:{u:'desafia alguém',o:'Desafia alguém'},shareTxt:'{s} pontos na Soko World. Bate isto.',find:'encontra',hits:{u:['limpo','fácil','tá-se bem','épico'],o:['Bem.','Limpo.','Muito bem.','Certeiro.']}}},
+const GC={en:{ui:{time:{u:'time!',o:'Time.'},out:{u:'out of lives. relax, you still win',o:'Out of lives. You still get the surprise.'},head:{u:'ok so you\'re:',o:'Our read on you:'},pick:{u:'go here, tonight',o:'Your pick'},gift:{u:'and the surprise',o:'Your surprise'},lock:{u:'locked to your number. nobody\'s stealing it',o:'Locked to your number.'},cta:{u:'claim it in soko',o:'Unlock it in Soko'},venue:'Partner venue (placeholder)',again:'Play again',box:{u:'better box unlocked 🔓',o:'Better box unlocked.'},goal:'better box at',best:'Venue best this week (demo)',share:{u:'challenge a friend',o:'Challenge a friend'},shareTxt:'{s} pts on Soko World. Beat that.',find:'find',hits:{u:['clean','easy','nice','sharp'],o:['Nice.','Clean.','Well done.','Sharp.']}}},
+ pt:{ui:{time:{u:'tempo!',o:'Tempo.'},out:{u:'sem vidas. calma, ganhas na mesma',o:'Sem vidas. A surpresa é tua na mesma.'},head:{u:'ok, então és:',o:'A nossa leitura:'},pick:{u:'vai aqui, hoje',o:'A tua escolha'},gift:{u:'e a surpresa',o:'A tua surpresa'},lock:{u:'fica no teu número. ninguém te rouba isto',o:'Fica associada ao teu número.'},cta:{u:'resgata na soko',o:'Desbloqueia na Soko'},venue:'Espaço parceiro (exemplo)',again:'Jogar outra vez',box:{u:'caixa melhor desbloqueada 🔓',o:'Caixa melhor desbloqueada.'},goal:'caixa melhor aos',best:'Recorde do sítio esta semana (demo)',share:{u:'desafia alguém',o:'Desafia alguém'},shareTxt:'{s} pontos na Soko World. Bate isto.',find:'encontra',hits:{u:['limpo','fácil','boa','épico'],o:['Bem.','Limpo.','Muito bem.','Certeiro.']}}},
  br:{ui:{time:{u:'acabou!',o:'Tempo.'},out:{u:'acabaram as vidas. relaxa, você ganha igual',o:'Sem vidas. A surpresa é sua mesmo assim.'},head:{u:'ok, então você é:',o:'Nossa leitura:'},pick:{u:'vai aqui, hoje',o:'Sua escolha'},gift:{u:'e a surpresa',o:'Sua surpresa'},lock:{u:'fica no seu número. ninguém rouba',o:'Fica vinculada ao seu número.'},cta:{u:'resgata na soko',o:'Desbloqueie na Soko'},venue:'Local parceiro (exemplo)',again:'Jogar de novo',box:{u:'caixa melhor liberada 🔓',o:'Caixa melhor liberada.'},goal:'caixa melhor com',best:'Recorde do lugar nesta semana (demo)',share:{u:'desafia alguém',o:'Desafie alguém'},shareTxt:'{s} pontos na Soko World. Bate essa.',find:'acha',hits:{u:['limpo','fácil','brabo','insano'],o:['Boa.','Limpo.','Muito bem.','Certeiro.']}}},
  es:{ui:{time:{u:'¡tiempo!',o:'Tiempo.'},out:{u:'sin vidas. tranqui, igual ganas',o:'Sin vidas. La sorpresa es tuya igual.'},head:{u:'vale, entonces eres:',o:'Nuestra lectura:'},pick:{u:'ve aquí, hoy',o:'Tu plan'},gift:{u:'y la sorpresa',o:'Tu sorpresa'},lock:{u:'va con tu número. nadie te lo roba',o:'Queda vinculada a tu número.'},cta:{u:'reclámalo en soko',o:'Desbloquéalo en Soko'},venue:'Lugar aliado (ejemplo)',again:'Jugar otra vez',box:{u:'caja mejor desbloqueada 🔓',o:'Caja mejor desbloqueada.'},goal:'caja mejor a los',best:'Récord del lugar esta semana (demo)',share:{u:'reta a alguien',o:'Reta a alguien'},shareTxt:'{s} puntos en Soko World. Supéralo.',find:'busca',hits:{u:['limpio','fácil','brutal','épico'],o:['Bien.','Limpio.','Muy bien.','Certero.']}}}};
 // per game: [intro lis u,o, cdmx u,o, br u,o], hint u,o, lose u,o, twist u,o, reward u,o, personas {key:[name,u,o]}
@@ -1010,7 +991,7 @@ fog:{
  br:[["uma linha. todos os azulejos. pensa antes", "Uma linha por todos os azulejos. A maré tá vindo.", "uma linha. todas as pedras. pensa antes", "Uma linha por todas as pedras. A poeira tá vindo.", "uma linha. todas as pedras. pensa antes", "Um caminho por todas as pedras. O rio tá subindo."],["arrasta por todos. volta pra desfazer", "Arraste uma linha por todos. Volte para desfazer."],["a maré levou. de novo", "A maré levou essa."],["agora maior. respira", "Um padrão maior agora."],["a última linha deu nisso. pra você", "Sua última linha terminou numa surpresa."],{psychic:['Vidente','chutou antes da névoa sumir','Sabia antes de aparecer.'],detective:['Detetive','esperou as provas','Nunca chuta. Só conclui.'],ghost:['Caça-Fantasmas','correu atrás de todo fantasma','Abordou toda sombra. Ousado.']}],
  es:[["una línea. todos los azulejos. piensa primero", "Una línea por todos los azulejos. Viene la marea.", "una línea. todas las piedras. piensa primero", "Una línea por todas las piedras. Viene la tolvanera.", "una línea. todas las piedras. piensa primero", "Un camino por todas las piedras. El río está subiendo."],["arrastra por todos. regresa para deshacer", "Arrastra una línea por todos. Regresa para deshacer."],["se lo llevó la marea. otra vez", "La marea se llevó esa."],["ahora más grande. respira", "Un patrón más grande ahora."],["la última línea llegó a esto. para ti", "Tu última línea terminó en una sorpresa."],{psychic:['Vidente','adivinaste antes que la niebla','Lo sabías antes de que apareciera.'],detective:['Detective','esperaste las pruebas','Nunca adivina. Solo concluye.'],ghost:['Cazafantasmas','perseguiste a todos los fantasmas','Te acercaste a cada sombra. Audaz.']}]},
 pour:{
- en:[['pour the minis. the seagull is watching','Pour to the line. The seagull has intentions.','serve the mezcal. the bar won\'t stop shaking','Pour to the line. The pesero just hit a tope.','pour the chope. the parrot wants it','Pour to the line. The parrot is thirsty.'],['hold to pour. let go on the line. tap the bird','Hold to pour, release on the line. Tap the bird away.'],['spilled. the sea\'s jealous','That\'s a puddle now.'],['plot twist. smaller glass','Smaller glass. Good luck.'],['that last pour is yours. irl','That last pour is real. It\'s waiting for you.'],{brim:['Brim Lord','full to the top, no fear','Half full is for cowards.'],surgeon:['The Surgeon','stopped on a pixel. scary','Steady hand. Possibly a surgeon.'],splash:['Splash Zone','the whole bar is wet. iconic','Generous with everything. Including spills.']}],
+ en:[['pour the minis. the seagull is watching','Pour to the line. The seagull has intentions.','serve the mezcal. the bar won\'t stop shaking','Pour to the line. The pesero just hit a tope.','pour the chope. the parrot wants it','Pour to the line. The parrot is thirsty.'],['hold to pour. let go on the line. tap the bird','Hold to pour, release on the line. Tap the bird away.'],['spilled. the sea\'s jealous','That\'s a puddle now.'],['plot twist. smaller glass','Smaller glass. Good luck.'],['that last pour is yours','That last pour is real. It\'s waiting for you.'],{brim:['Brim Lord','full to the top, no fear','Half full is for cowards.'],surgeon:['The Surgeon','stopped on a pixel. scary','Steady hand. Possibly a surgeon.'],splash:['Splash Zone','the whole bar is wet. iconic','Generous with everything. Including spills.']}],
  pt:[['tira as minis. a gaivota tá de olho','Enche até à linha. A gaivota tem planos.','serve o mezcal. o balcão não pára de abanar','Enche até à linha. O pesero apanhou uma lomba.','tira o chope. o papagaio quer','Enche até à linha. O papagaio tem sede.'],['segura pra encher. larga na linha. toca no pássaro','Segura para encher, larga na linha. Afasta o pássaro.'],['entornou. o mar tá com inveja','Agora é uma poça.'],['plot twist. copo mais pequeno','Copo mais pequeno. Boa sorte.'],['esse último copo é teu. a sério','Esse último copo é real. Está à tua espera.'],{brim:['Senhor da Espuma','cheio até cima, sem medo','Meio cheio é para medrosos.'],surgeon:['Cirurgião','parou no pixel. assustador','Mão firme. Talvez cirurgião.'],splash:['Zona de Salpicos','o bar todo molhado. icónico','Generoso em tudo. Até nos salpicos.']}],
  br:[['tira as minis. a gaivota tá de olho','Encha até a linha. A gaivota tem planos.','serve o mezcal. o balcão não para de tremer','Encha até a linha. O pesero passou num quebra-molas.','tira o chope. o papagaio quer','Encha até a linha. O papagaio está com sede.'],['segura pra encher. solta na linha. toca no bicho','Segure para encher, solte na linha. Espante o pássaro.'],['derramou. o mar tá com inveja','Agora é uma poça.'],['plot twist. copo menor','Copo menor. Boa sorte.'],['esse último copo é seu. de verdade','Esse último copo é real. Está te esperando.'],{brim:['Lorde da Espuma','cheio até a boca, sem medo','Meio cheio é pra medroso.'],surgeon:['Cirurgião','parou no pixel. assustador','Mão firme. Talvez cirurgião.'],splash:['Zona de Respingo','molhou o bar inteiro. icônico','Generoso em tudo. Até nos respingos.']}],
  es:[['sirve las minis. la gaviota está mirando','Llena hasta la línea. La gaviota tiene planes.','sirve el mezcal. la barra no deja de temblar','Llena hasta la línea. El pesero agarró un tope.','sirve el chope. el loro lo quiere','Llena hasta la línea. El loro tiene sed.'],['mantén para servir. suelta en la línea. toca al pájaro','Mantén para servir, suelta en la línea. Espanta al pájaro.'],['se derramó. el mar tiene envidia','Ahora es un charco.'],['plot twist. vaso más chico','Vaso más pequeño. Suerte.'],['ese último vaso es tuyo. de verdad','Ese último vaso es real. Te está esperando.'],{brim:['Señor de la Espuma','lleno hasta arriba, sin miedo','Medio lleno es para cobardes.'],surgeon:['Cirujano','paró en el píxel. da miedo','Pulso firme. Quizás cirujano.'],splash:['Zona de Salpicadura','mojaste toda la barra. icónico','Generoso con todo. Incluso con los derrames.']}]},
@@ -1030,7 +1011,7 @@ echo:{
  br:[["seu amigo ficou lá atrás. leva ele pra grade", "Seu amigo se perdeu lá atrás. Leve ele até a grade.", "seu amigo ficou lá atrás. leva ele pra grade", "Seu amigo se perdeu lá atrás. Leve ele até a grade.", "seu amigo ficou lá atrás. leva ele pra grade", "Seu amigo se perdeu lá atrás. Leve ele até a grade."],["arrasta seu amigo. foge dos seguranças", "Arraste seu amigo até o palco. Evite os seguranças."],["pego. volta pro fim", "Os seguranças notaram."],["strobo ligado. ficaram mais rápidos", "Os seguranças aceleraram."],["na grade. e deixaram isso pra você", "Na grade. Deixaram uma surpresa lá pra você."],{parrot:['Papagaio','cópia perfeita, zero criatividade','Exato. Sempre.'],remix:['Remixer','colocou seu toque, claro','Não resistiu a melhorar.'],speedrun:['Speedrunner','respondeu antes de acabar','Responde mais rápido que lê.']}],
  es:[["tu compa se quedó atrás. llévalo hasta adelante", "Tu amigo se perdió atrás. Llévalo a primera fila.", "tu compa se quedó atrás. llévalo hasta adelante", "Tu amigo se perdió atrás. Llévalo a primera fila.", "tu compa se quedó atrás. llévalo hasta adelante", "Tu amigo se perdió atrás. Llévalo a primera fila."],["arrastra a tu compa. esquiva a los de seguridad", "Arrastra a tu amigo al escenario. Evita a seguridad."],["te cacharon. al fondo otra vez", "Seguridad se dio cuenta."],["luces estrobo. van más rápido", "Seguridad aceleró el paso."],["primera fila. y te dejaron esto", "Primera fila. Te dejaron una sorpresa ahí."],{parrot:['Loro','copia perfecta, cero creatividad','Exacto. Siempre.'],remix:['Remixer','le pusiste tu toque, obvio','No pudiste evitar mejorarlo.'],speedrun:['Speedrunner','respondiste antes de que acabara','Responde más rápido de lo que lee.']}]},
 ride:{
- en:[['last ferry in 30 secs. RUN','Last ferry. 30 seconds. Your knees will remember this.','last pesero in 30 secs. RUN','Last pesero. 30 seconds. Mind the topes.','last boat in 30 secs. RUN','Last boat. 30 seconds. Mind the puddles.'],['tap to jump. tap again mid-air','Tap to jump. Grab the coins.'],['ouch. keep going','That will bruise.'],['gravity said bye','Gravity has left the building.'],['made it. your stop has a surprise waiting','You made it. Someone left you something at the door.'],{roof:['Rooftop Runner','took the roofs. main character','Took the scenic, dangerous route.'],straight:['Straight Liner','no detours, pure focus','Shortest path. Always.'],alley:['Alley Cat','found every coin in the city','You know streets nobody\'s mapped.']}],
+ en:[['last ferry in 30 secs. RUN','Last ferry. 30 seconds. Your knees will remember this.','last pesero in 30 secs. RUN','Last pesero. 30 seconds. Mind the topes.','last boat in 30 secs. RUN','Last boat. 30 seconds. Mind the puddles.'],['tap to jump. tap again mid-air','Tap to jump. Grab the coins.'],['ouch. keep going','That will bruise.'],['gravity said bye','Gravity has left the building.'],['made it. your stop has a surprise waiting','You made it. Someone left you something at the door.'],{roof:['Rooftop Runner','took the roofs. scenic route','Took the scenic, dangerous route.'],straight:['Straight Liner','no detours, pure focus','Shortest path. Always.'],alley:['Alley Cat','found every coin in the city','You know streets nobody\'s mapped.']}],
  pt:[['último barco em 30 seg. CORRE','Último barco. 30 segundos. Os joelhos vão lembrar-se.','último pesero em 30 seg. CORRE','Último pesero. 30 segundos. Cuidado com as lombas.','último barco em 30 seg. CORRE','Último barco. 30 segundos. Cuidado com as poças.'],['toca pra saltar. toca outra vez no ar','Toca para saltar. Apanha as moedas.'],['ai. continua','Isso vai deixar marca.'],['a gravidade foi-se','A gravidade saiu de cena.'],['chegaste. a tua paragem tem surpresa','Chegaste. Deixaram-te algo à porta.'],{roof:['Corredor de Telhados','foste pelos telhados. protagonista','Foste pelo caminho bonito e perigoso.'],straight:['Linha Reta','sem desvios, foco total','Caminho mais curto. Sempre.'],alley:['Gato de Beco','apanhaste todas as moedas da cidade','Conheces ruas que ninguém mapeou.']}],
  br:[['último barco em 30 seg. CORRE','Último barco. 30 segundos. Seus joelhos vão lembrar.','último pesero em 30 seg. CORRE','Último pesero. 30 segundos. Cuidado com os quebra-molas.','último barco em 30 seg. CORRE','Último barco. 30 segundos. Cuidado com as poças.'],['toca pra pular. toca de novo no ar','Toque para pular. Pegue as moedas.'],['ai. segue','Isso vai deixar roxo.'],['a gravidade vazou','A gravidade saiu de cena.'],['chegou. seu ponto tem surpresa','Você chegou. Deixaram algo na porta.'],{roof:['Corredor de Telhado','foi pelos telhados. protagonista','Foi pelo caminho bonito e perigoso.'],straight:['Linha Reta','sem desvio, foco total','Caminho mais curto. Sempre.'],alley:['Gato de Beco','pegou todas as moedas da cidade','Conhece ruas que ninguém mapeou.']}],
  es:[['último ferry en 30 seg. CORRE','Último ferry. 30 segundos. Tus rodillas lo recordarán.','último pesero en 30 seg. CORRE','Último pesero. 30 segundos. Cuidado con los topes.','último barco en 30 seg. CORRE','Último barco. 30 segundos. Cuidado con los charcos.'],['toca para saltar. toca otra vez en el aire','Toca para saltar. Agarra las monedas.'],['auch. sigue','Eso dejará moretón.'],['la gravedad se fue','La gravedad abandonó el edificio.'],['llegaste. tu parada tiene sorpresa','Llegaste. Alguien te dejó algo en la puerta.'],{roof:['Corredor de Azoteas','fuiste por las azoteas. protagonista','Tomaste la ruta bonita y peligrosa.'],straight:['Línea Recta','sin desvíos, foco total','El camino más corto. Siempre.'],alley:['Gato Callejero','agarraste todas las monedas de la ciudad','Conoces calles que nadie ha mapeado.']}]},
@@ -1074,7 +1055,7 @@ const MI={lis:0,cdmx:2,br:4};
 const SITX=window.SITX||{};const SITIDS=Object.keys(SITX);
 const SITHINT={en:['pick fast. nobody tells you what\'s right','Pick fast. Nobody tells you what\'s right.'],pt:['escolhe rápido. ninguém te diz o que está certo','Escolhe rápido. Ninguém te diz o que está certo.'],br:['escolhe rápido. ninguém te diz o que é certo','Escolha rápido. Ninguém diz o que é certo.'],es:['elige rápido. nadie te dice qué es lo correcto','Elige rápido. Nadie te dice qué es lo correcto.']};
 SITIDS.forEach(id=>{GL[id]={};['en','pt','br','es'].forEach(l=>{const d=SITX[id][l]||SITX[id].en,o=d.open,O=o.charAt(0).toUpperCase()+o.slice(1)+'.';GL[id][l]=[[o,O,o,O,o,O],SITHINT[l],['…','…'],['',''],['',''],{match:['','',''],chaos:['','',''],host:['','','']}]})});
-const L=()=>GL[G.id][S.lang];const UI=()=>GC[S.lang].ui;const A_=()=>S.age==='u'?0:1;
+const L=()=>GL[G.id][S.lang];const UI=()=>GC[S.lang].ui;const A_=()=>S.age==='u'?0:1;const CALM=()=>S.age==='o';
 const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[Math.floor(Math.random()*a.length)],wpick=a=>{const w=a.map(p=>.35+(p.p||0));let r=Math.random()*w.reduce((x,y)=>x+y,0);for(let i=0;i<a.length;i++){r-=w[i];if(r<=0)return a[i]}return a[a.length-1]};
 const bored=()=>S.ans[1]&&S.ans[1].v==='a',surprise=()=>S.ans[1]&&S.ans[1].v==='b';
 /* emoji + svg sprite caches */
@@ -1135,7 +1116,7 @@ function gameFor(){if(S.forceGame)return S.forceGame;if(S.strange){const sm=S.an
  const g=pick(pool);PLAYED.push(g);return g}
 let SAMEGAME=false;
 function cap(txt,fn){G.capFn=fn||null;const c=$('#gcap');if(!c)return;{const v=fn?fn():txt;if(v&&v.indexOf('<em>')>=0)c.innerHTML=v;else c.textContent=v}c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop')}
-function startGame(){const id=gameFor();track('sw_game_start',{game:id,replay:!!S.plan});Object.keys(G).forEach(k=>{if(k!=='on')delete G[k]});Object.assign(G,{id,on:true,score:0,combo:0,lastHit:0,lives:4,t0:0,el:0,twisted:false,ended:false,dur:30000,inv:0,shake:0,goalHit:false,lost:0,hits:0,taps:0,fl:[]});G.pick=(S.plan&&S.planG===id)?S.plan:wpick(grp(S.m,PGRP[id]));
+function startGame(){const id=gameFor();track('sw_game_start',{game:id,replay:!!S.plan});Object.keys(G).forEach(k=>{if(k!=='on')delete G[k]});Object.assign(G,{id,on:true,score:0,combo:0,lastHit:0,lives:4,t0:0,el:0,twisted:false,ended:false,dur:S.age==='o'?34000:30000,inv:0,shake:0,goalHit:false,lost:0,hits:0,taps:0,fl:[]});G.pick=(S.plan&&S.planG===id)?S.plan:wpick(grp(S.m,PGRP[id]));
  $('#done').classList.remove('on');$('#hover').style.opacity='0';$('#prog').classList.add('hide');$('#reveal').classList.remove('on');
  const gm=$('#game');gm.classList.add('on');gm.classList.toggle('sitg',!!GM[id].sit);gm.innerHTML=`<div class="ghud"><div class="gscore" id="gscore">0<small>PTS</small></div><div class="glives" id="glives"></div><div class="gtime"><i id="gtime"></i></div><div class="ggoal" id="ggoal">🎁 ${PASS[id]}</div></div><div class="gcap" id="gcap"></div><div class="gbox"><div class="ginner" id="ginner"><canvas id="gc"></canvas></div></div><div class="ghint" id="ghint"></div>`;
  drawLives();cap('');$('#ghint').textContent='';arp([0,2,4],.06);
@@ -1161,8 +1142,8 @@ function loop(now){if(!G.on||G.ended&&G.finT==null)return;let dt=Math.min(.05,(n
  if(G.t0&&!G.ended){G.el=now-G.t0;const p=Math.min(1,G.el/G.dur);$('#gtime').style.transform=`scaleX(${1-p})`;if(G.inv>0)G.inv-=dt;
   {const lv=Math.min(2,Math.floor(p*3));if(lv!==G.lv){G.lv=lv;whoomp();G.shake=.3;G.fl.push({s:UI().lvl+' '+(lv+1),x:G.W/2,y:G.H*.3,t:1.6,big:true,c:'#FFC93C'})}}
   if(!G.twisted&&p>(surprise()?1/3:2/3)){G.twisted=true;cap(null,()=>L()[3][A_()]);swoosh(1,3,false);GM[G.id].twist&&GM[G.id].twist()}
-  GM[G.id].update(dt,p*.6);if(p>=1)endGame('time')}
- ctx.save();if(G.shake>0){G.shake-=dt;ctx.translate(rnd(-5,5)*G.shake*4,rnd(-5,5)*G.shake*4)}
+  GM[G.id].update(CALM()&&!GM[G.id].sit?dt*.88:dt,p*.6);if(p>=1)endGame('time')}
+ ctx.save();if(G.shake>0){G.shake-=dt;const sk=CALM()?1.5:4;ctx.translate(rnd(-5,5)*G.shake*sk,rnd(-5,5)*G.shake*sk)}
  GM[G.id].draw(ctx,G.W,G.H,dt);if(!GM[G.id].sit)comp(ctx,G.W,G.H,dt);
  G.fl=G.fl.filter(f=>(f.t-=dt)>0);G.fl.forEach(f=>label(ctx,f.s,f.x,f.y-(1-f.t)*40,f.big?22:17,f.c||'#fff',Math.min(1,f.t*2)));
  if(G.grace&&!G.ended){const h=GM[G.id].hint&&GM[G.id].hint();if(h){ctx.beginPath();ctx.arc(h[0],h[1],26+Math.sin(now/140)*6,0,7);ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();dE(ctx,'👆',h[0]+8,h[1]+38+Math.sin(now/140)*6,46)}}
@@ -1174,7 +1155,7 @@ function hit(n,x,y,txt){G.cHop=1;if(G.grace){G.grace=false;G.t0=performance.now(
  $('#gscore').innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:(txt?txt+' ':'')+'+'+pts+(G.combo>1?' x'+G.combo:''),x,y,t:.8,c:'#fff'});note(Math.min(G.combo,4),0,0);buzz(8);
  const[ax,ay]=toApp(x,y);burst(ax,ay,0,8+G.combo*2);
  if(!G.goalHit&&G.score>=GOAL[G.id]){G.goalHit=true;$('#ggoal').classList.add('on');arp([2,4,3,4],.05);G.fl.push({s:'🎁 '+UI().box[S.age],x:G.W/2,y:G.H*.35,t:1.4,c:'#FFC93C',big:true})}
- if(Math.random()<.22)(()=>{const i=ri(0,3);cap(null,()=>UI().hits[S.age][i])})()}
+ if(Math.random()<(CALM()?.1:.22))(()=>{const i=ri(0,3);cap(null,()=>UI().hits[S.age][i])})()}
 function lose(x,y){if(G.grace||G.inv>0||G.ended)return false;G.cHurt=1;G.lives--;G.lost++;G.inv=1.5;G.combo=0;G.shake=.35;drawLives();buzz([25,40,25]);whoomp();cap(null,()=>L()[2][A_()]);
  if(x!=null)G.fl.push({s:'💔',x,y,t:.9,big:true});if(G.lives<=0)setTimeout(()=>endGame('out'),350);return true}
 function jumpEnd(){audio();BGM.stop();if(!S.age)S.age='o';if(!G.id||G.ended||!G.on){S.phase='game';stack.innerHTML='';startGame()}G.ended=true;G.on=false;G.score=Math.max(G.score||0,PASS[G.id]+100);G.pass=true;G.persona=GM[G.id].persona();G.best=G.score;$('#game').classList.remove('on');showReveal()}
@@ -1605,7 +1586,7 @@ function sitGame(id,D,PT,mnt){return{sit:true,
   if(G.bi<0&&G.ph!=='title'){this.title();return}G.pt+=dt;
   if(G.ph==='title'){if(G.pt>=6.5)this.untitle();return}
   if(G.ph==='intro'){if(G.pt>=G.wait){G.ph='ask';G.pt=0;BGM.duck(1);const o=$('#sitact');if(o)o.classList.remove('on');G.s3.ask();this.render(true);note(G.bi%5)}}
-  else if(G.ph==='ask'){const T=16,e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to);this.render()}}
+  else if(G.ph==='ask'){const T=CALM()?22:16,e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to);this.render()}}
   else if(G.ph==='res'&&G.pt>3&&G.lives>0){if(G.bi>=4){G.ph='end';endGame('time');if(G.pass)G.s3.fin()}else this.beat(G.bi+1)}},
  draw(ctx,W,H,dt){if(G.s3&&!G.s3.stub){ctx.clearRect(-20,-20,W+40,H+40);G.s3.tick(dt);return}sky(ctx,W,H)},
  hint(){return null},
@@ -1773,7 +1754,7 @@ const USLT={en:['What pulls you lately?',{culture:'I stare at paintings',food:'F
  es:['¿Qué te jala últimamente?',{culture:'Me quedo viendo cuadros',food:'Dame de comer',music:'¿Qué onda?',night:'Malas decisiones',after:'Tocar pasto'}]};
 const UNK=()=>!ALP.on&&qs.get('admin')!=='1'&&qs.get('zone')==='fallback'&&!qs.get('game');
 /* ---------- Roulette wheel: idles slowly, spins on touch or flick, lands on one choice ---------- */
-const WEMO={culture:'🖼️',food:'🍜',music:'🎤',night:'🪩',after:'🌿',fallback:'🔮'},WCOL={culture:'#F2E58A',food:'#F4A08F',music:'#9FD8F2',night:'#C9A2F2',after:'#B6EB9C',fallback:'#FFF4EA'};
+const WEMO={culture:'🖼️',food:'🍜',music:'🎤',night:'🪩',after:'🌿',fallback:'🔮'},WCOL={culture:'#ede77d',food:'#f68686',music:'#8bdfff',night:'#e08efb',after:'#b0ef8b',fallback:'#f9f0f0'};
 function wheel(host,keys,o){const N=keys.length,st=360/N,disc=host.querySelector('.wd'),ems=[...disc.querySelectorAll('i')];
  disc.style.background=`conic-gradient(from ${-st/2}deg,${keys.map((k,j)=>`${WCOL[k]} ${j*st}deg ${(j+1)*st}deg`).join(',')})`;
  let R=o.start||0,v=o.idle,mode=o.locked?'still':'idle',last=performance.now(),drag=null,prevIdx=-1,raf=0,snap=null;
