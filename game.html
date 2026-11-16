@@ -531,6 +531,20 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .usl .uv span{font-size:16px}
 #alpha .awv span{margin-right:6px}
 #alpha .ago[disabled]{opacity:.45}
+
+#alpha .atp:has(.str) .atb{min-height:118px}
+#alpha .atb.str{background:linear-gradient(135deg,#1C0A10,#4b2a6b);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.35),inset 0 0 0 2px rgba(255,255,255,.15)}
+#alpha .atb.str .sh{position:absolute;right:58px;top:6px;width:26px;height:70px;background:#000;border-radius:13px 13px 4px 4px;box-shadow:0 0 14px #000;animation:shd 2.2s ease-in-out infinite}
+#alpha .atb.str .orb{position:absolute;right:8px;top:14px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ffc6e0 40%,#8A3FFC);animation:orb 3s ease-in-out infinite}
+@keyframes shd{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}@keyframes orb{50%{transform:translateY(8px) scale(1.08)}}
+.strg .glives,.strg .gtime,.strg .ggoal{visibility:hidden}
+.strg .gcap,.strg .ghint{pointer-events:none}
+.strg .gcap em{font-family:'Season Mix',serif;font-style:italic;font-weight:400}
+.sdlg{position:absolute;left:10px;right:10px;bottom:10px;z-index:6;background:rgba(14,10,12,.92);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;animation:situp .35s both;color:#f5efe4}
+.sdlg .sdw{font-weight:900;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#E74479}
+.sdlg .sdq{font-family:'Season Mix',serif;font-size:21px;line-height:1.15;margin-bottom:4px}
+.sdlg button{font:inherit;font-weight:800;font-size:15px;text-align:left;border:0;border-radius:12px;padding:12px 14px;background:#f5efe4;color:#1C0A10;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+.sdlg button:active{transform:translateY(2px)}
 </style>
 </head>
 <body>
@@ -1115,7 +1129,7 @@ function sceneSVG(m){if(m==='lis')return`<svg viewBox="0 0 300 400" preserveAspe
 
 /* ---- shell ---- */
 const PLAYED=[];
-function gameFor(){if(S.forceGame)return S.forceGame;const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
+function gameFor(){if(S.forceGame)return S.forceGame;if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
  if(!S.classic){if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}const all=Object.values(ROUTE2).map(r=>r[some?1:0]);let pool=all.filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=all}const g=pick(pool);PLAYED.push(g);return g}
  if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}let pool=(some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']).filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']}
  const g=pick(pool);PLAYED.push(g);return g}
@@ -1612,6 +1626,145 @@ GM.signal={init(){const CS=[['#FFC93C','#FF8A1F'],['#3BE0E0','#3B6BE0'],['#FF2E8
  hint(){const s=G.spots.find(s=>s.on>0&&s.real&&!s.ans);return s?[s.x*G.W,s.y*G.H]:null},
  persona(){const r=G.react.length?G.react.reduce((a,b)=>a+b,0)/G.react.length:999;if(r<330)return'lighthouse';if(G.far>=3)return'owl';return'interp'}};
 
+/* ---------- STRANGE set: long, sneaky, comical games ---------- */
+const STR={
+ corridor:{
+  en:{open:'a corridor. very normal. keep walking',hint:'trust the screen',spot:'…is that someone?',run:'RUN!!',runs:'swipe to run faster',fum:['that is not how legs work','you tripped on nothing','faster by doing… that? no','it is gaining. stop helping'],calm:'your legs know what they are doing. let them',door:'a closet! TAP TO HIDE',bang:'BANG. BANG. BANG.',who:'the shade',mirror:'you look at the closet mirror. no you. just a shade wearing your shoes.',
+   q:[['…hey. hey in there. you dropped your keys.',[['slide them under the door',120,'k'],['i have no keys. go away',40,'m'],['i have a knife',20,'x']]],
+      ['can i say something? i was not chasing you. i was running TO you. different vibe.',[['why??',100,'k'],['that is literally chasing',60,'m'],['prove it',80,'m']]],
+      ['nobody hugs a shade. they just scream and sprint down corridors. every time.',[['that sounds lonely',150,'k'],['you are kinda scary',60,'m'],['have you tried a different face?',40,'x']]],
+      ['…so. who is the monster now?',[['open the door',200,'k'],['stay in the closet',50,'x'],['hug the mirror',120,'m']]]],
+   end:{host:'you hugged it. it smelled like old carpet. best night of the week.',match:'you two talked till the lights stopped flickering. weirdly wholesome.',chaos:'you stayed in the closet. the shade left a note: "same time tomorrow?"'}},
+  pt:{open:'um corredor. muito normal. continua a andar',hint:'confia no ecrã',spot:'…está ali alguém?',run:'FOGE!!',runs:'desliza para correr mais rápido',fum:['as pernas não funcionam assim','tropeçaste no nada','mais rápido a fazer… isso? não','está a ganhar terreno. para de ajudar'],calm:'as tuas pernas sabem o que fazem. deixa-as',door:'um armário! TOCA PARA TE ESCONDERES',bang:'BUM. BUM. BUM.',who:'a sombra',mirror:'olhas para o espelho do armário. não estás lá. só uma sombra com os teus ténis.',
+   q:[['…olá. olá aí dentro. deixaste cair as chaves.',[['passa-as por baixo da porta',120,'k'],['não tenho chaves. vai-te embora',40,'m'],['tenho uma faca',20,'x']]],
+      ['posso dizer uma coisa? eu não te estava a perseguir. estava a correr PARA ti. é diferente.',[['porquê??',100,'k'],['isso é literalmente perseguir',60,'m'],['prova',80,'m']]],
+      ['ninguém abraça uma sombra. gritam e correm pelos corredores. sempre.',[['isso parece solitário',150,'k'],['és um bocado assustadora',60,'m'],['já tentaste outra cara?',40,'x']]],
+      ['…então. quem é o monstro agora?',[['abrir a porta',200,'k'],['ficar no armário',50,'x'],['abraçar o espelho',120,'m']]]],
+   end:{host:'abraçaste-a. cheirava a alcatifa velha. melhor noite da semana.',match:'falaram até as luzes pararem de piscar. estranhamente fofo.',chaos:'ficaste no armário. a sombra deixou um bilhete: "amanhã à mesma hora?"'}},
+  br:{open:'um corredor. bem normal. continua andando',hint:'confia na tela',spot:'…tem alguém ali?',run:'CORRE!!',runs:'desliza pra correr mais rápido',fum:['perna não funciona assim','você tropeçou no nada','mais rápido fazendo… isso? não','tá chegando perto. para de ajudar'],calm:'suas pernas sabem o que fazem. deixa elas',door:'um armário! TOCA PRA SE ESCONDER',bang:'BUM. BUM. BUM.',who:'a sombra',mirror:'você olha no espelho do armário. você não tá lá. só uma sombra usando seu tênis.',
+   q:[['…oi. oi aí dentro. você deixou cair a chave.',[['passa por baixo da porta',120,'k'],['não tenho chave. vai embora',40,'m'],['tô com uma faca',20,'x']]],
+      ['posso falar uma coisa? eu não tava te perseguindo. eu tava correndo ATÉ você. é outra vibe.',[['por quê??',100,'k'],['isso é literalmente perseguir',60,'m'],['prova',80,'m']]],
+      ['ninguém abraça uma sombra. a galera grita e corre pelo corredor. sempre.',[['isso parece solitário',150,'k'],['você é meio assustadora',60,'m'],['já tentou outra cara?',40,'x']]],
+      ['…então. quem é o monstro agora?',[['abrir a porta',200,'k'],['ficar no armário',50,'x'],['abraçar o espelho',120,'m']]]],
+   end:{host:'você abraçou. tinha cheiro de carpete velho. melhor noite da semana.',match:'vocês conversaram até a luz parar de piscar. estranhamente fofo.',chaos:'você ficou no armário. a sombra deixou um bilhete: "amanhã mesmo horário?"'}},
+  es:{open:'un pasillo. muy normal. sigue caminando',hint:'confía en la pantalla',spot:'…¿hay alguien ahí?',run:'¡¡CORRE!!',runs:'desliza para correr más rápido',fum:['así no funcionan las piernas','te tropezaste con la nada','¿más rápido haciendo… eso? no','te está alcanzando. deja de ayudar'],calm:'tus piernas saben lo que hacen. déjalas',door:'¡un clóset! TOCA PARA ESCONDERTE',bang:'PUM. PUM. PUM.',who:'la sombra',mirror:'te ves en el espejo del clóset. no estás. solo una sombra con tus tenis.',
+   q:[['…oye. oye, ahí adentro. se te cayeron las llaves.',[['pásalas por debajo de la puerta',120,'k'],['no tengo llaves. vete',40,'m'],['tengo un cuchillo',20,'x']]],
+      ['¿puedo decirte algo? no te perseguía. corría HACIA ti. otra vibra.',[['¿¿por qué??',100,'k'],['eso es literalmente perseguir',60,'m'],['demuéstralo',80,'m']]],
+      ['nadie abraza a una sombra. gritan y corren por los pasillos. siempre.',[['eso suena solitario',150,'k'],['sí das un poco de miedo',60,'m'],['¿has probado otra cara?',40,'x']]],
+      ['…entonces. ¿quién es el monstruo ahora?',[['abrir la puerta',200,'k'],['quedarse en el clóset',50,'x'],['abrazar el espejo',120,'m']]]],
+   end:{host:'la abrazaste. olía a alfombra vieja. la mejor noche de la semana.',match:'platicaron hasta que las luces dejaron de parpadear. raro, pero tierno.',chaos:'te quedaste en el clóset. la sombra dejó una nota: "¿mañana a la misma hora?"'}}},
+ ether:{
+  en:{open:'breathe in. you are a cloud. clouds do not touch things',hint:'do what the screen says',ban:['TAP THE BUBBLES','CONNECT THE STARS','MOVE THE MOON','PRESS THE UNIVERSE'],
+   v:{idle:'beautiful. you are doing nothing. so pure.',hint:'between us: floating never won anything. that is the joke.',a1:'…was that a bubble? we do not pop here.',a2:'please. the bubbles have families.',a3:'i can hear you tapping. the universe can hear you tapping.',a4:'stop. making. bubbles. explode.',s0:'those stars were in perfect, ancient disorder.',s1:'you are drawing on the sky. like a toddler. on a SKY.',m0:'put. the moon. down.',m1:'THE MOON HAS A SCHEDULE.',b0:'whatever you do. do NOT press the universe.',b1:'good. stay zen. stay… prizeless.',fin:'…fine. you win. take your prize. namaste or whatever.'},
+   end:{chaos:'you broke the universe. the voice needs a minute.',match:'you found peace by ignoring the peace guy. iconic.',host:'very zen. then very not. balance, technically.'}},
+  pt:{open:'inspira. és uma nuvem. as nuvens não tocam em nada',hint:'faz o que o ecrã diz',ban:['TOCA NAS BOLHAS','LIGA AS ESTRELAS','MEXE A LUA','CARREGA NO UNIVERSO'],
+   v:{idle:'lindo. não estás a fazer nada. tão puro.',hint:'cá entre nós: flutuar nunca ganhou nada. a piada é essa.',a1:'…isso foi uma bolha? aqui não se rebenta nada.',a2:'por favor. as bolhas têm família.',a3:'ouço-te a tocar. o universo ouve-te a tocar.',a4:'para. de. rebentar. bolhas.',s0:'essas estrelas estavam numa desordem perfeita e antiga.',s1:'estás a desenhar no céu. como uma criança. no CÉU.',m0:'pousa. a lua.',m1:'A LUA TEM HORÁRIOS.',b0:'aconteça o que acontecer. NÃO carregues no universo.',b1:'boa. fica zen. fica… sem prémio.',fin:'…pronto. ganhaste. leva o prémio. namaste ou lá o que é.'},
+   end:{chaos:'partiste o universo. a voz precisa de um minuto.',match:'encontraste a paz a ignorar o senhor da paz. icónico.',host:'muito zen. depois nada zen. equilíbrio, tecnicamente.'}},
+  br:{open:'inspira. você é uma nuvem. nuvem não toca em nada',hint:'faz o que a tela diz',ban:['TOCA NAS BOLHAS','LIGA AS ESTRELAS','MEXE A LUA','APERTA O UNIVERSO'],
+   v:{idle:'lindo. você não tá fazendo nada. tão puro.',hint:'aqui entre nós: flutuar nunca ganhou nada. a piada é essa.',a1:'…isso foi uma bolha? aqui ninguém estoura nada.',a2:'por favor. as bolhas têm família.',a3:'tô ouvindo você tocar. o universo tá ouvindo você tocar.',a4:'para. de. estourar. bolha.',s0:'essas estrelas estavam numa bagunça perfeita e antiga.',s1:'você tá desenhando no céu. tipo criança. no CÉU.',m0:'solta. a lua.',m1:'A LUA TEM AGENDA.',b0:'aconteça o que acontecer. NÃO aperta o universo.',b1:'boa. fica zen. fica… sem prêmio.',fin:'…tá bom. você ganhou. pega o prêmio. namastê sei lá.'},
+   end:{chaos:'você quebrou o universo. a voz precisa de um minuto.',match:'você achou a paz ignorando o cara da paz. icônico.',host:'muito zen. depois zero zen. equilíbrio, tecnicamente.'}},
+  es:{open:'inhala. eres una nube. las nubes no tocan nada',hint:'haz lo que dice la pantalla',ban:['TOCA LAS BURBUJAS','UNE LAS ESTRELLAS','MUEVE LA LUNA','APRIETA EL UNIVERSO'],
+   v:{idle:'hermoso. no estás haciendo nada. qué pureza.',hint:'entre nos: flotar nunca ganó nada. ese es el chiste.',a1:'…¿eso fue una burbuja? aquí no se revienta nada.',a2:'por favor. las burbujas tienen familia.',a3:'te oigo tocar. el universo te oye tocar.',a4:'deja. de. reventar. burbujas.',s0:'esas estrellas estaban en un desorden perfecto y antiguo.',s1:'estás dibujando en el cielo. como niño. en el CIELO.',m0:'suelta. la luna.',m1:'LA LUNA TIENE HORARIO.',b0:'pase lo que pase. NO aprietes el universo.',b1:'bien. quédate zen. quédate… sin premio.',fin:'…ya. ganaste. llévate tu premio. namasté o lo que sea.'},
+   end:{chaos:'rompiste el universo. la voz necesita un minuto.',match:'encontraste la paz ignorando al señor de la paz. icónico.',host:'muy zen. luego nada zen. equilibrio, técnicamente.'}}}};
+const SG=()=>STR[G.id][S.lang]||STR[G.id].en;
+['corridor','ether'].forEach(id=>{GL[id]={};['en','pt','br','es'].forEach(l=>{const d=STR[id][l],o=d.open,O=o.charAt(0).toUpperCase()+o.slice(1)+'.';GL[id][l]=[[o,O,o,O,o,O],[d.hint,d.hint],['…','…'],['',''],['',''],{match:['','',''],chaos:['','',''],host:['','','']}]})});
+Object.assign(PASS,{corridor:500,ether:500});Object.assign(GOAL,{corridor:900,ether:900});Object.assign(PGRP,{corridor:'night',ether:'culture'});
+const ROUTE3={culture:['ether','ether'],after:['ether','ether'],food:['corridor','corridor'],music:['corridor','corridor'],night:['corridor','corridor'],fallback:['corridor','ether']};
+function addPts(n,x,y){if(!n)return;G.score=Math.max(0,G.score+n);const e=$('#gscore');if(e)e.innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:(n>0?'+':'')+n,x:x==null?G.W/2:x,y:y==null?G.H*.5:y,t:.9,c:n>0?'#fff':'#ffb8cb',big:Math.abs(n)>=100});
+ if(n>0){note(2,0,0);buzz(6)}if(!G.passHit&&G.score>=PASS[G.id]){G.passHit=true;const g=$('#ggoal');if(g)g.textContent='⭐ '+GOAL[G.id];arp([0,2,4],.05)}}
+function sfx(kind){if(!A.c)return;const c=A.c,t=c.currentTime;
+ if(kind==='squeak')osc('square',900,t,.14,.004,.05,0,1500);
+ else if(kind==='honk')osc('sawtooth',220,t,.25,.01,.06,0,160);
+ else if(kind==='thud'){osc('sine',90,t,.35,.004,.7,0,40);}
+ else if(kind==='pop')osc('sine',600+Math.random()*500,t,.09,.003,.08,0,1400);
+ else if(kind==='chime')[0,4,7].forEach((k,i)=>osc('sine',660*Math.pow(2,k/12),t+i*.06,.16,.01,.5,0,660*Math.pow(2,k/12)));
+ else if(kind==='growl'){const s=c.createBufferSource();s.buffer=A.n;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=180;const g=c.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.5,t+.08);g.gain.exponentialRampToValueAtTime(.0001,t+.9);s.connect(lp);lp.connect(g);out(g,0,false);s.start(t);s.stop(t+.95);osc('sawtooth',70,t,.22,.05,.7,0,48)}
+ else if(kind==='step')osc('triangle',140,t,.05,.002,.08,0,90)}
+function sChoices(q,cb){const box=document.createElement('div');box.className='sdlg';box.innerHTML=`<div class="sdw">${q[0]}</div><div class="sdq">${q[1]}</div>${q[2].map((c,i)=>`<button data-i="${i}">${c[0]}</button>`).join('')}`;$('#ginner').appendChild(box);
+ const t0=performance.now();box.onclick=e=>{const b=e.target.closest('button');if(!b||performance.now()-t0<600)return;e.stopPropagation();blip();const c=q[2][+b.dataset.i];box.remove();cb(c)}}
+
+/* S1. THE CORRIDOR: liminal POV horror that turns into a hug */
+GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1.2,lx:0,ly:0,tx:0,catch_:0,fum:0,idleRun:0,fumN:0,monZ:14,flash:0,look:0,door:0,bang:0,qi:-1,cnt:{k:0,m:0,x:0},stepT:0,said:{}});$('#game').classList.add('strg');cap(null,()=>SG().open)},
+ update(dt){G.grace=false;G.ct+=dt;const L_=SG();G.pos+=G.spd*dt;G.stepT-=dt*G.spd;if(G.stepT<=0&&G.ph!=='closet'&&G.ph!=='talk'){G.stepT=1.1;sfx('step')}
+  G.lx+=(G.tx-G.lx)*Math.min(1,dt*4);
+  if(G.ph==='walk'&&G.ct>7){G.ph='spot';G.ct=0;cap(null,()=>SG().spot);sfx('growl')}
+  else if(G.ph==='spot'){G.spd=.4;G.monZ=Math.max(2.4,14-G.ct*4.4);if(G.ct>1.6&&!G.said.g2){G.said.g2=1;sfx('growl');G.shake=.3}if(G.ct>2.6){G.ph='turn';G.ct=0;whoomp();G.shake=.6}}
+  else if(G.ph==='turn'){if(G.ct>.7){G.ph='run';G.ct=0;G.spd=7;cap(null,()=>SG().runs)}}
+  else if(G.ph==='run'){G.fum=Math.max(0,G.fum-dt);if(G.fum>0){G.spd+=(1.6-G.spd)*Math.min(1,dt*6);G.catch_=Math.min(1,G.catch_+dt*.28);G.idleRun=0}else{G.spd+=(7-G.spd)*Math.min(1,dt*2);G.catch_=Math.max(0,G.catch_-dt*.06);G.idleRun+=dt;G._acc=(G._acc||0)+dt*22;if(G._acc>=20){addPts(20,G.W/2,G.H*.62);G._acc=0}
+     if(G.idleRun>4&&!G.said.calm){G.said.calm=1;cap(null,()=>SG().calm)}}
+   if(Math.random()<dt*.35)sfx('growl');G.look=Math.max(0,G.look-dt);if(Math.random()<dt*.18&&!G.look)G.look=.45;
+   if(G.catch_>=1){G.catch_=.55;G.shake=.7;whoomp();addPts(-50,G.W/2,G.H*.4)}
+   if(G.ct>22&&G.idleRun>2||G.ct>40){G.ph='door';G.ct=0;G.spd=2.5;cap(null,()=>SG().door);G.door=0}}
+  else if(G.ph==='door'){G.door=Math.min(1,G.door+dt*.8);G.spd=Math.max(.6,G.spd-dt);if(G.ct>7)this.slam(false)}
+  else if(G.ph==='closet'){G.spd=0;G.bang-=dt;if(G.bang<=0&&G.ct<4.2){G.bang=.55+Math.random()*.3;G.shake=.45;sfx('thud');buzz(25)}if(G.ct>4.6&&G.qi<0)this.next()}
+  else if(G.ph==='end'){G.spd=0}},
+ slam(fast){if(G.ph!=='door')return;G.ph='closet';G.ct=0;G.bang=.3;sfx('thud');G.shake=.5;if(fast)addPts(G.door<.9?150:100,G.W/2,G.H*.45);else addPts(-40,G.W/2,G.H*.45);cap(null,()=>SG().bang)},
+ next(){const L_=SG();G.qi++;G.ph='talk';if(G.qi===3){cap(null,()=>SG().mirror);G.mir=1}
+  if(G.qi>=L_.q.length){G.ph='end';G.ct=0;setTimeout(()=>endGame('done'),900);return}
+  const q=L_.q[G.qi];setTimeout(()=>sChoices([L_.who,q[0],q[1]],c=>{G.cnt[c[2]]++;addPts(c[1],G.W/2,G.H*.42);if(G.qi===3&&c[2]==='k'){G.open=1;sfx('chime')}setTimeout(()=>this.next(),700)}),G.qi===3?1600:400)},
+ down(x,y){if(G.ph==='run'){G.fum=.8;G.fumN++;sfx(Math.random()<.5?'squeak':'honk');if(G.fumN%2===1)cap(null,()=>pick(SG().fum));G.fl.push({s:pick(['💨','🥴','🦶','🙃']),x,y,t:.7,big:true})}
+  else if(G.ph==='door')this.slam(true);else if(G.ph==='walk'||G.ph==='spot'){G.tx=(x/G.W-.5)*60}},
+ move(x,y){if(G.ph==='run'){G.fum=Math.max(G.fum,.35)}else G.tx=(x/G.W-.5)*60},
+ draw(ctx,W,H,dt){const t=performance.now()/1000,dark=G.ph==='closet'||G.ph==='talk'||G.ph==='end';
+  if(dark){ctx.fillStyle='#07060a';ctx.fillRect(0,0,W,H);const op=G.open?Math.min(1,(G.ct||0)):0;const dw=W*.5,dx=W/2-dw/2,dy=H*.12,dh=H*.76;
+   ctx.fillStyle='#120f0c';ctx.fillRect(dx,dy,dw,dh);ctx.fillStyle=`rgba(255,236,170,${.55+Math.sin(t*9)*.08})`;const gap=G.open?dw*Math.min(.95,(G.ct||0)*.5):4;ctx.fillRect(dx+dw/2-gap/2,dy,gap,dh);
+   if(G.open){const sx=W/2,sy=H*.55;ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(sx,sy-60,26,30,0,0,7);ctx.fill();ctx.fillRect(sx-38,sy-34,76,130);ctx.font='28px serif';ctx.textAlign='center';ctx.fillText('🫂',sx,sy-120)}
+   if(G.mir){ctx.save();ctx.globalAlpha=.85;rr(ctx,14,H*.18,W*.22,H*.4,10);ctx.fillStyle='#2a2f3a';ctx.fill();ctx.strokeStyle='#8b93a6';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(14+W*.11,H*.3,12,14,0,0,7);ctx.fill();ctx.fillRect(14+W*.11-16,H*.3+12,32,60);ctx.font='13px serif';ctx.textAlign='center';ctx.fillText('👟👟',14+W*.11,H*.3+86);ctx.restore()}
+   const v=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.8);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.85)');ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+   if(G.ph==='closet')label(ctx,SG().bang,W/2,H*.9,22,'#ffefb0',.6+Math.sin(t*12)*.3);return}
+  const bob=Math.sin(G.pos*2.6)*(2+G.spd*1.2),vx=W/2+G.lx+(G.ph==='run'?Math.sin(t*13)*3:0),vy=H*.46+bob,f=W*.55;
+  ctx.fillStyle='#d8d2ae';ctx.fillRect(0,0,W,vy);ctx.fillStyle='#6a5e3f';ctx.fillRect(0,vy,W,H-vy);
+  const seg=1.4,frac=(G.pos%seg)/seg,N=12,P=z=>{const s=f/Math.max(.35,z);return[vx-s*1.1,vy-s*.75,vx+s*1.1,vy+s*.85,s]};
+  for(let k=N;k>=0;k--){const z0=(k+1-frac)*seg*.6+.2,z1=(k-frac)*seg*.6+.2;if(z1<.25)continue;const a=P(z0),b=P(z1),fog=Math.min(1,z0/9);
+   const wall=`rgb(${Math.round(214-fog*170)},${Math.round(196-fog*156)},${Math.round(120-fog*100)})`,flo=`rgb(${Math.round(120-fog*90)},${Math.round(108-fog*82)},${Math.round(72-fog*58)})`,cei=`rgb(${Math.round(228-fog*180)},${Math.round(222-fog*176)},${Math.round(184-fog*150)})`;
+   const quad=(p,col)=>{ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(p[2],p[3]);ctx.lineTo(p[4],p[5]);ctx.lineTo(p[6],p[7]);ctx.closePath();ctx.fillStyle=col;ctx.fill()};
+   quad([a[0],a[1],b[0],b[1],b[0],b[3],a[0],a[3]],wall);quad([a[2],a[1],b[2],b[1],b[2],b[3],a[2],a[3]],wall);quad([a[0],a[3],a[2],a[3],b[2],b[3],b[0],b[3]],flo);quad([a[0],a[1],a[2],a[1],b[2],b[1],b[0],b[1]],cei);
+   if((k+Math.floor(G.pos/seg))%2===0){const lx0=vx-(b[4]*.35),lw=b[4]*.7,ly=b[1]+(a[1]-b[1])*.45;const fl=(Math.sin(t*37+k)>.93)?.25:1;ctx.fillStyle=`rgba(255,253,225,${(.9-fog*.7)*fl})`;ctx.fillRect(lx0,ly-2,lw,Math.max(2,(a[1]-b[1])*.25))}
+   if((k+Math.floor(G.pos/seg))%3===1){ctx.fillStyle=`rgba(60,42,22,${.9-fog*.6})`;const dh=(b[3]-b[1])*.62;ctx.fillRect(b[0]+2,b[3]-dh,Math.max(2,(a[0]-b[0])*-.5)||3,dh)}}
+  const fz=P(N*seg*.6);ctx.fillStyle='#0d0b05';ctx.fillRect(fz[0],fz[1],fz[2]-fz[0],fz[3]-fz[1]);
+  if(G.ph==='door'){const p=P(Math.max(.9,4-G.door*3));ctx.fillStyle='#5b3b1e';ctx.fillRect(p[0]+(p[2]-p[0])*.25,p[1]+(p[3]-p[1])*.05,(p[2]-p[0])*.5,(p[3]-p[1])*.95);ctx.fillStyle='#e8c070';ctx.beginPath();ctx.arc(p[0]+(p[2]-p[0])*.68,p[1]+(p[3]-p[1])*.55,Math.max(2,p[4]*.04),0,7);ctx.fill();
+   label(ctx,'👆',W/2,H*.82,36,'#fff',.6+Math.sin(t*8)*.4)}
+  const shade=(x,y,s,a)=>{ctx.save();ctx.globalAlpha=a;ctx.fillStyle='#000';ctx.shadowColor='#000';ctx.shadowBlur=18;ctx.translate(x+Math.sin(t*23)*s*.03,y);ctx.beginPath();ctx.ellipse(0,-s*.9,s*.22,s*.26,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(-s*.3,-s*.62);ctx.quadraticCurveTo(-s*.62,s*.2,-s*.5,s*.95);ctx.lineTo(s*.5,s*.95);ctx.quadraticCurveTo(s*.62,s*.2,s*.3,-s*.62);ctx.fill();ctx.lineWidth=s*.07;ctx.strokeStyle='#000';ctx.beginPath();ctx.moveTo(-s*.32,-s*.5);ctx.quadraticCurveTo(-s*.8,s*.1,-s*.95,s*.65+Math.sin(t*9)*s*.1);ctx.moveTo(s*.32,-s*.5);ctx.quadraticCurveTo(s*.8,s*.1,s*.95,s*.65-Math.sin(t*9)*s*.1);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-s*.07,-s*.93,s*.025,0,7);ctx.arc(s*.07,-s*.93,s*.025,0,7);ctx.fill();ctx.restore()};
+  if(G.ph==='spot'){const p=P(G.monZ);shade(vx,vy+p[4]*.2,p[4]*.55,.95)}
+  if(G.ph==='turn'){ctx.fillStyle=`rgba(0,0,0,${Math.sin(Math.min(1,G.ct/.7)*Math.PI)})`;ctx.fillRect(0,0,W,H)}
+  if(G.ph==='run'){const c=G.catch_;const g=ctx.createRadialGradient(W/2,H/2,H*(.6-c*.45),W/2,H/2,H*.75);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(0,0,0,${.35+c*.6})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+   if(G.look>0){ctx.save();ctx.globalAlpha=Math.min(1,G.look*4);rr(ctx,W-112,70,98,128,14);ctx.fillStyle='#d6c37c';ctx.fill();ctx.clip();shade(W-63,150,40+c*40,1);ctx.restore();label(ctx,'👀',W-63,62,16,'#fff')}
+   label(ctx,SG().run,W/2,H*.2+Math.sin(t*14)*3,44,'#ff2e2e',.75+Math.sin(t*10)*.25)}},
+ persona(){const c=G.cnt;return c.k>=3?'host':c.x>=2?'chaos':'match'},endLine(){return SG().end[this.persona()]},hint(){return null}};
+
+/* S2. THE ETHER: zen voice vs. the only way to win */
+GM.ether={sit:true,init(){const st=[];for(let k=0;st.length<9&&k<400;k++){const c={x:rnd(.1,.9),y:rnd(.22,.62),on:0};if(st.every(o=>Math.hypot(o.x-c.x,(o.y-c.y)*1.3)>.14))st.push(c)}Object.assign(G,{dur:1e9,ph:0,ct:0,idle:0,dist:0,bub:[],bt:0,stars:st,link:[],moon:{x:.72,y:.3,mv:0},btn:0,pressed:0,said:{},vl:'',fin:0,cl:[...Array(6)].map((_,i)=>({x:Math.random(),y:.55+Math.random()*.35,s:.6+Math.random()*.8,v:.006+Math.random()*.01}))});$('#game').classList.add('strg');this.say('open')},
+ say(k,force){const L_=SG();const v=k==='open'?L_.open:L_.v[k];if(!v||(!force&&G.said[k]))return;G.said[k]=1;cap(`<em>${v}</em>`)},
+ dis(n,x,y){G.dist+=n;G.idle=0;const d=G.dist;if(d>=1)this.say('a1');if(d>=3)this.say('a2');if(d>=6)this.say('a3');if(d>=10)this.say('a4');G.shake=Math.min(.4,.05+d*.01)},
+ update(dt){G.grace=false;G.ct+=dt;G.idle+=dt;G.cl.forEach(c=>{c.x+=c.v*dt;if(c.x>1.3)c.x=-.3});
+  if(G.idle>9&&!G.said.idle)this.say('idle');if(G.idle>22&&!G.said.hint){this.say('hint')}
+  if(G.ph===0){G.bt-=dt;if(G.bt<=0){G.bt=.55;G.bub.push({x:rnd(.1,.9),y:1.08,r:rnd(14,28),v:rnd(.05,.1),w:rnd(0,6)})}G.bub.forEach(b=>{b.y-=b.v*dt;b.x+=Math.sin(G.ct*1.3+b.w)*.0008});G.bub=G.bub.filter(b=>b.y>-.1&&!b.dead);if((G.popN||0)>=8||G.ct>40&&(G.popN||0)>=4){G.ph=1;G.ct=0;this.say('s0')}}
+  else if(G.ph===1){if(G.link.length>=6||G.ct>35&&G.link.length>=3){G.ph=2;G.ct=0;this.say('m0')}}
+  else if(G.ph===2){if(G.moon.mv>=1){G.ph=3;G.ct=0;G.btn=0;this.say('b0')}}
+  else if(G.ph===3){G.btn=Math.min(1,G.btn+dt*.5);if(G.ct>7&&!G.said.b1)this.say('b1')}
+  else if(G.ph===4){G.fin+=dt;if(G.fin>2.8&&!G.ended)endGame('done')}},
+ down(x,y){const W=G.W,H=G.H;
+  if(G.ph===0){for(const b of G.bub){if(!b.dead&&Math.hypot(b.x*W-x,b.y*H-y)<b.r+10){b.dead=1;G.popN=(G.popN||0)+1;sfx('pop');addPts(30,x,y);this.dis(1,x,y);return}}}
+  else if(G.ph===1){const cand=G.stars.filter(s=>!s.on).map(s=>[Math.hypot(s.x*W-x,s.y*H-y),s]).sort((a,b)=>a[0]-b[0])[0];for(const s of cand&&cand[0]<34?[cand[1]]:[]){{s.on=1;G.link.push(s);sfx('chime');addPts(40,x,y);this.dis(1.2,x,y);if(G.link.length===2)this.say('s1');return}}}
+  else if(G.ph===2){if(Math.hypot(G.moon.x*W-x,G.moon.y*H-y)<46){G.drag=1;G.mx=x;G.my=y}}
+  else if(G.ph===3&&G.btn>.6){if(Math.hypot(W/2-x,H*.62-y)<70){G.ph=4;G.fin=0;G.pressed=1;G.shake=1;whoomp();sfx('chime');addPts(200,W/2,H*.5);cap(`<em>${SG().v.fin}</em>`)}}},
+ move(x,y){if(G.ph===2&&G.drag){const dx=x-G.mx,dy=y-G.my;G.moon.x=Math.max(.1,Math.min(.9,G.moon.x+dx/G.W));G.moon.y=Math.max(.12,Math.min(.8,G.moon.y+dy/G.H));G.mx=x;G.my=y;const d=Math.hypot(dx,dy);G.moon.mv+=d/900;G._m=(G._m||0)+d;if(G._m>60){G._m=0;addPts(25,x,y);this.dis(.6,x,y);if(G.moon.mv>.45)this.say('m1')}}},
+ up(){G.drag=0},
+ draw(ctx,W,H){const t=performance.now()/1000,rage=Math.min(1,G.dist/14);
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,`rgb(${Math.round(40+rage*90)},${Math.round(30-rage*10)},${Math.round(90-rage*40)})`);g.addColorStop(.6,`rgb(${Math.round(190+rage*50)},${Math.round(150-rage*80)},${Math.round(200-rage*120)})`);g.addColorStop(1,`rgb(255,${Math.round(210-rage*90)},${Math.round(190-rage*120)})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  for(let i=0;i<60;i++){const x=(i*137.5%1)*W||((i*97)%W),y=((i*53)%(H*.6)),a=.3+.5*Math.abs(Math.sin(t*.8+i));ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.fillRect((i*97)%W,y,1.6,1.6)}
+  const mx=G.moon.x*W,my=G.moon.y*H;const mg=ctx.createRadialGradient(mx,my,4,mx,my,70);mg.addColorStop(0,'rgba(255,250,230,.9)');mg.addColorStop(1,'rgba(255,250,230,0)');ctx.fillStyle=mg;ctx.fillRect(mx-70,my-70,140,140);ctx.beginPath();ctx.arc(mx,my,26,0,7);ctx.fillStyle='#fff6dc';ctx.fill();
+  if(G.ph===2&&!G.drag)label(ctx,'👆',mx+8,my+48+Math.sin(t*6)*5,30,'#fff',.85);
+  if(G.ph>=1){ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=2;ctx.beginPath();G.link.forEach((s,i)=>i?ctx.lineTo(s.x*W,s.y*H):ctx.moveTo(s.x*W,s.y*H));ctx.stroke();
+   G.stars.forEach(s=>{const x=s.x*W,y=s.y*H,r=s.on?7:4+Math.sin(t*3+x)*1.5;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=s.on?'#fff':'rgba(255,255,255,.75)';ctx.shadowColor='#fff';ctx.shadowBlur=s.on?18:8;ctx.fill();ctx.shadowBlur=0})}
+  G.cl.forEach(c=>{const x=c.x*W,y=c.y*H,s=c.s*60;ctx.fillStyle='rgba(255,255,255,.55)';[[0,0,1],[-.6,.15,.7],[.6,.15,.75],[.25,-.25,.6]].forEach(([dx,dy,k])=>{ctx.beginPath();ctx.ellipse(x+dx*s,y+dy*s,s*.5*k,s*.32*k,0,0,7);ctx.fill()})});
+  if(G.ph===0)G.bub.forEach(b=>{const x=b.x*W,y=b.y*H;ctx.beginPath();ctx.arc(x,y,b.r,0,7);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='rgba(180,230,255,.18)';ctx.fill();ctx.beginPath();ctx.arc(x-b.r*.35,y-b.r*.35,b.r*.18,0,7);ctx.fillStyle='rgba(255,255,255,.8)';ctx.fill()});
+  if(G.ph===3||G.ph===4){const k=G.ph===4?1+G.fin*2:G.btn,x=W/2,y=H*.62,r=50*Math.min(1.4,k);const bg=ctx.createRadialGradient(x,y,4,x,y,r*1.8);bg.addColorStop(0,'rgba(255,90,150,.95)');bg.addColorStop(1,'rgba(255,90,150,0)');ctx.fillStyle=bg;ctx.fillRect(x-r*2,y-r*2,r*4,r*4);ctx.beginPath();ctx.arc(x,y,r*.7,0,7);ctx.fillStyle='#E74479';ctx.fill();label(ctx,'🌌',x,y,r*.7,'#fff')}
+  if(G.ph===4){ctx.fillStyle=`rgba(255,255,255,${Math.max(0,1-G.fin*.6)})`;ctx.fillRect(0,0,W,H)}
+  if(G.ph<4){const b=SG().ban[G.ph],y=H*.08;ctx.save();ctx.font='900 18px Inter,sans-serif';const tw=ctx.measureText(b).width+28;rr(ctx,W/2-tw/2,y-17,tw,34,17);ctx.fillStyle='#ede77d';ctx.fill();ctx.fillStyle='#3b0f18';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b,W/2,y+1);ctx.restore()}
+  if(rage>.3){ctx.fillStyle=`rgba(255,40,60,${(rage-.3)*.25*(.6+.4*Math.sin(t*9))})`;ctx.fillRect(0,0,W,H)}},
+ persona(){return G.dist>=16?'chaos':G.said.idle?'host':'match'},endLine(){return SG().end[this.persona()]},hint(){return null}};
+
 /* ---------- Start ---------- */
 
 const USLT={en:['What pulls you lately?',{culture:'I stare at paintings',food:'Feed me',music:'What’s poppin?',night:'Bad decisions',after:'Touch grass'}],
@@ -1662,7 +1815,7 @@ const PH_ON=location.protocol==='https:'&&/(^|\.)(soko\.fyi|nizar-soko\.github\.
 let SWID=null;try{SWID=localStorage.getItem('sw_id')}catch(e){}if(!SWID){SWID='sw_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);try{localStorage.setItem('sw_id',SWID)}catch(e){}}
 const SWSES='s_'+Math.random().toString(36).slice(2,10),SWT0=Date.now();
 function swMode(){return (typeof ALP!=='undefined'&&ALP.on)?'alpha':qs.get('admin')==='1'?'admin':qs.get('game')?'game_code':qs.get('zone')==='fallback'?'unknown_path':qs.get('zone')?'venue_code':'other'}
-function track(ev,pr){const P=Object.assign({source:'soko_world',$process_person_profile:false,sw_session:SWSES,secs:Math.round((Date.now()-SWT0)/1000),mode:swMode(),qr:qs.get('qr')||null,market:S.m,lang:S.lang,zone:S.zone||null,game_set:S.classic?'classic':'situational',age:S.age||null,$current_url:location.href.split('#')[0]},pr||{});
+function track(ev,pr){const P=Object.assign({source:'soko_world',$process_person_profile:false,sw_session:SWSES,secs:Math.round((Date.now()-SWT0)/1000),mode:swMode(),qr:qs.get('qr')||null,market:S.m,lang:S.lang,zone:S.zone||null,game_set:S.strange?'strange':S.classic?'classic':'situational',age:S.age||null,$current_url:location.href.split('#')[0]},pr||{});
  if(qs.get('phdebug')==='1'){(window.__ph=window.__ph||[]).push([ev,P]);return}if(!PH_ON)return;
  try{const body=JSON.stringify({api_key:PH_KEY,event:ev,distinct_id:SWID,timestamp:new Date().toISOString(),properties:P});
  if(navigator.sendBeacon&&navigator.sendBeacon(PH_URL,new Blob([body],{type:'text/plain'})))return;fetch(PH_URL,{method:'POST',body,keepalive:true,mode:'no-cors',headers:{'Content-Type':'text/plain'}}).catch(()=>{})}catch(e){}}
@@ -1681,7 +1834,7 @@ function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div'
  const H=(t,b)=>`<div class="alw"><div class="alb">SOKO WORLD · ALPHA</div><h2>${t}</h2>${b}</div>`;
  if(step==='market')o.innerHTML=H('Pick your market',Object.keys(MK).map(k=>`<button data-am="${k}">${MK[k].name}</button>`).join(''));
  if(step==='lang')o.innerHTML=H('Language',LANGS.map(([k,l])=>`<button data-al="${k}">${({pt:'Português (PT)',br:'Português (BR)',es:'Español',en:'English'})[k]||l}</button>`).join(''));
- if(step==='type')o.innerHTML=H('What kind of game?',`<div class="atp"><button data-at="arcade" class="atb arc"><span class="ill"><i class="px p1"></i><i class="px p2"></i><i class="px p3"></i><i class="joy">🕹️</i></span><b>Simple</b><small>Arcade · tap, dodge, score</small></button><button data-at="sit" class="atb spy"><span class="ill"><i class="bb b1">uh…</i><i class="bb b2">RUN.</i><i class="bb b3">no way</i></span><b>Spicy</b><small>Situational · choices get out of hand</small></button></div>`);
+ if(step==='type')o.innerHTML=H('What kind of game?',`<div class="atp"><button data-at="arcade" class="atb arc"><span class="ill"><i class="px p1"></i><i class="px p2"></i><i class="px p3"></i><i class="joy">🕹️</i></span><b>Simple</b><small>Arcade · tap, dodge, score</small></button><button data-at="sit" class="atb spy"><span class="ill"><i class="bb b1">uh…</i><i class="bb b2">RUN.</i><i class="bb b3">no way</i></span><b>Spicy</b><small>Situational · choices get out of hand</small></button><button data-at="strange" class="atb str"><span class="ill"><i class="sh"></i><i class="orb"></i></span><b>Strange</b><small>Long · sneaky · a little unhinged</small></button></div>`);
  if(step==='venue'){const ks=ALZ.map(x=>x[0]);
   o.innerHTML=H('Pick the path',`${wheelHTML(ks)}<div class="awv"></div><button class="ago" data-az="" disabled>Pick one first</button><small class="swh">tap a slice or turn the wheel</small>`);
   const lab=o.querySelector('.awv'),go=o.querySelector('.ago');let landed=false;const name=i=>`<span>${WEMO[ks[i]]}</span>${ALZ[i][1]}`;
@@ -1689,14 +1842,14 @@ function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div'
  o.dataset.t=performance.now();o.onclick=e=>{const b=e.target.closest('button');if(!b||performance.now()-(+o.dataset.t||0)<450)return;audio();blip();buzz(6);
   if(b.dataset.am){S.m=b.dataset.am;S.lang=MK[S.m].lang;theme();alphaShow('lang')}
   else if(b.dataset.al){S.lang=b.dataset.al;alphaShow('type')}
-  else if(b.dataset.at){S.classic=b.dataset.at==='arcade';alphaShow('venue')}
+  else if(b.dataset.at){S.classic=b.dataset.at==='arcade';S.strange=b.dataset.at==='strange';alphaShow('venue')}
   else if(b.dataset.az){S.zone=b.dataset.az;S.forceGame=null;o.classList.remove('on');start();applyLang()}}}
 function alphaStart(){start();alphaShow('market')}
 
 function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
  $('#done').classList.remove('on');$('#done').innerHTML='';L_off();$('#hover').style.opacity='';$('#prog').classList.add('hide');drawProg();$('#bottom').classList.add('hide');
  app.classList.remove('l1','l2','l3');side(0);applyLang(false)}
-S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
+S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';S.strange=qs.get('set')==='strange';if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
 const QP={age:qs.get('age'),vibe:qs.get('vibe'),look:qs.get('look'),play:qs.get('play')==='1'};
 let rzT;addEventListener('resize',()=>{fxSize();clearTimeout(rzT);rzT=setTimeout(paintBg,150)});fxSize();drawMute();theme();drawTest();start();track('sw_qr_open',{referrer:document.referrer||null});
 if(QP.play){S.age=QP.age==='o'?'o':'u';S.ans=[{k:'c1',v:S.age==='u'?'a':'b'},{k:'c2',v:QP.vibe==='surprise'?'b':'a'},{k:'c3',v:QP.look==='someone'?'b':'a'}];S.phase='game';stack.innerHTML='';setTimeout(startGame,60)}
