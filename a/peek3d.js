@@ -3,7 +3,7 @@
 // peeks over it, looks around, then ducks back down. y = 0 is the card edge.
 import * as THREE from './three.min.js';
 
-const INK = 0x3b0f18, PAPER = 0xf9f0f0, PINK = 0xffb8cb, PINKM = 0xef8ea8, CREAM = 0xfff4e8;
+const INK = 0x3b0f18, PAPER = 0xf9f0f0, PINK = 0xffb8cb, PINKM = 0xef8ea8, CREAM = 0xf9f0f0;
 
 function toonRamp() {
   const d = new Uint8Array([90, 170, 255]);
@@ -37,7 +37,7 @@ export function mountPeek(host, { onTap, onBubble } = {}) {
   renderer.outputColorSpace = THREE.SRGBColorSpace; host.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
   const cam = new THREE.PerspectiveCamera(26, W / H, .1, 50); cam.position.set(0, 1.05, 9.2); cam.lookAt(0, 1.05, 0);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xe9c6cf, 1.6));
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xe7dbde, 1.6));
   const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(-3, 5, 6); scene.add(sun);
   const ramp = toonRamp(), M = c => new THREE.MeshToonMaterial({ color: c, gradientMap: ramp });
 
