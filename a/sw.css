@@ -1,0 +1,47 @@
+@font-face{font-family:"Season Mix";src:url(SeasonMixTRIAL-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Zalando Sans";src:url(ZalandoSans.woff2) format("woff2");font-weight:200 900;font-display:swap}
+@font-face{font-family:"Oswald";src:url(Oswald-Regular.woff2) format("woff2");font-weight:400;font-display:swap}
+:root{--paper:#f9f0f0;--pink:#ffb8cb;--pinkm:#ef8ea8;--pinkl:#ffdae4;--ink:#3b0f18;--inkd:#160407;--dark:#170408;--blue:#8bdfff;--lilac:#e08efb;--yellow:#ede77d;--green:#b0ef8b;--greend:#276a2b;--red:#f68686;--sh1:#312228;--sh2:#534b4d;--sh3:#947c81;--sh4:#c1b2b5;--sh45:#e7dbde;--ink50:#764d4d}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--inkd);font-family:"Zalando Sans",system-ui,sans-serif;font-weight:400;-webkit-font-smoothing:antialiased}
+body.dk{background:var(--dark);color:var(--paper)}
+.wrap{max-width:440px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:18px 18px 28px;gap:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top img{height:24px}
+.ey{font-family:"Oswald",sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink50)}
+.dk .ey{color:var(--sh4)}
+.disp{font-family:"Season Mix",serif;font-weight:400;line-height:1.04;margin:0}
+.card{border-radius:6px;padding:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:56px;border:0;border-radius:6px;font:400 18px "Zalando Sans",sans-serif;cursor:pointer;text-decoration:none;padding:0 16px}
+.btn.y{background:var(--yellow);color:var(--inkd)}.btn.p{background:var(--pink);color:var(--inkd)}.btn.d{background:var(--inkd);color:var(--paper)}
+.btn.g{background:transparent;color:var(--ink);text-decoration:underline;min-height:44px;font-size:15px}
+.dk .btn.g{color:var(--sh4)}
+.btn:disabled{opacity:.45}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kv>div{background:var(--sh45);border-radius:6px;padding:12px}
+.kv b{display:block;font-weight:500;font-size:15px;margin-top:2px}
+.langs{display:flex;gap:4px}
+.langs button{border:0;border-radius:6px;padding:6px 8px;font:400 12px "Zalando Sans",sans-serif;background:var(--sh45);color:var(--inkd);cursor:pointer}
+.langs button.on{background:var(--pink)}
+.dk .langs button{background:var(--sh1);color:var(--paper)}.dk .langs button.on{background:var(--pink);color:var(--inkd)}
+input,select{font:500 18px "Zalando Sans",sans-serif;color:var(--inkd);background:#fff;border:2px solid var(--sh45);border-radius:6px;height:56px;padding:0 14px;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--inkd)}
+.small{font-size:13px;line-height:1.4;color:var(--ink50)}
+.dk .small{color:var(--sh4)}
+.pin{display:flex;gap:10px;justify-content:center}
+.pin span{width:54px;height:64px;border-radius:6px;border:2px solid var(--sh4);display:flex;align-items:center;justify-content:center;font-size:26px}
+.pin span.f{background:var(--inkd);border-color:var(--inkd);color:var(--paper)}
+.keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.keys button{height:62px;border:0;border-radius:6px;background:var(--sh45);color:var(--inkd);font:400 24px "Zalando Sans",sans-serif;cursor:pointer}
+.keys button:active{background:var(--sh4)}
+.state{border-radius:6px;padding:22px 20px;display:flex;flex-direction:column;gap:8px}
+.state.ok{background:var(--green)}.state.no{background:var(--red)}.state.wait{background:var(--yellow)}
+.check{width:88px;height:88px;border-radius:50%;background:var(--green);color:var(--inkd);display:flex;align-items:center;justify-content:center;margin:0 auto}
+.err{color:#b3261e;font-size:14px;min-height:18px}
+.qrbox{background:#fff;border-radius:6px;padding:16px;display:flex;justify-content:center}
+.qrbox svg,.qrbox img{width:220px;height:220px;display:block}
+.code{font-family:"Oswald",sans-serif;font-size:28px;letter-spacing:.18em;text-align:center}
+.demo{border:1.5px dashed var(--sh3);border-radius:6px;padding:12px;font-size:13px;color:var(--ink50);display:flex;flex-direction:column;gap:8px}
+.dk .demo{color:var(--sh4)}
+@media (prefers-reduced-motion:no-preference){.pop{animation:pop .35s ease}@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}}
+.dk .top img{filter:brightness(0) invert(.94)!important}

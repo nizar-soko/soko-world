@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f9f0f0">
+<title>Soko · Your gift</title>
+<link rel="stylesheet" href="a/sw.css">
+</head>
+<body>
+<main class="wrap" id="app"></main>
+<script src="a/qr.js"></script>
+<script src="a/claim.js"></script>
+<script>
+/* Customer side · the page the WhatsApp message links to after signup (?d=<claim>). */
+const T={
+pt:{ey:'A tua oferta',show:'Mostra isto ao balcão',venue:'Venue',until:'Válida até',once:'Só funciona uma vez. A equipa lê com a câmara do telemóvel.',lock_ey:'Oferta guardada',lock_h:'Regista-te na Soko para a desbloquear',lock_p:'A tua oferta está presa a {p}. Regista-te na Soko com este número exato e o QR chega-te pelo WhatsApp.',get:'Obter a Soko',sim:'Demo: simular registo na Soko',used:'Esta oferta já foi usada a {t}.',inv:'Este link não é válido.'},
+br:{ey:'Seu presente',show:'Mostre isto no balcão',venue:'Lugar',until:'Válido até',once:'Só funciona uma vez. A equipe lê com a câmera do celular.',lock_ey:'Presente guardado',lock_h:'Cadastre-se na Soko pra liberar',lock_p:'Seu presente está preso a {p}. Cadastre-se na Soko com este número exato e o QR chega pelo WhatsApp.',get:'Baixar a Soko',sim:'Demo: simular cadastro na Soko',used:'Este presente já foi usado em {t}.',inv:'Este link não é válido.'},
+es:{ey:'Tu regalo',show:'Muestra esto en la barra',venue:'Lugar',until:'Válido hasta',once:'Funciona una sola vez. El equipo lo lee con la cámara del teléfono.',lock_ey:'Regalo guardado',lock_h:'Regístrate en Soko para desbloquearlo',lock_p:'Tu regalo está ligado a {p}. Regístrate en Soko con este número exacto y el QR te llega por WhatsApp.',get:'Descargar Soko',sim:'Demo: simular registro en Soko',used:'Este regalo ya se usó el {t}.',inv:'Este enlace no es válido.'},
+en:{ey:'Your gift',show:'Show this at the counter',venue:'Venue',until:'Valid until',once:'Works once. Staff scan it with their phone camera.',lock_ey:'Gift saved',lock_h:'Sign up to Soko to unlock it',lock_p:'Your gift is locked to {p}. Sign up to Soko with this exact number and the QR arrives on WhatsApp.',get:'Get Soko',sim:'Demo: simulate Soko signup',used:'This gift was already used on {t}.',inv:'This link isn’t valid.'}};
+const LOC={pt:'pt-PT',br:'pt-BR',es:'es-MX',en:'en-GB'};
+const API=SWGifts,qs=new URLSearchParams(location.search),app=document.getElementById('app');
+const R=API.get(qs.get('d')||'');const c=R.claim;
+let L=qs.get('lang')||(c&&(c.lang||API.LANG[c.market]))||'pt';if(!T[L])L='pt';
+document.documentElement.lang=L==='br'?'pt-BR':L;
+const t=(k,o)=>{let s=T[L][k];for(const x in (o||{}))s=s.replace('{'+x+'}',o[x]);return s};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const topbar=`<div class="top"><img src="a/wordmark.svg" alt="Soko" style="filter:brightness(.25)"><span class="ey">Soko World</span></div>`;
+function qrSvg(text){const q=qrcode(0,'L');q.addData(text);q.make();return q.createSvgTag({cellSize:6,margin:0,scalable:true})}
+if(!c){app.innerHTML=topbar+`<h1 class="disp" style="font-size:30px">${esc(t('inv'))}</h1>`}
+else{
+  API.track('sw_gift_open',{status:c.status,code:c.code,venue:c.venue_id});
+  const phone=c.phone_masked||API.mask(c.phone_e164||'');
+  if(c.status==='locked'){
+    app.innerHTML=topbar+`<span class="ey">${esc(t('lock_ey'))}</span><h1 class="disp" style="font-size:34px">${esc(t('lock_h'))}</h1>
+    <div class="card" style="background:var(--pinkl)"><span class="ey" style="font-size:10px">${esc(c.venue_name)}</span><div style="font-size:18px;font-weight:500;margin-top:4px">${esc(c.gift_title)}</div></div>
+    <p style="margin:0;font-size:16px;line-height:1.45">${esc(t('lock_p',{p:phone}))}</p>
+    <a class="btn p" href="https://soko.fyi/get/">${esc(t('get'))}</a>
+    ${qs.get('demo')==='1'?`<div class="demo"><button class="btn y" id="sim">${esc(t('sim'))}</button></div>`:''}`;
+    const sim=document.getElementById('sim');
+    if(sim)sim.onclick=()=>{let u=API.unlock(c.code);if(!u||u.status!=='unlocked'){u=Object.assign({},c,{status:'unlocked',unlocked_at:Date.now(),expires_at:Date.now()+7*864e5})}
+      location.href=API.giftUrl(u).replace(/\?/,'?demo=1&');};
+  } else {
+    const url=API.redeemUrl(c);
+    const dl=new Date(c.expires_at).toLocaleDateString(LOC[L],{weekday:'short',day:'numeric',month:'numeric'});
+    app.innerHTML=topbar+`<span class="ey" style="text-align:center">${esc(t('show'))}</span><h1 class="disp" style="font-size:36px;text-align:center">${esc(c.gift_title)}</h1>
+    <div class="qrbox pop">${qrSvg(url)}</div><div class="code">${esc(c.code)}</div>
+    <div class="kv"><div style="background:var(--pinkl)"><span class="ey" style="font-size:10px">${esc(t('venue'))}</span><b>${esc(c.venue_name)}</b></div><div><span class="ey" style="font-size:10px">${esc(t('until'))}</span><b>${esc(dl)}</b></div></div>
+    <p class="small" style="text-align:center;margin:0">${esc(c.status==='redeemed'?t('used',{t:new Date(c.redeemed_at).toLocaleString(LOC[L])}):t('once'))}</p>
+    ${qs.get('demo')==='1'?`<div class="demo">Demo: <a href="${esc(url)}" style="color:inherit">open the venue screen for this QR</a></div>`:''}`;
+  }
+}
+</script>
+</body>
+</html>

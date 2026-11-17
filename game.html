@@ -474,6 +474,25 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 @keyframes sitin{from{transform:translateY(10px) scale(.96);opacity:0}}@keyframes sitsh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .sitg .gtime{visibility:hidden}
 .qm{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:6px;border-radius:50%;border:0;background:var(--sk-yellow,#ede77d);color:#170408;font:500 13px/1 inherit;cursor:pointer;vertical-align:middle}
+#clpop{position:absolute;inset:0;z-index:72;display:none;align-items:flex-end;justify-content:center;background:rgba(22,4,7,.62);padding:14px}
+#clpop.on{display:flex}
+#clpop .cc{position:relative;width:100%;max-width:400px;background:#f9f0f0;color:#160407;border-radius:6px;padding:20px 18px 16px;display:flex;flex-direction:column;gap:11px;animation:situp .3s both}
+#clpop .cx{position:absolute;right:8px;top:6px;border:0;background:none;font-size:26px;color:#160407;cursor:pointer;width:44px;height:44px}
+#clpop .ce{font:400 11px 'Oswald',var(--f);letter-spacing:.14em;text-transform:uppercase;color:#764d4d}
+#clpop h3{margin:0;font-family:'Season Mix',serif;font-weight:400;font-size:26px;line-height:1.05}
+#clpop .cg{background:#ffdae4;border-radius:6px;padding:10px 12px;font-size:15px}
+#clpop .cr{display:flex;gap:6px}
+#clpop select,#clpop input{height:54px;border:2px solid #e7dbde;border-radius:6px;background:#fff;color:#160407;font:500 18px var(--f);padding:0 10px}
+#clpop select{flex:none;width:92px}#clpop input{flex:1;min-width:0}
+#clpop input:focus,#clpop select:focus{outline:none;border-color:#160407}
+#clpop .cw{background:#ede77d;border-radius:6px;padding:10px 12px;font-size:14px;line-height:1.35}
+#clpop .cb{border:0;border-radius:6px;min-height:54px;font:400 18px var(--f);cursor:pointer}
+#clpop .cb.k{background:#160407;color:#f9f0f0}#clpop .cb.p{background:#ffb8cb;color:#160407}
+#clpop .cer{color:#b3261e;font-size:14px;min-height:0}
+#clpop .ctip{background:#160407;color:#f9f0f0;border-radius:6px;padding:12px 14px;font-size:15px;line-height:1.35;position:relative}
+#clpop .ctip:after{content:'';position:absolute;left:24px;top:-8px;border:8px solid transparent;border-top:0;border-bottom-color:#160407}
+#clpop .cd{border:1.5px dashed #947c81;border-radius:6px;padding:10px;font-size:13px;color:#764d4d;display:flex;flex-direction:column;gap:6px}
+#clpop .cd a{color:#3b0f18}
 #qmpop{position:absolute;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center;background:rgba(22,4,7,.6);padding:18px}#qmpop.on{display:flex}
 #qmpop .qmc{position:relative;width:100%;max-width:380px;background:#f9f0f0;color:#170408;border-radius:22px;padding:22px 20px 18px;box-shadow:0 10px 0 var(--sk-pinkm);animation:situp .3s both}
 #qmpop b{font-family:'Season Mix',serif;font-weight:400;font-size:28px;display:block;margin-bottom:7px}#qmpop p{margin:0 0 10px;font-size:15px;line-height:1.35}
@@ -611,7 +630,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
   <div class="toast" id="toast"></div>
 </div>
 
-<script src="a/sitx.js"></script><script src="a/sitxo.js"></script>
+<script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/claim.js"></script>
 <script>
 (()=>{
 "use strict";
@@ -1334,7 +1353,7 @@ function showReveal(quiet){orbStop();BGM.stop();const t=UI(),a=S.age,rl=RVL[S.la
   $('#showme').onclick=e=>{e.stopPropagation();track('sw_orb_open');orbRun()};$('#orbx').onclick=()=>{orbClose();backRun(S.bi||0)};$('#claim3').onclick=()=>$('#claim').click();
   $('#stage').onclick=e=>{if(performance.now()-(S.flipT||0)<600)return;const b=e.currentTarget.getBoundingClientRect();backRun(S.bi+((e.clientX-b.left)<b.width*.33?-1:1))};$('#claim2').onclick=()=>$('#claim').click()}
  if(!quiet){clearTimeout(S.autoF);S.autoF=setTimeout(()=>{const f=$('#fin');if(!f||f.classList.contains('fl')||!$('#reveal').classList.contains('on'))return;f.classList.add('slow');flip(true);setTimeout(()=>f.classList.remove('slow'),2600)},10000);arp([0,2,4,3,4],.07);const ar=app.getBoundingClientRect();burst(ar.width/2,ar.height*.35,0,60)}
- howRun();$('#claim').onclick=()=>{blip();buzz(10);waOpen('reward')};$('#qm').onclick=e=>{e.stopPropagation();blip();qmShow()};
+ howRun();$('#claim').onclick=()=>{blip();buzz(10);claimOpen('reward')};$('#qm').onclick=e=>{e.stopPropagation();blip();qmShow()};
  $('#shr').onclick=async()=>{const gl=giftLabel(),txt=rl.sh.replace('{g}',gl.charAt(0).toLowerCase()+gl.slice(1)).replace('{l}','w.soko.fyi');try{if(navigator.share)await navigator.share({text:txt});else{await navigator.clipboard.writeText(txt);toast('Copied: '+txt)}}catch(e){}};
  $('#again').onclick=()=>{clearTimeout(S.autoF);track('sw_play_again');r.classList.remove('on');if(ALP.on){alphaStart();return}SAMEGAME=true;startGame()}}
 
@@ -1905,9 +1924,46 @@ function track(ev,pr){const P=Object.assign({source:'soko_world',$process_person
 function waOpen(src){track('sw_claim_click',{via:src||'reward',gift:giftLabel(),venue_a:vname(S.plan||{}),game:G.id||null});const q=QM[S.lang]||QM.en,msg=q.m.replace('{g}',giftLabel()+' · '+vname(S.plan||{})+' · '+(G.id||''));
  const w=SOKO_WA(),u=w?'https://wa.me/'+w+'?text='+encodeURIComponent(msg):'https://soko.fyi/get/?utm_source=soko-world&utm_medium=qr&utm_campaign='+encodeURIComponent(S.m);
  try{window.open(u,'_blank')||(location.href=u)}catch(e){location.href=u}}
-function qmShow(){track('sw_reward_info_open');let o=$('#qmpop');if(!o){o=document.createElement('div');o.id='qmpop';app.appendChild(o)}const q=QM[S.lang]||QM.en;
+/* ---------- Claim: lock the gift to a phone number (mock backoffice in a/claim.js) ---------- */
+const CL={
+ pt:{ey:'Guardar a tua oferta',h:'Prende a oferta ao teu telemóvel',lab:'Número de telemóvel',ph:'912 345 678',warn:'A oferta fica presa a este número. Isto não pode ser desfeito.',go:'Prender a minha oferta',bad:'Escreve um número válido.',dup:'Este número já tem uma oferta deste sítio.',stock:'Esta oferta esgotou por hoje.',lk:'Presa a {p}',tip:'Regista-te na Soko com este número exato, senão a oferta não desbloqueia.',ok:'Percebido',wa:'Onde está a minha oferta?',demo:'Demo: simular registo e ver a oferta',bo:'Abrir backoffice'},
+ br:{ey:'Guardar seu presente',h:'Prenda o presente ao seu celular',lab:'Número de celular',ph:'21 99999 9999',warn:'O presente fica preso a este número. Isso não pode ser desfeito.',go:'Prender meu presente',bad:'Digite um número válido.',dup:'Este número já tem um presente deste lugar.',stock:'Este presente acabou por hoje.',lk:'Preso a {p}',tip:'Cadastre-se na Soko com este número exato, senão o presente não libera.',ok:'Entendi',wa:'Cadê meu presente?',demo:'Demo: simular cadastro e ver o presente',bo:'Abrir backoffice'},
+ es:{ey:'Guardar tu regalo',h:'Liga el regalo a tu teléfono',lab:'Número de teléfono',ph:'55 1234 5678',warn:'El regalo queda ligado a este número. Esto no se puede deshacer.',go:'Ligar mi regalo',bad:'Escribe un número válido.',dup:'Este número ya tiene un regalo de este lugar.',stock:'Este regalo se agotó por hoy.',lk:'Ligado a {p}',tip:'Regístrate en Soko con este número exacto o el regalo no se desbloquea.',ok:'Entendido',wa:'¿Dónde está mi regalo?',demo:'Demo: simular registro y ver el regalo',bo:'Abrir backoffice'},
+ en:{ey:'Save your gift',h:'Lock the gift to your phone',lab:'Phone number',ph:'912 345 678',warn:'Your gift will be locked to this number. This can’t be undone.',go:'Lock my gift',bad:'Enter a valid number.',dup:'This number already has a gift from this venue.',stock:'This gift is out of stock for today.',lk:'Locked to {p}',tip:'Sign up to Soko with this exact number, or the gift won’t unlock.',ok:'Got it',wa:'Where’s my gift?',demo:'Demo: simulate signup and see the gift',bo:'Open backoffice'}};
+const clDemo=()=>qs.get('admin')==='1'||qs.get('alpha')==='1'||(typeof ALP!=='undefined'&&ALP.on);
+function clEsc(x){return String(x==null?'':x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function claimOpen(src){
+ clearTimeout(S.autoF);const q=CL[S.lang]||CL.en;let o=$('#clpop');if(!o){o=document.createElement('div');o.id='clpop';app.appendChild(o)}
+ track('sw_claim_open',{via:src||'reward',gift:giftLabel(),venue_a:vname(S.plan||{})});
+ if(S.claim)return claimDone(o,q);
+ const pre=(window.SWGifts&&SWGifts.PREFIX[S.m])||'+351';
+ o.innerHTML=`<div class="cc" role="dialog" aria-modal="true" aria-labelledby="clh"><button class="cx" aria-label="close">×</button><span class="ce">${clEsc(q.ey)}</span><h3 id="clh">${clEsc(q.h)}</h3>
+ <div class="cg">${clEsc(giftLabel())} · ${clEsc(vname(S.plan||{}))}</div>
+ <label class="ce" for="clph">${clEsc(q.lab)}</label>
+ <div class="cr"><select id="clpre" aria-label="Country code">${['+351','+55','+52','+34','+44','+1'].map(p=>`<option ${p===pre?'selected':''}>${p}</option>`).join('')}</select><input id="clph" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="${clEsc(q.ph)}"></div>
+ <div class="cw">🔒 ${clEsc(q.warn)}</div><div class="cer" id="cler" role="alert"></div><button class="cb k" id="clgo">${clEsc(q.go)}</button></div>`;
+ o.classList.add('on');setTimeout(()=>{const i=$('#clph');i&&i.focus()},250);
+ o.onclick=e=>{if(e.target===o||e.target.closest('.cx'))o.classList.remove('on')};
+ $('#clph').oninput=()=>{$('#cler').textContent=''};
+ $('#clgo').onclick=()=>{
+  const preV=$('#clpre').value;
+  const raw=$('#clph').value;const r=SWGifts.lock({phone:raw,prefix:preV,market:S.m,lang:S.lang,gift_title:giftLabel(),venue_name:vname(S.plan||{}),venue_area:(S.plan||{}).a||''});
+  if(r.error){track('sw_claim_lock',{ok:false,error:r.error});if(r.error==='duplicate'&&r.claim){S.claim=r.claim;return claimDone(o,q)}$('#cler').textContent=q[r.error==='phone'?'bad':r.error==='stock'?'stock':'dup'];buzz(30);return}
+  S.claim=r.claim;track('sw_claim_lock',{ok:true,code_issued:true,venue_a:r.claim.venue_id,prefix:preV});blip();claimDone(o,q)};
+}
+function claimDone(o,q){
+ const c=S.claim,ph=SWGifts.mask(c.phone_e164);
+ o.innerHTML=`<div class="cc" role="dialog" aria-modal="true" aria-labelledby="clh"><button class="cx" aria-label="close">×</button><span class="ce">🔒 ${clEsc(q.lk.replace('{p}',ph))}</span><h3 id="clh">${clEsc(c.gift_title)}</h3>
+ <div class="ctip">${clEsc(q.tip)}</div><button class="cb p" id="clok">${clEsc(q.ok)}</button>
+ ${clDemo()?`<div class="cd"><a href="#" id="clsim">${clEsc(q.demo)}</a><a href="backoffice.html" target="_blank">${clEsc(q.bo)}</a></div>`:''}</div>`;
+ o.classList.add('on');
+ o.onclick=e=>{if(e.target===o||e.target.closest('.cx'))o.classList.remove('on')};
+ $('#clok').onclick=()=>{o.classList.remove('on');const w=SOKO_WA(),u=w?'https://wa.me/'+w+'?text='+encodeURIComponent(q.wa):'https://soko.fyi/get/';track('sw_claim_whatsapp',{has_number:!!w});try{window.open(u,'_blank')||(location.href=u)}catch(e){location.href=u}};
+ const sm=$('#clsim');if(sm)sm.onclick=e=>{e.preventDefault();const u=SWGifts.unlock(c.code);track('sw_claim_unlock',{via:'demo'});window.open(SWGifts.giftUrl(u)+'&demo=1','_blank')};
+}
+function qmShow(){clearTimeout(S.autoF);track('sw_reward_info_open');let o=$('#qmpop');if(!o){o=document.createElement('div');o.id='qmpop';app.appendChild(o)}const q=QM[S.lang]||QM.en;
  o.innerHTML=`<div class="qmc"><button class="qmx" aria-label="close">×</button><b>${q.h}</b><p>${q.a}</p><p>${q.b}</p><button class="cta" id="qmwa">💬 ${q.c}</button></div>`;o.classList.add('on');
- o.onclick=e=>{if(e.target===o||e.target.closest('.qmx'))o.classList.remove('on')};$('#qmwa').onclick=()=>{blip();waOpen('info_popup')}}
+ o.onclick=e=>{if(e.target===o||e.target.closest('.qmx'))o.classList.remove('on')};$('#qmwa').onclick=()=>{blip();o.classList.remove('on');claimOpen('info_popup')}}
 
 /* ---------- Alpha path: team testing flow (market → language → pre-game → game type → venue) ---------- */
 const ALP={on:qs.get('alpha')==='1'};

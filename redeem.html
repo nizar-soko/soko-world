@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f9f0f0">
+<title>Soko · Gift redeem</title>
+<link rel="stylesheet" href="a/sw.css">
+<style>.dkstats .kv>div{background:var(--sh1);color:var(--paper)}.dkstats .kv .ey{color:var(--sh4)}.dkstats div[style*="border-bottom"]{border-color:var(--sh1)!important}</style>
+</head>
+<body>
+<main class="wrap" id="app" aria-live="polite"></main>
+<script src="a/claim.js"></script>
+<script>
+/* Business side · soko.fyi/business/redeem (mockup on GitHub Pages)
+   Staff scan the customer's gift QR with the phone camera; it opens this page with ?d=<claim>.
+   Backoffice calls this page makes are marked "API:" and live in a/claim.js. */
+const T={
+pt:{brand:'Resgate de ofertas',home_h:'Aponta a câmara ao QR do cliente',home_p:'Usa a câmara normal do telemóvel. O link abre esta página com a oferta.',type:'Escrever código',code_ph:'SW-XXXXXX',find:'Procurar',notfound:'Código não encontrado.',pin_h:'PIN da {v}',pin_p:'Só da primeira vez. Este telemóvel guarda-o.',pin_bad:'PIN errado. Tenta outra vez.',del:'Apagar',valid:'Oferta válida',until:'Válida até',customer:'Cliente',hand:'Entrega a oferta e toca em Resgatar. Depois disto não pode ser usada outra vez.',redeem:'Resgatar oferta',redeemed:'Resgatada',logged:'Registado na Soko. Não precisas de fazer mais nada.',week:'Esta semana',month:'Este mês',next:'Ler a próxima',used_h:'Já foi usada',used_p:'Resgatada {t}. Não entregues a oferta.',exp_h:'Expirou',exp_p:'Esta oferta terminou a {d}.',wrong_h:'Venue errado',wrong_p:'Esta oferta é para {v}, não para {me}.',lock_h:'Ainda não desbloqueada',lock_p:'O cliente ainda não se registou na Soko com o número dele. Pede-lhe que se registe e lê outra vez.',inv_h:'QR inválido',inv_p:'Este código não é uma oferta da Soko.',can_h:'Cancelada',can_p:'A Soko cancelou esta oferta.',another:'Ler outra',recent:'Últimos resgates',logout:'Mudar de venue',demo:'Demo: o estado do resgate fica guardado neste telemóvel. Na versão real vem do backoffice da Soko.'},
+br:{brand:'Resgate de presentes',home_h:'Aponte a câmera pro QR do cliente',home_p:'Use a câmera normal do celular. O link abre esta página com o presente.',type:'Digitar código',code_ph:'SW-XXXXXX',find:'Buscar',notfound:'Código não encontrado.',pin_h:'PIN do {v}',pin_p:'Só na primeira vez. Este celular guarda.',pin_bad:'PIN errado. Tente de novo.',del:'Apagar',valid:'Presente válido',until:'Válido até',customer:'Cliente',hand:'Entregue o presente e toque em Resgatar. Depois disso não dá pra usar de novo.',redeem:'Resgatar presente',redeemed:'Resgatado',logged:'Registrado na Soko. Não precisa fazer mais nada.',week:'Esta semana',month:'Este mês',next:'Ler o próximo',used_h:'Já foi usado',used_p:'Resgatado {t}. Não entregue o presente.',exp_h:'Expirou',exp_p:'Este presente terminou em {d}.',wrong_h:'Lugar errado',wrong_p:'Este presente é do {v}, não do {me}.',lock_h:'Ainda não liberado',lock_p:'O cliente ainda não se cadastrou na Soko com o número dele. Peça pra ele se cadastrar e leia de novo.',inv_h:'QR inválido',inv_p:'Este código não é um presente da Soko.',can_h:'Cancelado',can_p:'A Soko cancelou este presente.',another:'Ler outro',recent:'Últimos resgates',logout:'Trocar de lugar',demo:'Demo: o estado do resgate fica salvo neste celular. Na versão real vem do backoffice da Soko.'},
+es:{brand:'Canje de regalos',home_h:'Apunta la cámara al QR del cliente',home_p:'Usa la cámara normal del teléfono. El enlace abre esta página con el regalo.',type:'Escribir código',code_ph:'SW-XXXXXX',find:'Buscar',notfound:'Código no encontrado.',pin_h:'PIN de {v}',pin_p:'Solo la primera vez. Este teléfono lo recuerda.',pin_bad:'PIN incorrecto. Intenta otra vez.',del:'Borrar',valid:'Regalo válido',until:'Válido hasta',customer:'Cliente',hand:'Entrega el regalo y toca Canjear. Después ya no se puede volver a usar.',redeem:'Canjear regalo',redeemed:'Canjeado',logged:'Registrado en Soko. No tienes que hacer nada más.',week:'Esta semana',month:'Este mes',next:'Leer el siguiente',used_h:'Ya se usó',used_p:'Canjeado {t}. No entregues el regalo.',exp_h:'Venció',exp_p:'Este regalo terminó el {d}.',wrong_h:'Lugar equivocado',wrong_p:'Este regalo es de {v}, no de {me}.',lock_h:'Aún no desbloqueado',lock_p:'El cliente todavía no se registró en Soko con su número. Pídele que se registre y vuelve a leerlo.',inv_h:'QR no válido',inv_p:'Este código no es un regalo de Soko.',can_h:'Cancelado',can_p:'Soko canceló este regalo.',another:'Leer otro',recent:'Últimos canjes',logout:'Cambiar de lugar',demo:'Demo: el estado del canje se guarda en este teléfono. En la versión real viene del backoffice de Soko.'},
+en:{brand:'Gift redeem',home_h:'Point the camera at the customer’s QR',home_p:'Use the normal phone camera. The link opens this page with the gift.',type:'Type a code',code_ph:'SW-XXXXXX',find:'Find',notfound:'Code not found.',pin_h:'{v} PIN',pin_p:'First time only. This phone remembers it.',pin_bad:'Wrong PIN. Try again.',del:'Delete',valid:'Valid gift',until:'Valid until',customer:'Customer',hand:'Hand over the gift, then tap Redeem. It can’t be used again after this.',redeem:'Redeem gift',redeemed:'Redeemed',logged:'Logged with Soko. Nothing else to do.',week:'This week',month:'This month',next:'Scan the next one',used_h:'Already used',used_p:'Redeemed {t}. Don’t hand over a gift.',exp_h:'Expired',exp_p:'This gift ended on {d}.',wrong_h:'Wrong venue',wrong_p:'This gift is for {v}, not {me}.',lock_h:'Not unlocked yet',lock_p:'The customer hasn’t signed up to Soko with their number yet. Ask them to sign up, then scan again.',inv_h:'Invalid QR',inv_p:'This code isn’t a Soko gift.',can_h:'Cancelled',can_p:'Soko cancelled this gift.',another:'Scan another',recent:'Latest redemptions',logout:'Switch venue',demo:'Demo: redemption state is stored on this phone. In the real version it comes from the Soko backoffice.'}};
+const LOC={pt:'pt-PT',br:'pt-BR',es:'es-MX',en:'en-GB'};
+const API=SWGifts,qs=new URLSearchParams(location.search),app=document.getElementById('app');
+const SES='sw_venue_session';
+let D=qs.get('d'),R=null,L=qs.get('lang')||null,pin='';
+if(D){R=API.get(D)}
+if(!L){L=(R&&R.claim&&R.claim.lang)||(R&&R.claim&&API.LANG[R.claim.market])||'pt'} if(!T[L])L='pt';
+document.documentElement.lang=L==='br'?'pt-BR':L;
+const t=(k,o)=>{let s=(T[L]||T.en)[k]||T.en[k]||k;for(const x in (o||{}))s=s.replace('{'+x+'}',o[x]);return s};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtD=ms=>new Date(ms).toLocaleDateString(LOC[L],{weekday:'short',day:'numeric',month:'numeric'});
+const fmtT=ms=>new Date(ms).toLocaleString(LOC[L],{hour:'2-digit',minute:'2-digit',day:'numeric',month:'numeric'});
+function session(){try{return JSON.parse(localStorage.getItem(SES))||null}catch(e){return null}}
+function setSession(v){try{localStorage.setItem(SES,JSON.stringify(v))}catch(e){}}
+function header(){const s=session();return `<div class="top"><img src="a/wordmark.svg" alt="Soko" style="filter:brightness(.25)"><div class="langs">${['pt','br','es','en'].map(k=>`<button data-l="${k}" class="${k===L?'on':''}">${k==='br'?'PT-BR':k.toUpperCase()}</button>`).join('')}</div></div><div class="ey">${esc(t('brand'))}${s?' · '+esc(s.name):''}</div>`}
+function bindLangs(){app.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{L=b.dataset.l;document.documentElement.lang=L==='br'?'pt-BR':L;render()})}
+
+function render(){
+  const c=R&&R.claim;
+  if(D&&(!R||R.error||!c)){return show('no',t('inv_h'),t('inv_p'))}
+  if(!c){return home()}
+  const s=session();
+  if(!s) return pinScreen({id:c.venue_id,name:c.venue_name,area:c.venue_area,market:c.market});
+  const st=API.check(c,s.venue_id);
+  API.track('sw_redeem_view',{state:st,venue:c.venue_id,code:c.code});
+  if(st==='valid')return valid(c,s);
+  if(st==='used')return show('no',t('used_h'),t('used_p',{t:fmtT(c.redeemed_at)}),c);
+  if(st==='expired')return show('no',t('exp_h'),t('exp_p',{d:fmtD(c.expires_at)}),c);
+  if(st==='wrong_venue')return show('no',t('wrong_h'),t('wrong_p',{v:esc(c.venue_name),me:esc(s.name)}),c);
+  if(st==='locked')return show('wait',t('lock_h'),t('lock_p'),c);
+  if(st==='cancelled')return show('no',t('can_h'),t('can_p'),c);
+  return show('no',t('inv_h'),t('inv_p'));
+}
+function home(){
+  const s=session();const st=s?API.stats(s.venue_id):null;
+  app.innerHTML=header()+`<h1 class="disp" style="font-size:34px">${esc(t('home_h'))}</h1><p class="small" style="margin:0;font-size:15px">${esc(t('home_p'))}</p>
+  <div class="card" style="background:var(--sh45);display:flex;flex-direction:column;gap:8px"><label class="ey" for="cd">${esc(t('type'))}</label><input id="cd" placeholder="${t('code_ph')}" autocapitalize="characters" autocomplete="off"><div class="err" id="er"></div><button class="btn d" id="fd">${esc(t('find'))}</button></div>
+  ${st?stats(st,s):''}
+  ${s?`<button class="btn g" id="lo">${esc(t('logout'))}</button>`:''}
+  <p class="demo" style="margin-top:auto">${esc(t('demo'))}</p>`;
+  bindLangs();
+  document.getElementById('fd').onclick=()=>{const v=document.getElementById('cd').value.trim().toUpperCase().replace(/^SW-?/,'SW-');const r=API.get(v);if(r.claim){R=r;D=v;render()}else document.getElementById('er').textContent=t('notfound')};
+  const lo=document.getElementById('lo');if(lo)lo.onclick=()=>{localStorage.removeItem(SES);render()};
+}
+function stats(st,s){return `<div class="kv"><div><span class="ey" style="font-size:10px">${esc(t('week'))}</span><b class="disp" style="font-size:30px">${st.week}</b></div><div><span class="ey" style="font-size:10px">${esc(t('month'))}</span><b class="disp" style="font-size:30px">${st.month}</b></div></div>${st.recent.length?`<div><div class="ey" style="margin-bottom:6px">${esc(t('recent'))}</div>${st.recent.map(r=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--sh45);font-size:14px"><span>${esc(r.code)}</span><span class="small">${esc(fmtT(r.at))}</span></div>`).join('')}</div>`:''}`}
+function pinScreen(v){
+  pin='';
+  const draw=()=>{const p=document.getElementById('pn');if(p)p.innerHTML=[0,1,2,3].map(i=>`<span class="${i<pin.length?'f':''}">${i<pin.length?'•':''}</span>`).join('')};
+  app.innerHTML=header()+`<h1 class="disp pop" style="font-size:32px">${esc(t('pin_h',{v:v.name}))}</h1><p class="small" style="margin:0;font-size:15px">${esc(t('pin_p'))}</p><div class="pin" id="pn" aria-label="PIN"></div><div class="err" id="er" style="text-align:center"></div>
+  <div class="keys" style="margin-top:auto">${['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k=>k?`<button data-k="${k}" ${k==='⌫'?`aria-label="${t('del')}"`:''}>${k}</button>`:'<span></span>').join('')}</div>`;
+  bindLangs();draw();
+  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const k=b.dataset.k;document.getElementById('er').textContent='';
+    if(k==='⌫'){pin=pin.slice(0,-1)}else if(pin.length<4){pin+=k}draw();
+    if(pin.length===4){if(API.checkPin(v.id,pin,v)){setSession({venue_id:v.id,name:v.name,at:Date.now()});API.track('sw_redeem_pin_ok',{venue:v.id});setTimeout(render,180)}else{API.track('sw_redeem_pin_bad',{venue:v.id});pin='';draw();document.getElementById('er').textContent=t('pin_bad')}}});
+}
+function valid(c,s){
+  app.innerHTML=header()+`<div class="state ok pop"><span class="ey" style="color:var(--greend)">${esc(t('valid'))}</span><h1 class="disp" style="font-size:40px">${esc(c.gift_title)}</h1><span style="font-family:Oswald,sans-serif;font-size:18px;letter-spacing:.16em">${esc(c.code)}</span></div>
+  <div class="kv"><div><span class="ey" style="font-size:10px">${esc(t('customer'))}</span><b>${esc(c.phone_masked||API.mask(c.phone_e164||''))}</b></div><div><span class="ey" style="font-size:10px">${esc(t('until'))}</span><b>${esc(fmtD(c.expires_at))}</b></div></div>
+  <p class="small" style="margin:0;font-size:15px">${esc(t('hand'))}</p>
+  <button class="btn d" id="rd" style="margin-top:auto;min-height:66px;font-size:20px">${esc(t('redeem'))}</button>`;
+  bindLangs();
+  document.getElementById('rd').onclick=()=>{const r=API.redeem(c,s.venue_id);if(r.error){R=API.get(D);return render()}R.claim=r.claim;API.track('sw_redeem_ok',{venue:s.venue_id,code:c.code,gift:c.gift_title});done(r.claim,s)};
+}
+function done(c,s){
+  const st=API.stats(s.venue_id);document.body.classList.add('dk');
+  app.innerHTML=header()+`<div class="pop" style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:24px 0"><div class="check"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#160407" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h1 class="disp" style="font-size:44px">${esc(t('redeemed'))}</h1><span class="small" style="font-size:16px">${esc(c.code)} · ${esc(c.gift_title)} · ${esc(fmtT(c.redeemed_at))}</span><span class="small">${esc(t('logged'))}</span></div>
+  <div class="dkstats">${stats(st,s)}</div><button class="btn y" id="nx" style="margin-top:auto">${esc(t('next'))}</button>`;
+  bindLangs();
+  document.getElementById('nx').onclick=()=>{document.body.classList.remove('dk');history.replaceState(null,'',location.pathname);D=null;R=null;render()};
+}
+function show(kind,h,p,c){
+  app.innerHTML=header()+`<div class="state ${kind} pop"><span class="ey" style="color:var(--inkd)">${kind==='wait'?'···':'STOP'}</span><h1 class="disp" style="font-size:36px">${esc(h)}</h1><p style="margin:0;font-size:16px;line-height:1.4">${esc(p)}</p></div>
+  ${c?`<div class="kv"><div><span class="ey" style="font-size:10px">Code</span><b>${esc(c.code)}</b></div><div><span class="ey" style="font-size:10px">${esc(t('customer'))}</span><b>${esc(c.phone_masked||API.mask(c.phone_e164||''))}</b></div></div>`:''}
+  <button class="btn d" id="an" style="margin-top:auto">${esc(t('another'))}</button>`;
+  bindLangs();
+  document.getElementById('an').onclick=()=>{history.replaceState(null,'',location.pathname);D=null;R=null;render()};
+}
+render();
+</script>
+</body>
+</html>

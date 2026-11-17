@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Soko Backoffice · Gifts (mockup)</title>
+<link rel="stylesheet" href="a/sw.css">
+<style>
+body{background:#f1e5e6}
+.bo{display:flex;flex-wrap:wrap;min-height:100dvh}
+nav{flex:1 1 200px;max-width:240px;background:var(--dark);color:var(--paper);padding:18px 14px;display:flex;flex-direction:column;gap:4px}
+nav button{all:unset;cursor:pointer;padding:10px 12px;border-radius:6px;font-size:15px}
+nav button.on{background:var(--pink);color:var(--inkd)}
+nav button:focus-visible{outline:2px solid var(--yellow)}
+section{flex:999 1 560px;min-width:0;padding:22px;display:flex;flex-direction:column;gap:14px}
+.tw{overflow-x:auto;background:#fff;border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{font:400 11px Oswald,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink50);text-align:left;padding:10px 12px;border-bottom:1px solid var(--sh45);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--sh45);vertical-align:middle;white-space:nowrap}
+.tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:12px}
+.t-locked{background:var(--yellow)}.t-unlocked{background:var(--blue)}.t-redeemed{background:var(--green)}.t-expired,.t-cancelled{background:var(--sh45);color:var(--sh2)}
+.mini{border:0;border-radius:6px;padding:6px 10px;font:400 13px "Zalando Sans",sans-serif;background:var(--sh45);color:var(--inkd);cursor:pointer;margin-right:4px}
+.mini.d{background:var(--inkd);color:var(--paper)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fg label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink50)}
+.fg input,.fg select{height:44px;font-size:15px}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi div{background:#fff;border-radius:6px;padding:14px}
+.kpi b{display:block;font-family:"Season Mix",serif;font-weight:400;font-size:30px}
+@media (max-width:700px){.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}.fg{grid-template-columns:1fr}nav{max-width:none;flex-direction:row;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="bo">
+<nav aria-label="Backoffice">
+<img src="a/wordmark.svg" alt="Soko" style="filter:brightness(0) invert(.94);height:22px;margin:4px 12px 14px;align-self:flex-start">
+<span class="ey" style="padding:0 12px 6px">Soko World · Gifts</span>
+<button data-v="claims" class="on">Claims</button>
+<button data-v="gifts">Gifts</button>
+<button data-v="venues">Venues</button>
+<button data-v="log">Redemptions</button>
+<span style="margin-top:auto;font-size:12px;color:var(--sh4);padding:12px;line-height:1.4">Mockup. Data lives in this browser. Every action here maps to a backoffice endpoint in a/claim.js.</span>
+</nav>
+<section id="main" aria-live="polite"></section>
+</div>
+<script src="a/claim.js"></script>
+<script>
+const API=SWGifts,M=document.getElementById('main');let V='claims',F='all';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dt=ms=>ms?new Date(ms).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'·';
+document.querySelectorAll('nav [data-v]').forEach(b=>b.onclick=()=>{V=b.dataset.v;document.querySelectorAll('nav [data-v]').forEach(x=>x.classList.toggle('on',x===b));draw()});
+function stat(c){return API.check(c)==='expired'&&c.status==='unlocked'?'expired':c.status}
+function draw(){const d=API.db();({claims,gifts,venues,log})[V](d)}
+function claims(d){
+  const all=Object.values(d.claims).sort((a,b)=>b.created_at-a.created_at);
+  const n=s=>all.filter(c=>stat(c)===s).length;
+  const rows=all.filter(c=>F==='all'||stat(c)===F);
+  M.innerHTML=`<h1 class="disp" style="font-size:34px">Claims</h1>
+  <div class="kpi"><div><span class="ey">Locked</span><b>${n('locked')}</b></div><div><span class="ey">Unlocked</span><b>${n('unlocked')}</b></div><div><span class="ey">Redeemed</span><b>${n('redeemed')}</b></div><div><span class="ey">Expired · cancelled</span><b>${n('expired')+n('cancelled')}</b></div></div>
+  <div class="row">${['all','locked','unlocked','redeemed','expired','cancelled'].map(s=>`<button class="mini ${F===s?'d':''}" data-f="${s}">${s}</button>`).join('')}<button class="mini" id="rs" style="margin-left:auto">Reset demo data</button></div>
+  <div class="tw"><table><thead><tr><th>Code</th><th>Status</th><th>Phone</th><th>Gift</th><th>Venue</th><th>Created</th><th>Unlocked</th><th>Expires</th><th>Redeemed</th><th>Actions</th></tr></thead><tbody>
+  ${rows.map(c=>`<tr><td><b style="font-weight:500">${esc(c.code)}</b></td><td><span class="tag t-${stat(c)}">${stat(c)}</span></td><td>${esc(API.mask(c.phone_e164||'')||c.phone_masked)}</td><td>${esc(c.gift_title)}</td><td>${esc(c.venue_name)}</td><td>${dt(c.created_at)}</td><td>${dt(c.unlocked_at)}</td><td>${dt(c.expires_at)}</td><td>${dt(c.redeemed_at)}</td>
+  <td>${c.status==='locked'?`<button class="mini d" data-a="unlock" data-c="${c.code}" title="What the signup hook does when this phone signs up">Simulate signup</button>`:''}${c.status==='unlocked'?`<button class="mini" data-a="gift" data-c="${c.code}">Gift page</button><button class="mini" data-a="venue" data-c="${c.code}">Venue screen</button>`:''}${['locked','unlocked'].includes(c.status)?`<button class="mini" data-a="cancel" data-c="${c.code}">Cancel</button>`:''}</td></tr>`).join('')||`<tr><td colspan="10" style="color:var(--ink50);padding:22px">No claims yet. Win a game and tap Claim, or they appear here when someone locks a gift.</td></tr>`}
+  </tbody></table></div>`;
+  M.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{F=b.dataset.f;draw()});
+  document.getElementById('rs').onclick=()=>{if(confirm('Reset all demo data in this browser?')){API.reset();draw()}};
+  M.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const c=API.db().claims[b.dataset.c];const a=b.dataset.a;
+    if(a==='unlock'){API.unlock(c.code);API.track('sw_claim_unlock',{code:c.code,via:'backoffice_sim'})}
+    if(a==='cancel'&&confirm('Cancel '+c.code+'? The customer can no longer redeem it.'))API.cancel(c.code);
+    if(a==='gift')window.open(API.giftUrl(c)+'&demo=1','_blank');
+    if(a==='venue')window.open(API.redeemUrl(c),'_blank');
+    draw()});
+}
+function gifts(d){
+  const vs=Object.values(d.venues);
+  M.innerHTML=`<h1 class="disp" style="font-size:34px">Gifts</h1>
+  <div class="tw"><table><thead><tr><th>ID</th><th>Venue</th><th>Title (PT)</th><th>Stock</th><th>Per day</th><th>Valid days</th><th>Issued</th><th>Active</th><th></th></tr></thead><tbody>
+  ${Object.values(d.gifts).map(g=>`<tr><td>${esc(g.id)}</td><td>${esc(g.venue_id?(d.venues[g.venue_id]||{}).name:'Any venue')}</td><td>${esc(g.title.pt)}</td><td>${g.stock_total}</td><td>${g.stock_day}</td><td>${g.valid_days}</td><td>${g.issued||0}</td><td>${g.active?'<span class="tag t-redeemed">on</span>':'<span class="tag t-cancelled">off</span>'}</td><td><button class="mini" data-e="${esc(g.id)}">Edit</button></td></tr>`).join('')}
+  </tbody></table></div>
+  <form id="gf" class="card" style="background:#fff;display:flex;flex-direction:column;gap:12px"><span class="ey" id="gfh">New gift</span>
+  <div class="fg"><label>ID<input name="id" required placeholder="G-COFFEE"></label><label>Venue<select name="venue_id"><option value="">Any venue</option>${vs.map(v=>`<option value="${esc(v.id)}">${esc(v.name)}</option>`).join('')}</select></label>
+  <label>Title PT<input name="pt" required></label><label>Title PT-BR<input name="br" required></label><label>Title ES<input name="es" required></label><label>Title EN<input name="en" required></label>
+  <label>Total stock<input name="stock_total" type="number" min="1" value="50" required></label><label>Per day<input name="stock_day" type="number" min="1" value="10" required></label>
+  <label>Valid days after unlock<input name="valid_days" type="number" min="1" value="7" required></label><label>Active<select name="active"><option value="1">On</option><option value="0">Off</option></select></label></div>
+  <button class="btn d" type="submit">Save gift</button></form>`;
+  const f=document.getElementById('gf');
+  M.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const g=d.gifts[b.dataset.e];document.getElementById('gfh').textContent='Edit '+g.id;f.id.value=g.id;f.venue_id.value=g.venue_id||'';['pt','br','es','en'].forEach(k=>f[k].value=g.title[k]);f.stock_total.value=g.stock_total;f.stock_day.value=g.stock_day;f.valid_days.value=g.valid_days;f.active.value=g.active?'1':'0';f.scrollIntoView({behavior:'smooth'})});
+  f.onsubmit=e=>{e.preventDefault();API.saveGift({id:f.id.value.trim().toUpperCase(),venue_id:f.venue_id.value||null,title:{pt:f.pt.value,br:f.br.value,es:f.es.value,en:f.en.value},stock_total:+f.stock_total.value,stock_day:+f.stock_day.value,valid_days:+f.valid_days.value,active:f.active.value==='1'});draw()};
+}
+function venues(d){
+  M.innerHTML=`<h1 class="disp" style="font-size:34px">Venues</h1><p class="small" style="margin:0">In the real backoffice these are the existing Soko venues. The only new field is the redeem PIN.</p>
+  <div class="tw"><table><thead><tr><th>Venue</th><th>Area</th><th>Market</th><th>Redeem PIN</th><th>This week</th><th>This month</th><th>Redeem page</th></tr></thead><tbody>
+  ${Object.values(d.venues).map(v=>{const s=API.stats(v.id);return `<tr><td>${esc(v.name)}</td><td>${esc(v.area)}</td><td>${esc(v.market)}</td><td><input data-p="${esc(v.id)}" value="${esc(v.redeem_pin)}" inputmode="numeric" maxlength="4" style="width:90px;height:38px;font-size:15px" aria-label="PIN for ${esc(v.name)}"></td><td>${s.week}</td><td>${s.month}</td><td><a href="redeem.html" target="_blank" style="color:var(--ink)">Open</a></td></tr>`}).join('')}
+  </tbody></table></div>`;
+  M.querySelectorAll('[data-p]').forEach(i=>i.onchange=()=>{if(/^\d{4}$/.test(i.value))API.saveVenue({id:i.dataset.p,redeem_pin:i.value});else{i.value=API.db().venues[i.dataset.p].redeem_pin}});
+}
+function log(d){
+  M.innerHTML=`<h1 class="disp" style="font-size:34px">Redemptions</h1><div class="tw"><table><thead><tr><th>When</th><th>Code</th><th>Gift</th><th>Venue</th><th>Customer</th></tr></thead><tbody>
+  ${d.log.map(r=>`<tr><td>${dt(r.at)}</td><td>${esc(r.code)}</td><td>${esc(r.gift_title)}</td><td>${esc((d.venues[r.venue_id]||{}).name||r.venue_id)}</td><td>${esc(r.phone)}</td></tr>`).join('')||`<tr><td colspan="5" style="color:var(--ink50);padding:22px">No redemptions in this browser yet.</td></tr>`}
+  </tbody></table></div>`;
+}
+draw();
+</script>
+</body>
+</html>
