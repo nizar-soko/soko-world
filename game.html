@@ -1214,7 +1214,7 @@ function lose(x,y){if(G.grace||G.inv>0||G.ended)return false;G.cHurt=1;G.lives--
 function jumpEnd(){audio();BGM.stop();AMB.stop(true);if(!S.age)S.age='o';if(!G.id||G.ended||!G.on){S.phase='game';stack.innerHTML='';startGame()}G.ended=true;G.on=false;G.score=Math.max(G.score||0,PASS[G.id]+100);G.pass=true;G.persona=GM[G.id].persona();G.best=G.score;$('#game').classList.remove('on');showReveal()}
 function showFail(){track('sw_game_fail',{game:G.id,score:G.score});G.on=false;BGM.stop();$('#game').classList.remove('on');const t=UI(),a=S.age,r=$('#reveal');r.classList.add('on');
  r.innerHTML=`<div class="rv"><span class="stk p corner">Soko knows you got this</span><div class="k">${G.score} PTS</div><h2 style="font-size:28px;line-height:1.05">${t.fail[a]}</h2><div class="pl" style="margin:8px 0 16px">${t.need.replace('{s}',G.score).replace('{n}',PASS[G.id])}</div><button class="cta" id="again">${t.retry[a]}</button></div>`;$('#again').onclick=()=>{r.classList.remove('on');SKIPSTORY=true;SAMEGAME=true;startGame()}}
-function endGame(why){if(G.ended)return;AMB.stop();if(G.id==='corridor'||G.id==='ether')fsOut();G.ended=true;G.finT=0;G.score=Math.floor(G.score);G.pass=G.score>=PASS[G.id];
+function endGame(why){if(G.ended)return;AMB.stop();if(G.id==='ether'&&G.ph!==4)VO.stop();if(G.id==='corridor'||G.id==='ether')fsOut();G.ended=true;G.finT=0;G.score=Math.floor(G.score);G.pass=G.score>=PASS[G.id];
  if(!G.pass){cap(null,()=>UI().fail[S.age]);whoomp();G.shake=.5;setTimeout(showFail,1100);return}
  if(!GM[G.id].sit)cap(null,()=>UI().time[S.age]);
  G.persona=GM[G.id].persona();try{const k='sw_best_'+G.id+'_'+S.m;G.score=Math.floor(G.score);G.best=Math.max(+localStorage.getItem(k)||0,G.score);localStorage.setItem(k,G.best)}catch(e){G.best=Math.floor(G.score)}
@@ -1834,46 +1834,54 @@ const PCITY={lis:'Lisboa',cdmx:'CDMX',br:'Rio'};
 function portalText(to){const c=PGC[S.lang]||PGC.en,o=S.age==='o'?1:0,mv=(S.ans[1]&&S.ans[1].v)||'b',qv=(S.ans[2]&&S.ans[2].v)||'a',p=G.pick||{},a=p.a||PCITY[S.m]||'';
  return{ey:c.ey,h:c.h[o],safe:c.safe[to][o],me:c.me[mv+qv][o].replace('{a}',a),go:c.go[o]}}
 function portal(from){if(G.ended||G.portaling)return;G.portaling=true;const to=from==='corridor'?'ether':'corridor',x=portalText(to),carry=Math.floor(G.score||0);
- track('sw_portal',{from,to,score:carry,answers:S.ans.map(a=>a.v).join('')});AMB.stop(true);sfx('dronestop');sfx2('portal');buzz([20,30,60]);G.shake=.8;
+ track('sw_portal',{from,to,score:carry,answers:S.ans.map(a=>a.v).join('')});AMB.stop(true);VO.stop();sfx('dronestop');sfx2('portal');buzz([20,30,60]);G.shake=.8;
  G.on=false;G.ended=true;G.finT=null;
  const gm=$('#game'),ov=document.createElement('div');ov.className='pgate';ov.innerHTML=`<div class="sw"></div><div class="snap"><div class="ey">✦ ${x.ey}</div><h3>${x.h}</h3><p class="safe">${x.safe}</p><p class="me">${x.me}</p><button>${x.go}</button></div>`;gm.appendChild(ov);
  let done=false;const go=()=>{if(done)return;done=true;blip();const prev=S.forceGame;S.forceGame=to;SKIPSTORY=true;startGame();S.forceGame=prev;G.viaPortal=from;setTimeout(()=>{addPts(Math.max(150,Math.min(carry,PASS[to]-100)),G.W/2,G.H*.4);G.fl.push({s:'✦',x:G.W/2,y:G.H*.32,t:1.4,big:true,c:'#ffb8cb'})},600)};
  ov.querySelector('button').onclick=e=>{e.stopPropagation();go()};setTimeout(go,9000)}
 
+
+/* Corridor samples: shade voice + monster sounds (a/vo/shade, a/vo/sfx); synth sounds stay as fallback */
+const SMP={buf:{},load(list){if(!audio())return;list.forEach(n=>{if(this.buf[n]!==undefined)return;this.buf[n]=0;fetch('a/vo/'+n+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{this.buf[n]=d}).catch(()=>{this.buf[n]=null})})},
+ play(n,g=1,pan=0,wet=.25,rate=1){const d=this.buf[n];if(!d||!A.c)return false;const c=A.c,s=c.createBufferSource(),gg=c.createGain();s.buffer=d;s.playbackRate.value=rate;gg.gain.value=g;s.connect(gg);let o=gg;if(c.createStereoPanner){const p=c.createStereoPanner();p.pan.value=pan;gg.connect(p);o=p}o.connect(A.m);if(wet){const w=c.createGain();w.gain.value=wet;o.connect(w);w.connect(A.dl)}s.start();return s}};
+const MON=['sfx/growl','sfx/ghrr','sfx/breath','sfx/lunge','sfx/sniff','sfx/knock','sfx/purr'];
+const mon=(n,fb,g,pan)=>{if(!SMP.play('sfx/'+n,g==null?1:g,pan||0,.3,.92+Math.random()*.1)&&fb)sfx(fb)};
+const shadeKey=i=>'shade/'+(S.lang||'en')+'_'+(S.age==='o'?'o':'u')+'_q'+i;
+
 /* S1. THE CORRIDOR: liminal POV horror that turns into a hug */
-GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1.2,lx:0,ly:0,tx:0,catch_:0,fum:0,idleRun:0,fumN:0,monZ:14,flash:0,look:0,door:0,bang:0,qi:-1,cnt:{k:0,m:0,x:0},stepT:0,said:{},fear:0,dim:0,glimpse:-2,hb:0,black:0,lunge:0,pk:null,pkLast:-1,bi:0});$('#game').classList.add('strg');fsGo();sfx('drone');AMB.start('corridor');cap(null,()=>SG().open)},
+GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1.2,lx:0,ly:0,tx:0,catch_:0,fum:0,idleRun:0,fumN:0,monZ:14,flash:0,look:0,door:0,bang:0,qi:-1,cnt:{k:0,m:0,x:0},stepT:0,said:{},fear:0,dim:0,glimpse:-2,hb:0,black:0,lunge:0,pk:null,pkLast:-1,bi:0});$('#game').classList.add('strg');fsGo();sfx('drone');AMB.start('corridor');SMP.load(MON.concat([0,1,2,3].map(shadeKey)));cap(null,()=>SG().open)},
  update(dt){G.grace=false;G.ct+=dt;const L_=SG();G.pos+=G.spd*dt;G.stepT-=dt*G.spd;if(G.stepT<=0&&G.ph!=='closet'&&G.ph!=='talk'){G.stepT=1.1;sfx('step')}
   G.lx+=(G.tx-G.lx)*Math.min(1,dt*4);
    G.flash=Math.max(0,G.flash-dt*2.5);if(G.black>0)G.black-=dt;AMB.set('fear',G.ph==='run'?.8:G.fear);
    if(G.ph==='walk'){const c=G.ct,at=(k,s0,fn)=>{if(c>s0&&!G.said[k]){G.said[k]=1;fn()}};G.fear=Math.min(1,c/28);G.spd=1.1-G.fear*.5;
     at('w1',6,()=>{sfx('creak');G.shake=.25;cap(null,()=>SG().b1)});
     at('w2',12,()=>{G.dim=.4;sfx('thud');G.shake=.35;buzz(30);cap(null,()=>SG().b2)});
-    at('w3',17,()=>{G.glimpse=0;sfx('whisper')});
-    at('w4',21,()=>{sfx('breath');cap(null,()=>SG().b3)});
+    at('w3',17,()=>{G.glimpse=0;mon('sniff','whisper',.8,-.6)});
+    at('w4',21,()=>{mon('breath','breath',.9,.5);cap(null,()=>SG().b3)});
     at('w5',25,()=>{G.black=.8;sfx('thud');G.shake=.5;buzz([20,40,20])});
     at('w6',26,()=>{cap(null,()=>SG().b4)});
     if(G.glimpse>=0){G.glimpse+=dt*.33;if(G.glimpse>1)G.glimpse=-2}
     if(c>15){G.hb-=dt;if(G.hb<=0){G.hb=1.15-G.fear*.6;sfx('heart');if(c>22)buzz(12)}}
     if(Math.random()<dt*G.fear*.3)G.shake=Math.max(G.shake,.12);
-    if(c>28.5){G.ph='spot';G.ct=0;G.monZ=14;cap(null,()=>SG().spot);sfx('growl')}}
+    if(c>28.5){G.ph='spot';G.ct=0;G.monZ=14;cap(null,()=>SG().spot);mon('growl','growl',1)}}
    else if(G.ph==='spot'){G.spd=.25;G.hb-=dt;if(G.hb<=0){G.hb=.42;sfx('heart')}
     if(G.ct<3.2)G.monZ=Math.max(3,14-G.ct*3.6)+(Math.sin(G.ct*21)>.75?.8:0);
-    else{if(!G.said.lg){G.said.lg=1;sfx('scream');buzz([60,30,90]);G.shake=1.1;cap(null,()=>'')}G.lunge=Math.min(1,(G.ct-3.2)/.32);if(G.lunge>=1&&!G.said.fl){G.said.fl=1;G.flash=1}}
-    if(G.ct>1.6&&!G.said.g2){G.said.g2=1;sfx('growl');G.shake=.3}
+    else{if(!G.said.lg){G.said.lg=1;sfx('scream');mon('lunge',null,1.2);buzz([60,30,90]);G.shake=1.1;cap(null,()=>'')}G.lunge=Math.min(1,(G.ct-3.2)/.32);if(G.lunge>=1&&!G.said.fl){G.said.fl=1;G.flash=1}}
+    if(G.ct>1.6&&!G.said.g2){G.said.g2=1;mon('ghrr','growl',1);G.shake=.3}
     if(G.ct>4){G.ph='turn';G.ct=0;whoomp();G.shake=.6;sfx('dronestop')}}
   else if(G.ph==='turn'){if(G.ct>.8){G.ph='run';G.ct=0;G.spd=7;cap(null,()=>SG().runs)}}
   else if(G.ph==='run'){G.fum=Math.max(0,G.fum-dt);if(G.fum>0){G.spd+=(1.6-G.spd)*Math.min(1,dt*6);G.catch_=Math.min(1,G.catch_+dt*.28);G.idleRun=0}else{G.spd+=(7-G.spd)*Math.min(1,dt*2);G.catch_=Math.max(0,G.catch_-dt*.06);G.idleRun+=dt;G._acc=(G._acc||0)+dt*22;if(G._acc>=20){addPts(20,G.W/2,G.H*.62);G._acc=0}
      if(G.idleRun>4&&!G.said.calm){G.said.calm=1;cap(null,()=>SG().calm)}}
-   if(Math.random()<dt*.35)sfx('growl');G.look=Math.max(0,G.look-dt);if(Math.random()<dt*.18&&!G.look)G.look=.45;
+   if(Math.random()<dt*.35)mon(Math.random()<.5?'ghrr':'growl','growl',.7,rnd(-.5,.5));G.look=Math.max(0,G.look-dt);if(Math.random()<dt*.18&&!G.look)G.look=.45;
    if(G.catch_>=1){G.catch_=.55;G.shake=.7;whoomp();addPts(-50,G.W/2,G.H*.4)}
    if(G.ct>22&&G.idleRun>2||G.ct>40){G.ph='door';G.ct=0;G.spd=2.5;cap(null,()=>SG().door);G.door=0}}
   else if(G.ph==='door'){G.door=Math.min(1,G.door+dt*.8);G.spd=Math.max(.6,G.spd-dt);if(G.ct>7)this.slam(false)}
   else if(G.ph==='closet'){G.spd=0;if(!G.said.mf){G.said.mf=1;AMB.set('muffle',1)}G.bang-=dt;if(G.bang<=0&&G.ct<4.2){G.bang=.55+Math.random()*.3;G.shake=.45;sfx('thud');buzz(25)}if(G.ct>4.6&&G.qi<0)this.next()}
   else if(G.ph==='end'){G.spd=0}},
- slam(fast){if(G.ph!=='door')return;G.ph='closet';G.ct=0;G.bang=.3;sfx('thud');G.shake=.5;if(fast)addPts(G.door<.9?150:100,G.W/2,G.H*.45);else addPts(-40,G.W/2,G.H*.45);cap(null,()=>SG().bang)},
+ slam(fast){if(G.ph!=='door')return;G.ph='closet';G.ct=0;G.bang=.3;sfx('thud');mon('knock',null,1);G.shake=.5;if(fast)addPts(G.door<.9?150:100,G.W/2,G.H*.45);else addPts(-40,G.W/2,G.H*.45);cap(null,()=>SG().bang)},
  next(){const L_=SG();G.qi++;G.ph='talk';if(G.qi===3){cap(null,()=>SG().mirror);G.mir=1}
   if(G.qi>=L_.q.length){G.ph='end';G.ct=0;fsOut();if(!G.open)sfx2('kazoo');setTimeout(()=>endGame('done'),900);return}
-  const q=L_.q[G.qi];setTimeout(()=>sChoices([L_.who,q[0],q[1]],c=>{G.cnt[c[2]]++;addPts(c[1],G.W/2,G.H*.42);if(G.qi===3&&c[2]==='k'){G.open=1;sfx('chime');setTimeout(()=>sfx2('kazoo'),500)}setTimeout(()=>this.next(),700)}),G.qi===3?1600:400)},
+  const q=L_.q[G.qi];setTimeout(()=>{if(G.qi<4&&!G.ended){G.shV&&(()=>{try{G.shV.stop()}catch(e){}})();G.shV=SMP.play(shadeKey(G.qi),1.3,0,.35)}},G.qi===3?1500:300);setTimeout(()=>sChoices([L_.who,q[0],q[1]],c=>{G.cnt[c[2]]++;addPts(c[1],G.W/2,G.H*.42);if(G.qi===3&&c[2]==='k'){G.open=1;sfx('chime');setTimeout(()=>sfx2('kazoo'),500);setTimeout(()=>mon('purr',null,1),1500)}setTimeout(()=>this.next(),700)}),G.qi===3?1600:400)},
  down(x,y){if(G.pk&&(G.ph==='walk'||G.ph==='run'||G.ph==='door')){const r=G.pk;if(x>r.x&&x<r.x+r.w&&y>r.y&&y<r.y+r.h){portal('corridor');return}}
   if(G.ph==='run'){G.fum=.8;G.fumN++;sfx(Math.random()<.5?'squeak':'honk');if(G.fumN%2===1)cap(null,()=>pick(SG().fum));G.fl.push({s:pick(['💨','🥴','🦶','🙃']),x,y,t:.7,big:true})}
   else if(G.ph==='door')this.slam(true);else if(G.ph==='walk'||G.ph==='spot'){G.tx=-(x/G.W-.5)*70;this.lookSay()}},
@@ -1924,25 +1932,48 @@ GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1
    label(ctx,SG().run,W/2,H*.22+Math.sin(t*14)*3,44,'#b3261e',.75+Math.sin(t*10)*.25)}},
  persona(){const c=G.cnt;return c.k>=3?'host':c.x>=2?'chaos':'match'},endLine(){return SG().end[this.persona()]},hint(){return null}};
 
+
+/* Ether voice-over: pre-rendered clips in a/vo/<lang>_<age>_<key>.mp3, text only as fallback */
+const EXV={en:{sf:['the stars do not want to be connected. respect that.','The stars do not wish to be connected. Respect that.'],bd:['it does not want to be pressed. it told me.','It does not want to be pressed. It told me.'],bh:['let go. let go. LET. GO.','Let go. Let go. Let. Go.'],hold:'HOLD THE UNIVERSE'},
+ pt:{sf:['as estrelas não querem ser ligadas. respeita isso.','As estrelas não querem ser ligadas. Respeita isso.'],bd:['o universo não quer ser carregado. disse-mo.','O universo não quer ser carregado. Disse-mo.'],bh:['larga. larga. LARGA. JÁ.','Larga. Larga. Larga já.'],hold:'MANTÉM O UNIVERSO PREMIDO'},
+ br:{sf:['as estrelas não querem ser ligadas. respeita isso.','As estrelas não querem ser ligadas. Respeite isso.'],bd:['o universo não quer ser apertado. ele me disse.','O universo não quer ser apertado. Ele me disse.'],bh:['solta. solta. SOLTA. AGORA.','Solte. Solte. Solte agora.'],hold:'SEGURA O UNIVERSO'},
+ es:{sf:['las estrellas no quieren que las unan. respeta eso.','Las estrellas no quieren que las unan. Respeta eso.'],bd:['el universo no quiere que lo presiones. me lo dijo.','El universo no quiere que lo presiones. Me lo dijo.'],bh:['suéltalo. suéltalo. SUÉL. TA. LO.','Suéltalo. Suéltalo. Suéltalo ya.'],hold:'MANTÉN PRESIONADO EL UNIVERSO'}};
+const exv=k=>{const e=EXV[S.lang]||EXV.en;return e[k][S.age==='o'?1:0]};
+const ETHK=['open','idle','hint','a1','a2','a3','a4','s0','s1','sf','m0','m1','mi','sp','b0','b1','bd','bh','fin'];
+function ethLine(k){const L_=SG();if(k==='open')return L_.open;if(k==='mi'||k==='sp')return sex(k);if(k==='sf'||k==='bd'||k==='bh')return exv(k);return L_.v[k]}
+const VO={buf:{},pend:{},cur:null,
+ key(k){return (S.lang||'en')+'_'+(S.age==='o'?'o':'u')+'_'+k},
+ load(){if(!audio())return;ETHK.forEach(k=>{const id=this.key(k);if(this.buf[id]!==undefined||this.pend[id])return;this.pend[id]=1;fetch('a/vo/ether/'+id+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{this.buf[id]=d}).catch(()=>{this.buf[id]=null}).finally(()=>{delete this.pend[id]})})},
+ has(k){return !!this.buf[this.key(k)]},
+ play(k){const d=this.buf[this.key(k)];if(!d||!A.c)return false;this.stop();const c=A.c,s=c.createBufferSource(),g=c.createGain(),lp=c.createBiquadFilter();s.buffer=d;lp.type='lowshelf';lp.frequency.value=180;lp.gain.value=4;g.gain.value=1.25;s.connect(lp);lp.connect(g);g.connect(A.m);const w=c.createGain();w.gain.value=.22;g.connect(w);w.connect(A.dl);s.start();this.cur=s;AMB.set('muffle',1);s.onended=()=>{if(this.cur===s){this.cur=null;AMB.set('muffle',0)}};return true},
+ stop(){if(this.cur){try{this.cur.stop()}catch(e){}this.cur=null}}};
+
 /* S2. THE ETHER: zen voice vs. the only way to win */
-GM.ether={sit:true,init(){const st=[];for(let k=0;st.length<9&&k<400;k++){const c={x:rnd(.1,.9),y:rnd(.22,.62),on:0};if(st.every(o=>Math.hypot(o.x-c.x,(o.y-c.y)*1.3)>.14))st.push(c)}Object.assign(G,{dur:1e9,ph:0,ct:0,idle:0,dist:0,bub:[],bt:0,stars:st,link:[],moon:{x:.72,y:.3,mv:0},btn:0,pressed:0,said:{},vl:'',fin:0,ps:(()=>{let p;for(let i=0;i<40;i++){p={x:rnd(.08,.92),y:rnd(.12,.5)};if(Math.hypot(p.x-.72,p.y-.3)>.18&&p.y>.13&&st.every(q=>Math.hypot(q.x-p.x,(q.y-p.y)*1.3)>.11))break}return p})(),pT:0,pN:0,pGl:6,cl:[...Array(6)].map((_,i)=>({x:Math.random(),y:.55+Math.random()*.35,s:.6+Math.random()*.8,v:.006+Math.random()*.01}))});$('#game').classList.add('strg');AMB.start('ether');this.say('open')},
- say(k,force){const L_=SG();const v=k==='open'?L_.open:L_.v[k];if(!v||(!force&&G.said[k]))return;G.said[k]=1;cap(`<em>${v}</em>`)},
+GM.ether={sit:true,init(){const st=[];for(let k=0;st.length<9&&k<400;k++){const c={x:rnd(.1,.9),y:rnd(.22,.62),on:0};if(st.every(o=>Math.hypot(o.x-c.x,(o.y-c.y)*1.3)>.14))st.push(c)}Object.assign(G,{dur:1e9,ph:0,ct:0,idle:0,dist:0,bub:[],bt:0,stars:st,link:[],moon:{x:.72,y:.3,mv:0},btn:0,pressed:0,said:{},vl:'',fin:0,ps:(()=>{let p;for(let i=0;i<40;i++){p={x:rnd(.08,.92),y:rnd(.12,.5)};if(Math.hypot(p.x-.72,p.y-.3)>.18&&p.y>.13&&st.every(q=>Math.hypot(q.x-p.x,(q.y-p.y)*1.3)>.11))break}return p})(),pT:0,pN:0,pGl:6,cl:[...Array(6)].map((_,i)=>({x:Math.random(),y:.55+Math.random()*.35,s:.6+Math.random()*.8,v:.006+Math.random()*.01}))});Object.assign(G,{bx:.5,by:.62,dodge:0,hold:0,holdOn:0,ptr:null});$('#game').classList.add('strg');AMB.start('ether');VO.load();G.voT=.15},
+ say(k,force){if(!force&&G.said[k])return;const v=ethLine(k);if(!v)return;G.said[k]=1;if(VO.play(k)){cap('');G.capFn=null}else cap(`<em>${v}</em>`)},
  dis(n,x,y){G.dist+=n;G.idle=0;const d=G.dist;if(d>=1)this.say('a1');if(d>=3)this.say('a2');if(d>=6)this.say('a3');if(d>=10)this.say('a4');G.shake=Math.min(.4,.05+d*.01)},
- update(dt){G.grace=false;G.ct+=dt;G.idle+=dt;AMB.set('rage',Math.min(1,G.dist/14));G.pGl-=dt;if(G.pGl<=0){G.pGl=rnd(10,15);G.pGlT=.45;sfx2('hum')}if(G.pGlT>0)G.pGlT-=dt;if(G.pT>0){G.pT-=dt;if(G.pT<=0)G.pN=0}G.cl.forEach(c=>{c.x+=c.v*dt;if(c.x>1.3)c.x=-.3});
+ update(dt){G.grace=false;G.ct+=dt;G.idle+=dt;if(G.voT>0){G.voT-=dt;if(G.voT<=0){if(VO.has('open')||G.ct>1.6)this.say('open');else G.voT=.15}}
+  if(G.ph===1&&G.ptr){G.stars.forEach(st=>{if(st.on)return;st.hx=st.hx??st.x;st.hy=st.hy??st.y;const dx=st.x*G.W-G.ptr[0],dy=st.y*G.H-G.ptr[1],d=Math.hypot(dx,dy);if(d<90&&d>1){const f=(90-d)/90*dt*.55;st.x=Math.max(.06,Math.min(.94,st.x+dx/d*f));st.y=Math.max(.15,Math.min(.7,st.y+dy/d*f*.6));if(!G.said.sf&&G.link.length>=1)this.say('sf')}})}
+  if(G.ph===1&&!G.ptr)G.stars.forEach(st=>{if(!st.on&&st.hx!=null){st.x+=(st.hx-st.x)*dt*.4;st.y+=(st.hy-st.y)*dt*.4}});
+  if(G.ph===3&&G.dodge>=2){if(G.holdOn){G.hold=Math.min(1,G.hold+dt/2.2);if(G.hold>.35&&!G.said.bh)this.say('bh');G.shake=Math.max(G.shake,G.hold*.25);if(G.hold>=1)this.win()}else G.hold=Math.max(0,G.hold-dt*.8)}
+  AMB.set('rage',Math.min(1,G.dist/14));G.pGl-=dt;if(G.pGl<=0){G.pGl=rnd(10,15);G.pGlT=.45;sfx2('hum')}if(G.pGlT>0)G.pGlT-=dt;if(G.pT>0){G.pT-=dt;if(G.pT<=0)G.pN=0}G.cl.forEach(c=>{c.x+=c.v*dt;if(c.x>1.3)c.x=-.3});
   if(G.idle>9&&!G.said.idle)this.say('idle');if(G.idle>22&&!G.said.hint){this.say('hint')}
   if(G.ph===0){G.bt-=dt;if(G.bt<=0){G.bt=.55;G.bub.push({x:rnd(.1,.9),y:1.08,r:rnd(14,28),v:rnd(.05,.1),w:rnd(0,6)})}G.bub.forEach(b=>{b.y-=b.v*dt;b.x+=Math.sin(G.ct*1.3+b.w)*.0008});G.bub=G.bub.filter(b=>b.y>-.1&&!b.dead);if((G.popN||0)>=8||G.ct>40&&(G.popN||0)>=4){G.ph=1;G.ct=0;this.say('s0')}}
   else if(G.ph===1){if(G.link.length>=6||G.ct>35&&G.link.length>=3){G.ph=2;G.ct=0;this.say('m0')}}
-  else if(G.ph===2){if(G.moon.mv>=1){G.ph=3;G.ct=0;G.btn=0;this.say('b0')}}
+  else if(G.ph===2){if(G.moon.mv>=1){G.ph=3;G.ct=0;G.btn=0;G.drag=0;this.say('b0')}}
   else if(G.ph===3){G.btn=Math.min(1,G.btn+dt*.5);if(G.ct>7&&!G.said.b1)this.say('b1')}
   else if(G.ph===4){G.fin+=dt;if(!G.said.wp&&G.fin>.9){G.said.wp=1;AMB.stop();sfx2('womp')}if(G.fin>3.4&&!G.ended)endGame('done')}},
  down(x,y){const W=G.W,H=G.H;
   if(G.ph<4&&Math.hypot(G.ps.x*W-x,G.ps.y*H-y)<18){G.pN++;G.pT=8;osc('sine',1318.51*Math.pow(2,G.pN/12),A.c?A.c.currentTime:0,.03,.01,.8);if(G.pN>=3)portal('ether');return}
-  if(G.ph===0){for(const b of G.bub){if(!b.dead&&Math.hypot(b.x*W-x,b.y*H-y)<b.r+10){b.dead=1;G.popN=(G.popN||0)+1;sfx('pop');addPts(30,x,y);if(!b.sm&&Math.random()<.28){[-1,1].forEach(d=>G.bub.push({x:b.x+d*.04,y:b.y,r:b.r*.62,v:b.v*1.15,w:rnd(0,6),sm:1}));if(!G.said.sp){G.said.sp=1;setTimeout(()=>cap(`<em>${sex('sp')}</em>`),900)}}this.dis(1,x,y);return}}}
-  else if(G.ph===1){const cand=G.stars.filter(s=>!s.on).map(s=>[Math.hypot(s.x*W-x,s.y*H-y),s]).sort((a,b)=>a[0]-b[0])[0];for(const s of cand&&cand[0]<34?[cand[1]]:[]){{s.on=1;G.link.push(s);sfx('chime');addPts(40,x,y);this.dis(1.2,x,y);if(G.link.length===2)this.say('s1');return}}}
+  if(G.ph===0){for(const b of G.bub){if(!b.dead&&Math.hypot(b.x*W-x,b.y*H-y)<b.r+10){b.dead=1;G.popN=(G.popN||0)+1;sfx('pop');addPts(30,x,y);if(!b.sm&&Math.random()<.28){[-1,1].forEach(d=>G.bub.push({x:b.x+d*.04,y:b.y,r:b.r*.62,v:b.v*1.15,w:rnd(0,6),sm:1}));if(!G.said.sp)setTimeout(()=>this.say('sp'),900)}this.dis(1,x,y);return}}}
+  else if(G.ph===1){G.ptr=[x,y];this.grab(x,y)}
   else if(G.ph===2){if(Math.hypot(G.moon.x*W-x,G.moon.y*H-y)<46){G.drag=1;G.mx=x;G.my=y}}
-  else if(G.ph===3&&G.btn>.6){if(Math.hypot(W/2-x,H*.62-y)<70){G.ph=4;G.fin=0;G.pressed=1;G.shake=1;whoomp();sfx('chime');addPts(200,W/2,H*.5);cap(`<em>${SG().v.fin}</em>`)}}},
- move(x,y){if(G.ph===2&&G.drag){const dx=x-G.mx,dy=y-G.my;G.moon.x=Math.max(.1,Math.min(.9,G.moon.x-dx/G.W));G.moon.y=Math.max(.12,Math.min(.8,G.moon.y-dy/G.H));if(!G.said.mi&&G.moon.mv>.12){G.said.mi=1;cap(`<em>${sex('mi')}</em>`)}G.mx=x;G.my=y;const d=Math.hypot(dx,dy);G.moon.mv+=d/900;G._m=(G._m||0)+d;if(G._m>60){G._m=0;addPts(25,x,y);this.dis(.6,x,y);if(G.moon.mv>.45)this.say('m1')}}},
- up(){G.drag=0},
+  else if(G.ph===3&&G.btn>.6){if(Math.hypot(G.bx*W-x,G.by*H-y)<70){if(G.dodge<2){G.dodge++;let nx,ny;do{nx=rnd(.2,.8);ny=rnd(.35,.72)}while(Math.hypot((nx-G.bx)*W,(ny-G.by)*H)<140);G.bx=nx;G.by=ny;swoosh(G.dodge%2?1:-1,2,false);G.shake=.3;addPts(40,x,y);this.dis(1,x,y);if(G.dodge===1)this.say('bd')}else{G.holdOn=1}}}},
+ grab(x,y){const W=G.W,H=G.H;const cand=G.stars.filter(s=>!s.on).map(s=>[Math.hypot(s.x*W-x,s.y*H-y),s]).sort((a,b)=>a[0]-b[0])[0];if(cand&&cand[0]<26){const s=cand[1];s.on=1;G.link.push(s);sfx('chime');addPts(40,x,y);this.dis(1.2,x,y);if(G.link.length===2)this.say('s1')}},
+ win(){if(G.ph!==3)return;G.ph=4;G.fin=0;G.pressed=1;G.holdOn=0;G.shake=1;whoomp();sfx('chime');addPts(200,G.bx*G.W,G.by*G.H);this.say('fin',true)},
+ move(x,y){if(G.ph===1){G.ptr=[x,y];this.grab(x,y);return}if(G.ph===3&&G.holdOn&&Math.hypot(G.bx*G.W-x,G.by*G.H-y)>90){G.holdOn=0}
+  if(G.ph===2&&G.drag){const dx=x-G.mx,dy=y-G.my;G.moon.x=Math.max(.1,Math.min(.9,G.moon.x-dx/G.W));G.moon.y=Math.max(.12,Math.min(.8,G.moon.y-dy/G.H));if(!G.said.mi&&G.moon.mv>.12)this.say('mi');G.mx=x;G.my=y;const d=Math.hypot(dx,dy);G.moon.mv+=d/900;G._m=(G._m||0)+d;if(G._m>60){G._m=0;addPts(25,x,y);this.dis(.6,x,y);if(G.moon.mv>.45)this.say('m1')}}},
+ up(){G.drag=0;G.ptr=null;G.holdOn=0},
  draw(ctx,W,H){const t=performance.now()/1000,rage=Math.min(1,G.dist/14);
   const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,`rgb(${Math.round(40+rage*90)},${Math.round(30-rage*10)},${Math.round(90-rage*40)})`);g.addColorStop(.6,`rgb(${Math.round(190+rage*50)},${Math.round(150-rage*80)},${Math.round(200-rage*120)})`);g.addColorStop(1,`rgb(255,${Math.round(210-rage*90)},${Math.round(190-rage*120)})`);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   for(let i=0;i<60;i++){const x=(i*137.5%1)*W||((i*97)%W),y=((i*53)%(H*.6)),a=.3+.5*Math.abs(Math.sin(t*.8+i));ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.fillRect((i*97)%W,y,1.6,1.6)}
@@ -1953,9 +1984,9 @@ GM.ether={sit:true,init(){const st=[];for(let k=0;st.length<9&&k<400;k++){const 
    G.stars.forEach(s=>{const x=s.x*W,y=s.y*H,r=s.on?7:4+Math.sin(t*3+x)*1.5;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=s.on?'#fff':'rgba(255,255,255,.75)';ctx.shadowColor='#fff';ctx.shadowBlur=s.on?18:8;ctx.fill();ctx.shadowBlur=0})}
   G.cl.forEach(c=>{const x=c.x*W,y=c.y*H,s=c.s*60;ctx.fillStyle='rgba(255,255,255,.55)';[[0,0,1],[-.6,.15,.7],[.6,.15,.75],[.25,-.25,.6]].forEach(([dx,dy,k])=>{ctx.beginPath();ctx.ellipse(x+dx*s,y+dy*s,s*.5*k,s*.32*k,0,0,7);ctx.fill()})});
   if(G.ph===0)G.bub.forEach(b=>{const x=b.x*W,y=b.y*H;ctx.beginPath();ctx.arc(x,y,b.r,0,7);ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='rgba(139,223,255,.18)';ctx.fill();ctx.beginPath();ctx.arc(x-b.r*.35,y-b.r*.35,b.r*.18,0,7);ctx.fillStyle='rgba(255,255,255,.8)';ctx.fill()});
-  if(G.ph===3||G.ph===4){const k=G.ph===4?1+G.fin*2:G.btn,x=W/2,y=H*.62,r=50*Math.min(1.4,k);const bg=ctx.createRadialGradient(x,y,4,x,y,r*1.8);bg.addColorStop(0,'rgba(239,142,168,.95)');bg.addColorStop(1,'rgba(239,142,168,0)');ctx.fillStyle=bg;ctx.fillRect(x-r*2,y-r*2,r*4,r*4);ctx.beginPath();ctx.arc(x,y,r*.7,0,7);ctx.fillStyle='#f68686';ctx.fill();label(ctx,'🌌',x,y,r*.7,'#fff')}
+  if(G.ph===3||G.ph===4){const k=G.ph===4?1+G.fin*2:G.btn,x=G.bx*W+(G.holdOn?rnd(-2,2)*G.hold*4:0),y=G.by*H,r=50*Math.min(1.4,k);if(G.ph===3&&G.hold>0){ctx.beginPath();ctx.arc(x,y,r*.95,-Math.PI/2,-Math.PI/2+G.hold*Math.PI*2);ctx.strokeStyle='#ede77d';ctx.lineWidth=6;ctx.stroke()}const bg=ctx.createRadialGradient(x,y,4,x,y,r*1.8);bg.addColorStop(0,'rgba(239,142,168,.95)');bg.addColorStop(1,'rgba(239,142,168,0)');ctx.fillStyle=bg;ctx.fillRect(x-r*2,y-r*2,r*4,r*4);ctx.beginPath();ctx.arc(x,y,r*.7,0,7);ctx.fillStyle='#f68686';ctx.fill();label(ctx,'🌌',x,y,r*.7,'#fff')}
   if(G.ph===4){ctx.fillStyle=`rgba(255,255,255,${Math.max(0,1-G.fin*.6)})`;ctx.fillRect(0,0,W,H)}
-  if(G.ph<4){const b=SG().ban[G.ph],y=H*.86;ctx.save();ctx.font='500 18px \"Zalando Sans\",sans-serif';const tw=ctx.measureText(b).width+28;rr(ctx,W/2-tw/2,y-17,tw,34,17);ctx.fillStyle='#ede77d';ctx.fill();ctx.fillStyle='#3b0f18';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b,W/2,y+1);ctx.restore()}
+  if(G.ph<4){const b=G.ph===3&&G.dodge>=2?exv('hold'):SG().ban[G.ph],y=H*.86;ctx.save();ctx.font='500 18px \"Zalando Sans\",sans-serif';const tw=ctx.measureText(b).width+28;rr(ctx,W/2-tw/2,y-17,tw,34,17);ctx.fillStyle='#ede77d';ctx.fill();ctx.fillStyle='#3b0f18';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b,W/2,y+1);ctx.restore()}
   if(rage>.3){ctx.fillStyle=`rgba(255,40,60,${(rage-.3)*.25*(.6+.4*Math.sin(t*9))})`;ctx.fillRect(0,0,W,H)}GRN(ctx,W,H,.07+rage*.1,'soft-light')},
  persona(){return G.dist>=16?'chaos':G.said.idle?'host':'match'},endLine(){return SG().end[this.persona()]},hint(){return null}};
 
@@ -2077,7 +2108,7 @@ function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div'
   else if(b.dataset.az){S.zone=b.dataset.az;S.forceGame=null;o.classList.remove('on');start();applyLang()}}}
 function alphaStart(){start();alphaShow('market')}
 
-function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof AMB!=='undefined')AMB.stop(true);if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
+function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof AMB!=='undefined')AMB.stop(true);if(typeof VO!=='undefined')VO.stop();if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
  $('#done').classList.remove('on');$('#done').innerHTML='';L_off();$('#hover').style.opacity='';$('#prog').classList.add('hide');drawProg();$('#bottom').classList.add('hide');
  app.classList.remove('l1','l2','l3');side(0);applyLang(false)}
 S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';S.strange=qs.get('set')==='strange';if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
