@@ -1843,13 +1843,14 @@ function portal(from){if(G.ended||G.portaling)return;G.portaling=true;const to=f
 
 /* Corridor samples: shade voice + monster sounds (a/vo/shade, a/vo/sfx); synth sounds stay as fallback */
 const SMP={buf:{},load(list){if(!audio())return;list.forEach(n=>{if(this.buf[n]!==undefined)return;this.buf[n]=0;fetch('a/vo/'+n+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{this.buf[n]=d}).catch(()=>{this.buf[n]=null})})},
+ loadPacks(){if(!audio())return Promise.reject();const la=(S.lang||'en')+'_'+(S.age==='o'?'o':'u');return Promise.all([PACK.load('sfx').then(o=>Object.entries(o).forEach(([k,b])=>{this.buf['sfx/'+k]=b})),PACK.load('shade_'+la).then(o=>Object.entries(o).forEach(([k,b])=>{this.buf['shade/'+la+'_'+k]=b}))])},
  play(n,g=1,pan=0,wet=.25,rate=1){const d=this.buf[n];if(!d||!A.c)return false;const c=A.c,s=c.createBufferSource(),gg=c.createGain();s.buffer=d;s.playbackRate.value=rate;gg.gain.value=g;s.connect(gg);let o=gg;if(c.createStereoPanner){const p=c.createStereoPanner();p.pan.value=pan;gg.connect(p);o=p}o.connect(A.m);if(wet){const w=c.createGain();w.gain.value=wet;o.connect(w);w.connect(A.dl)}s.start();return s}};
 const MON=['sfx/growl','sfx/ghrr','sfx/breath','sfx/lunge','sfx/sniff','sfx/knock','sfx/purr'];
 const mon=(n,fb,g,pan)=>{if(!SMP.play('sfx/'+n,g==null?1:g,pan||0,.3,.92+Math.random()*.1)&&fb)sfx(fb)};
 const shadeKey=i=>'shade/'+(S.lang||'en')+'_'+(S.age==='o'?'o':'u')+'_q'+i;
 
 /* S1. THE CORRIDOR: liminal POV horror that turns into a hug */
-GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1.2,lx:0,ly:0,tx:0,catch_:0,fum:0,idleRun:0,fumN:0,monZ:14,flash:0,look:0,door:0,bang:0,qi:-1,cnt:{k:0,m:0,x:0},stepT:0,said:{},fear:0,dim:0,glimpse:-2,hb:0,black:0,lunge:0,pk:null,pkLast:-1,bi:0});$('#game').classList.add('strg');fsGo();sfx('drone');AMB.start('corridor');SMP.load(MON.concat([0,1,2,3].map(shadeKey)));cap(null,()=>SG().open)},
+GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1.2,lx:0,ly:0,tx:0,catch_:0,fum:0,idleRun:0,fumN:0,monZ:14,flash:0,look:0,door:0,bang:0,qi:-1,cnt:{k:0,m:0,x:0},stepT:0,said:{},fear:0,dim:0,glimpse:-2,hb:0,black:0,lunge:0,pk:null,pkLast:-1,bi:0});$('#game').classList.add('strg');fsGo();sfx('drone');AMB.start('corridor');SMP.loadPacks().catch(()=>SMP.load(MON.concat([0,1,2,3].map(shadeKey))));cap(null,()=>SG().open)},
  update(dt){G.grace=false;G.ct+=dt;const L_=SG();G.pos+=G.spd*dt;G.stepT-=dt*G.spd;if(G.stepT<=0&&G.ph!=='closet'&&G.ph!=='talk'){G.stepT=1.1;sfx('step')}
   G.lx+=(G.tx-G.lx)*Math.min(1,dt*4);
    G.flash=Math.max(0,G.flash-dt*2.5);if(G.black>0)G.black-=dt;AMB.set('fear',G.ph==='run'?.8:G.fear);
@@ -1933,6 +1934,13 @@ GM.corridor={sit:true,init(){Object.assign(G,{dur:1e9,ph:'walk',ct:0,pos:0,spd:1
  persona(){const c=G.cnt;return c.k>=3?'host':c.x>=2?'chaos':'match'},endLine(){return SG().end[this.persona()]},hint(){return null}};
 
 
+
+/* Voice packs: one mp3 per language/age + index.json offsets (a/vo/pack); single files are the fallback */
+const PACK={idx:null,ip:null,got:{},
+ index(){return this.ip||(this.ip=fetch('a/vo/pack/index.json').then(r=>{if(!r.ok)throw 0;return r.json()}).then(j=>this.idx=j))},
+ load(name){if(this.got[name])return this.got[name];return this.got[name]=this.index().then(ix=>{const m=ix[name];if(!m)throw 0;return fetch('a/vo/pack/'+name+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{const o={},sr=d.sampleRate,ch=d.getChannelData(0);
+  Object.entries(m).forEach(([k,[st,du]])=>{const a=Math.max(0,Math.floor((st-.02)*sr)),e=Math.min(ch.length,Math.ceil((st+du+.06)*sr)),nb=A.c.createBuffer(1,Math.max(1,e-a),sr);nb.copyToChannel(ch.subarray(a,e),0);o[k]=nb});return o})})}};
+
 /* Ether voice-over: pre-rendered clips in a/vo/<lang>_<age>_<key>.mp3, text only as fallback */
 const EXV={en:{sf:['the stars do not want to be connected. respect that.','The stars do not wish to be connected. Respect that.'],bd:['it does not want to be pressed. it told me.','It does not want to be pressed. It told me.'],bh:['let go. let go. LET. GO.','Let go. Let go. Let. Go.'],hold:'HOLD THE UNIVERSE'},
  pt:{sf:['as estrelas não querem ser ligadas. respeita isso.','As estrelas não querem ser ligadas. Respeita isso.'],bd:['o universo não quer ser carregado. disse-mo.','O universo não quer ser carregado. Disse-mo.'],bh:['larga. larga. LARGA. JÁ.','Larga. Larga. Larga já.'],hold:'MANTÉM O UNIVERSO PREMIDO'},
@@ -1943,7 +1951,8 @@ const ETHK=['open','idle','hint','a1','a2','a3','a4','s0','s1','sf','m0','m1','m
 function ethLine(k){const L_=SG();if(k==='open')return L_.open;if(k==='mi'||k==='sp')return sex(k);if(k==='sf'||k==='bd'||k==='bh')return exv(k);return L_.v[k]}
 const VO={buf:{},pend:{},cur:null,
  key(k){return (S.lang||'en')+'_'+(S.age==='o'?'o':'u')+'_'+k},
- load(){if(!audio())return;ETHK.forEach(k=>{const id=this.key(k);if(this.buf[id]!==undefined||this.pend[id])return;this.pend[id]=1;fetch('a/vo/ether/'+id+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{this.buf[id]=d}).catch(()=>{this.buf[id]=null}).finally(()=>{delete this.pend[id]})})},
+ load(){if(!audio())return;const la=(S.lang||'en')+'_'+(S.age==='o'?'o':'u');PACK.load('ether_'+la).then(o=>{Object.entries(o).forEach(([k,b])=>{this.buf[la+'_'+k]=b})}).catch(()=>this.load1())},
+ load1(){ETHK.forEach(k=>{const id=this.key(k);if(this.buf[id]!==undefined||this.pend[id])return;this.pend[id]=1;fetch('a/vo/ether/'+id+'.mp3').then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>A.c.decodeAudioData(b)).then(d=>{this.buf[id]=d}).catch(()=>{this.buf[id]=null}).finally(()=>{delete this.pend[id]})})},
  has(k){return !!this.buf[this.key(k)]},
  play(k){const d=this.buf[this.key(k)];if(!d||!A.c)return false;this.stop();const c=A.c,s=c.createBufferSource(),g=c.createGain(),lp=c.createBiquadFilter();s.buffer=d;lp.type='lowshelf';lp.frequency.value=180;lp.gain.value=4;g.gain.value=1.25;s.connect(lp);lp.connect(g);g.connect(A.m);const w=c.createGain();w.gain.value=.22;g.connect(w);w.connect(A.dl);s.start();this.cur=s;AMB.set('muffle',1);s.onended=()=>{if(this.cur===s){this.cur=null;AMB.set('muffle',0)}};return true},
  stop(){if(this.cur){try{this.cur.stop()}catch(e){}this.cur=null}}};
