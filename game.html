@@ -1616,7 +1616,6 @@ GM.sun={init(){Object.assign(G,{sy:.62,sv:0,gr:.42,clouds:[],alarms:[],cT:1,aT:2
  persona(){if(G.days>=2)return'chaser';if(G.pops>=4)return'spark';return'golden'}};
 
 /* 10. SIGNAL */
-let REAL3D=null;const loadReal=()=>{if(REAL3D===null){REAL3D='l';import('./a/real3d.js').then(m=>{REAL3D=m}).catch(e=>{console.warn('real3d',e);REAL3D=false})}};
 let SIT3D=null;import('./a/sit3d.js').then(m=>{SIT3D=m}).catch(e=>{console.warn('sit3d',e);SIT3D=false});
 const SITSTUB={beat:()=>.4,ask(){},react(){},fin(){},tick(){},stub:true};
 const SITKO={en:['Situation','Tap to begin','Reach {n} points to unlock your surprise'],pt:['Situação','Toca para começar','Chega aos {n} pontos para desbloquear a tua surpresa'],br:['Situação','Toque para começar','Chegue a {n} pontos pra liberar sua surpresa'],es:['Situación','Toca para empezar','Llega a {n} puntos para desbloquear tu sorpresa']};
@@ -1638,7 +1637,7 @@ function sitGame(id,D,PT,mnt){return{sit:true,
   else{G.score=Math.max(0,G.score+p);$('#gscore').innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:String(p).replace('-','−'),x:G.W/2,y:G.H*.12,t:1.2,big:true,c:'#f68686'});
    G.lives--;G.lost++;drawLives();buzz([25,40,25]);whoomp();G.shake=.35;if(G.lives<=0)setTimeout(()=>endGame('out'),2300)}},
  choose(k){if(G.ph!=='ask'||G.ended)return;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);cap(null,()=>D().b[bi][2][k][1]);this.render()},
- update(dt){G.grace=false;G.bob+=dt;if(!G.s3){G.w0+=dt;if(id==='waiter'&&!S.px&&REAL3D!==false){loadReal();if(REAL3D&&REAL3D!=='l'){try{G.s3=REAL3D.mount($('#ginner'))}catch(e){console.warn(e);REAL3D=false}}else if(G.w0>20)REAL3D=false;return}if(SIT3D){try{G.s3=mnt(SIT3D)}catch(e){console.warn(e);G.s3=SITSTUB}}else if(SIT3D===false||G.w0>6)G.s3=SITSTUB;return}
+ update(dt){G.grace=false;G.bob+=dt;if(!G.s3){G.w0+=dt;if(SIT3D){try{G.s3=mnt(SIT3D)}catch(e){console.warn(e);G.s3=SITSTUB}}else if(SIT3D===false||G.w0>6)G.s3=SITSTUB;return}
   if(G.bi<0&&G.ph!=='title'){this.title();return}G.pt+=dt;
   if(G.ph==='title'){if(G.pt>=6.5)this.untitle();return}
   if(G.ph==='intro'){if(G.pt>=G.wait){G.ph='ask';G.pt=0;BGM.duck(1);const o=$('#sitact');if(o)o.classList.remove('on');G.s3.ask();this.render(true);note(G.bi%5)}}
