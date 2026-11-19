@@ -470,7 +470,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .sitbar{height:5px;border-radius:3px;background:rgba(255,255,255,.22);overflow:hidden}.sitbar i{display:block;height:100%;background:var(--sk-yellow);transform-origin:left}
 .sito{display:flex;flex-direction:column;gap:7px}
 .sito button{font:inherit;text-align:left;padding:10px 12px;border-radius:14px;border:0;background:var(--sk-pink);color:var(--sk-ink);font-weight:500;font-size:14.5px;line-height:1.2;box-shadow:0 3px 0 rgba(0,0,0,.28);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s,opacity .2s}
-.sito button:active{transform:translateY(2px)}.sito button.off{opacity:.3}.sito button.good{background:var(--sk-green)}.sito button.bad{background:#f68686;animation:sitsh .3s}
+.sito button:active{transform:translateY(2px)}.sito button.off{opacity:.3}
+.ttm{display:flex;gap:7px}.ttm input{flex:1;min-width:0;font:inherit;font-size:16px;padding:11px 13px;border-radius:14px;border:0;background:var(--sk-paper);color:var(--sk-ink);box-shadow:0 3px 0 rgba(0,0,0,.28);outline:none}
+.ttm .ttmgo{flex:none;width:46px;text-align:center;font-size:18px;font-weight:700;background:var(--sk-green)}.ttm input:disabled{opacity:.6}
+.ttmalt{display:block;text-align:center;font-size:12px;opacity:.75;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px;color:var(--sk-paper)}.sito button.good{background:var(--sk-green)}.sito button.bad{background:#f68686;animation:sitsh .3s}
 @keyframes sitin{from{transform:translateY(10px) scale(.96);opacity:0}}@keyframes sitsh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 .sitg .gtime{visibility:hidden}
 .qm{display:inline-grid;place-items:center;width:22px;height:22px;margin-left:6px;border-radius:50%;border:0;background:var(--sk-yellow,#ede77d);color:#170408;font:500 13px/1 inherit;cursor:pointer;vertical-align:middle}
@@ -1631,26 +1634,39 @@ function vPick(id,bi,k){const n=1+Math.max(vAlts(id,bi,k).length,vAlts(id,bi,k,'
  const key=id+(S.age==='o'?'o':'u')+bi+k,last=seen[key];let v=Math.floor(Math.random()*n);if(n>1&&v===last)v=(v+1+Math.floor(Math.random()*(n-1)))%n;seen[key]=v;try{localStorage.setItem('sw_vseen',JSON.stringify(seen))}catch(e){}return v}
 function chTxt(id,bi,k,base){const v=(G.vv||[])[k]||0;if(!v)return base;const a=vAlts(id,bi,k);return a[v-1]||base}
 
+const TTM={url:'https://soko-world-ttm.soko-world.workers.dev',
+ L:{en:['Say it your way…','or pick an option','thinking…'],pt:['Diz à tua maneira…','ou escolhe uma opção','a pensar…'],br:['Fala do seu jeito…','ou escolhe uma opção','pensando…'],es:['Dilo a tu manera…','o elige una opción','pensando…']},
+ did(){let d='';try{d=localStorage.getItem('sw_did')}catch(e){}if(!d){d='d'+Math.random().toString(36).slice(2)+Date.now().toString(36);try{localStorage.setItem('sw_did',d)}catch(e){}}return qs.get('ttm')==='1'?'t'+Math.random().toString(36).slice(2):d},
+ async post(path,b,ms){const c=new AbortController(),t=setTimeout(()=>c.abort(),ms||7000);try{const r=await fetch(this.url+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b),signal:c.signal});return await r.json()}catch(e){return{fallback:true,why:'net'}}finally{clearTimeout(t)}},
+ want(){if(qs.get('ttm')==='0')return false;if(qs.get('ttm')==='1')return true;return !!S.mix},
+ async open(){G.ttm=false;if(!this.want())return;G.tdid=this.did();G.tpid='p'+Math.random().toString(36).slice(2);const r=await this.post('/gate',{did:G.tdid,pid:G.tpid},4000);G.ttm=!!(r&&r.ok);if(G.ttm&&G.ph==='ask')GM[G.id]&&GM[G.id].render()}};
 function sitGame(id,D,PT,mnt){return{sit:true,
  init(){Object.assign(G,{bi:-1,ph:'wait',pt:0,sty:{c:0,k:0,m:0},dur:1e9,bob:0,s3:null,w0:0});const o=document.createElement('div');o.className='sit';o.id='sit';o.style.display='none';
   o.innerHTML='<div class="sitsc"></div><div class="sitq" id="sitq"></div><div class="sitbar"><i id="sitt"></i></div><div class="sito" id="sito"></div>';$('#ginner').appendChild(o);const ac=document.createElement('div');ac.className='sitact';ac.id='sitact';$('#ginner').appendChild(ac);$('#gc').style.zIndex=1;
-  o.addEventListener('click',e=>{const b=e.target.closest('button');if(b)this.choose(+b.dataset.k)})},
+  o.addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(b){this.choose(+b.dataset.k);return}if(e.target.closest('.ttmalt')){G.toff=true;this.render()}});
+  o.addEventListener('submit',e=>{e.preventDefault();this.say()});TTM.open()},
  act(){const o=$('#sitact');const b=D().b[G.bi];const a=b&&b[1].indexOf('||')>=0?b[1].split('||')[0]:'';if(!o)return a;o.innerHTML=a?`<span>${a}</span>`:'';o.classList.toggle('on',!!a&&G.ph==='intro');return a},
- beat(i){G.bi=i;G.ph='intro';G.pt=0;G.ch=null;G.ord=[0,1,2].sort(()=>Math.random()-.5);G.vv=[0,1,2].map(k=>vPick(id,i,k));const w=G.s3.beat(i);const a=this.act();G.wait=Math.max(w,a?1.4+a.split(' ').length*.24:0)*(CALM()?1.25:1);this.render();swoosh(1,1,false)},
+ beat(i){G.bi=i;G.ph='intro';G.pt=0;G.ch=null;G.ord=[0,1,2].sort(()=>Math.random()-.5);G.vv=[0,1,2].map(k=>vPick(id,i,k));G.toff=false;G.tbusy=false;const w=G.s3.beat(i);const a=this.act();G.wait=Math.max(w,a?1.4+a.split(' ').length*.24:0)*(CALM()?1.25:1);this.render();swoosh(1,1,false)},
  render(anim){const o=$('#sit');if(!o)return;if(G.ph!=='ask'||G.bi<0){o.style.display='none';return}o.style.display='';const b=D().b[G.bi],q=$('#sitq'),qq=b[1].split('||').pop();q.innerHTML=`<small>${b[0]}</small>${qq.replace('{€}',{lis:'4€',cdmx:'$80',br:'R$20'}[S.m]||'4€')}`;if(anim){q.style.animation='none';void q.offsetWidth;q.style.animation=''}
-  $('#sito').innerHTML=G.ord.map(k=>`<button data-k="${k}">${chTxt(id,G.bi,k,b[2][k][0])}</button>`).join('')},
+  const btns=G.ord.map(k=>`<button data-k="${k}">${chTxt(id,G.bi,k,b[2][k][0])}</button>`).join(''),tl=TTM.L[S.lang]||TTM.L.en;
+  if(G.ttm&&!G.toff){const keep=$('#ttmin'),v=keep?keep.value:'';$('#sito').innerHTML=`<form class="ttm"><input id="ttmin" maxlength="140" autocomplete="off" enterkeyhint="send" placeholder="${tl[0]}"${G.tbusy?' disabled':''}><button type="submit" class="ttmgo"${G.tbusy?' disabled':''}>${G.tbusy?'…':'↑'}</button></form><a class="ttmalt">${G.tbusy?tl[2]:tl[1]}</a>`;const i=$('#ttmin');if(i){i.value=v;if(!G.tbusy&&anim)setTimeout(()=>{try{i.focus({preventScroll:true})}catch(e){}},250)}}
+  else $('#sito').innerHTML=btns},
+ async say(){if(G.ph!=='ask'||G.tbusy)return;const i=$('#ttmin'),a=(i&&i.value||'').trim();if(!a)return;G.tbusy=true;this.render();const b=D().b[G.bi],bi=G.bi;
+  const r=await TTM.post('/score',{did:G.tdid,pid:G.tpid,lang:S.lang,age:S.age==='o'?'o':'u',who:b[0],q:b[1].split('||').pop(),opts:b[2].map(o=>[o[0],o[2]]),a});
+  if(G.bi!==bi||G.ph!=='ask')return;G.tbusy=false;
+  if(r&&!r.fallback&&[0,1,2].includes(r.k)){G.said=(G.said||0)+1;this.choose(r.k,r.react)}else{if(r&&r.why&&r.why!=='model'&&r.why!=='net')G.ttm=false;G.toff=true;G.pt=Math.min(G.pt,4);this.render()}},
  relang(){this.render();this.act();if(G.ph==='title')sitTitle(id)},
  title(){G.ph='title';G.pt=0;G.s3.establish&&G.s3.establish();cap('');const o=document.createElement('div');o.className='sitin';o.id='sitin';$('#ginner').appendChild(o);sitTitle(id);o.addEventListener('click',()=>{if(G.pt>1.2)this.untitle()});arp([0,2,4,7],.12)},
  untitle(){if(G.ph!=='title')return;const o=$('#sitin');if(o){o.classList.add('out');setTimeout(()=>o.remove(),350)}cap(null,()=>L()[0][MI[S.m]+A_()]);this.beat(0)},
  pts(p){if(p>0){hit(p,G.W/2,G.H*.12);arp(p>=150?[0,2,4]:[0,2],.07)}
   else{G.score=Math.max(0,G.score+p);$('#gscore').innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:String(p).replace('-','−'),x:G.W/2,y:G.H*.12,t:1.2,big:true,c:'#f68686'});
    G.lives--;G.lost++;drawLives();buzz([25,40,25]);whoomp();G.shake=.35;if(G.lives<=0)setTimeout(()=>endGame('out'),2300)}},
- choose(k){if(G.ph!=='ask'||G.ended)return;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);cap(null,()=>D().b[bi][2][k][1]);this.render()},
+ choose(k,re){if(G.ph!=='ask'||G.ended)return;G.tbusy=false;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);cap(null,re?(()=>re):(()=>D().b[bi][2][k][1]));this.render()},
  update(dt){G.grace=false;G.bob+=dt;if(!G.s3){G.w0+=dt;if(SIT3D){try{G.s3=mnt(SIT3D)}catch(e){console.warn(e);G.s3=SITSTUB}}else if(SIT3D===false||G.w0>6)G.s3=SITSTUB;return}
   if(G.bi<0&&G.ph!=='title'){this.title();return}G.pt+=dt;
   if(G.ph==='title'){if(G.pt>=6.5)this.untitle();return}
   if(G.ph==='intro'){if(G.pt>=G.wait){G.ph='ask';G.pt=0;BGM.duck(1);const o=$('#sitact');if(o)o.classList.remove('on');G.s3.ask();this.render(true);note(G.bi%5)}}
-  else if(G.ph==='ask'){const T=CALM()?22:16,e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to);this.render()}}
+  else if(G.ph==='ask'){if(G.tbusy){G.pt-=dt;return}const T=(G.ttm&&!G.toff)?(CALM()?40:32):CALM()?22:16,e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to);this.render()}}
   else if(G.ph==='res'&&G.pt>(CALM()?4.2:3)&&G.lives>0){if(G.bi>=4){G.ph='end';endGame('time');if(G.pass)G.s3.fin()}else this.beat(G.bi+1)}},
  draw(ctx,W,H,dt){if(G.s3&&!G.s3.stub){ctx.clearRect(-20,-20,W+40,H+40);G.s3.tick(dt);return}sky(ctx,W,H)},
  hint(){return null},

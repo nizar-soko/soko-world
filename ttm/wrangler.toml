@@ -1,0 +1,21 @@
+name = "soko-world-ttm"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[ai]
+binding = "AI"
+
+[[durable_objects.bindings]]
+name = "GATE"
+class_name = "Gate"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Gate"]
+
+[vars]
+MAX_CALLS_DAY = "2500"   # whole-world daily cap on model calls (spend cap)
+PLAYS_PER_DEVICE = "5"   # open-field plays per device, ever
+CALLS_PER_IP_DAY = "60"  # abuse guard
+MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
