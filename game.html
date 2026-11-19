@@ -599,11 +599,27 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .flip.min .rv .nxt{background:none;padding:12px 0 0;margin:0;font-size:13px;text-decoration:underline;text-underline-offset:3px;opacity:.7}
 .flip.min .rv .rvb{justify-content:center;margin-top:4px}
 .flip.min .rv.back .kick{font-family:'Season Mix',serif;font-size:40px;line-height:1;margin:6px 0 8px}
-.flip.min{margin-top:0}
-.flip.min .fin>.rv:not(.back){min-height:440px;display:flex;flex-direction:column;justify-content:center}
-.flip.min .rv.back{justify-content:center;padding:30px 24px 20px}
+.flip.min{margin-top:0!important}#reveal:has(.flip.min){justify-content:center!important}
+.flip.min .fin>.rv:not(.back){min-height:min(470px,calc(100dvh - 124px));display:flex;flex-direction:column;justify-content:center}
+.flip.min .rv.back{justify-content:center;padding:18px 24px 14px}
+.flip.min .rv.back #claim2{margin-top:14px!important}.flip.min .rv.back>#showme{margin-top:10px}
+@media (max-height:640px){.nos{width:104px!important;height:50px!important;margin-bottom:6px!important}.flip.min .rv.back .kick{font-size:30px;margin:0 0 4px}.flip.min .minl{font-size:16px;margin-bottom:10px}.flip.min .rv .vb span{font-size:19px}.flip.min .rv.back #claim2{margin-top:8px!important;padding-top:12px;padding-bottom:12px}.flip.min .rv.back>#showme{margin-top:6px;padding:5px 12px 5px 6px}.flip.min .rv h2.gift{font-size:32px;margin-bottom:14px}}
 .flip.min .rv.back .kick{order:1;text-align:center;padding:0}
-.flip.min .minl{order:2;display:block;font-size:18px;line-height:1.25;margin:0 0 20px}.flip.min .minl small{display:block;font-size:14px;opacity:.65;margin-top:4px}
+.flip.min .minl{order:2;display:block;font-size:18px;line-height:1.25;margin:0 0 14px}.flip.min .minl small{display:block;font-size:14px;margin-top:4px}
+.flip.min .rv.back.orbon>#showme{display:none}
+.nos{display:block;width:150px;height:72px;margin:0 auto 12px;overflow:visible}
+.nos .nfeed{animation:nfeed 6s linear infinite}.nos .nph{transform-origin:80px 70px;animation:nph 6s cubic-bezier(.5,0,.3,1) infinite}
+.nos .nmoon{animation:nmoon 6s cubic-bezier(.3,1.2,.4,1) infinite}.nos .nppl circle{animation:nppl 6s ease-in-out infinite}.nos .nppl circle:nth-child(2){animation-delay:.12s}.nos .nppl circle:nth-child(3){animation-delay:.24s}.nos .nppl circle:nth-child(4){animation-delay:.36s}
+.nos .ngr{stroke-dasharray:100;animation:ngr 6s ease infinite}
+@keyframes nfeed{0%{transform:translateY(0)}42%,100%{transform:translateY(-56px)}}
+@keyframes nph{0%,38%{transform:none;opacity:1}50%,92%{transform:translateY(26px) rotate(-90deg) scale(.2);opacity:0}100%{transform:none;opacity:1}}
+@keyframes nmoon{0%,42%{transform:translateY(40px);opacity:0}56%,90%{transform:none;opacity:1}100%{transform:translateY(40px);opacity:0}}
+@keyframes nppl{0%,48%{transform:translateY(16px);opacity:0}58%{transform:translateY(-5px);opacity:1}64%,70%{transform:none;opacity:1}76%{transform:translateY(-4px)}82%,90%{transform:none;opacity:1}100%{transform:translateY(16px);opacity:0}}
+@keyframes ngr{0%,44%{stroke-dashoffset:100;opacity:0}58%,90%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:100;opacity:0}}
+.minl small i{font-style:normal}.minl .na{animation:nna 6s ease infinite}.minl .nb{animation:nnb 6s ease infinite}
+@keyframes nna{0%,44%{opacity:.45}56%,92%{opacity:1;font-weight:500}100%{opacity:.45}}
+@keyframes nnb{0%,40%{opacity:1;text-decoration:none}54%,92%{opacity:.45;text-decoration:line-through}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.nos *,.minl small i{animation:none!important}.nos .nph{display:none}}
 .flip.min .rv .vb{order:3}.flip.min .rv.back #claim2{order:4}.flip.min .rv.back .rvb{order:5}
 .flip.min .rv .vb{margin:0;background:none;padding:0;align-items:center;text-align:center}.flip.min .rv .vb b{opacity:.6}.flip.min .rv .vb span{font-size:24px}
 #game.wild:not(.strg) .gbox{animation:wscroll 5s linear infinite;transition:box-shadow .15s}
@@ -1312,7 +1328,11 @@ const BACK={en:{psst:'psst… wanna know more?',k:'Soko is…',s:['…your city,
 const SCD=3600;
 function recoHTML(bk){let B=null;try{B=recoB()}catch(e){}if(!B)return '';return `<div class="vb"><b>${bk.reco}</b><span>${vname(B)}${B.a?' · '+B.a:''}</span><button class="why" id="why">${bk.why}</button></div>`}
 function backHTML(bk){const pins=[['music',22,30],['eat_drink',62,20],['art',42,48],['nightlife',74,54],['outdoors',14,62],['date_worthy',58,74]];
- return `<div class="seg">${[0,1,2,3,4].map(()=>'<i><b></b></i>').join('')}</div><span class="xl">${bk.det}</span>${recoHTML(bk)}<button class="x" id="unflipx" aria-label="${bk.det}"><svg viewBox="0 0 32 32" fill="none" stroke="#3b0f18" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="13" width="22" height="15" rx="2"/><rect x="3" y="8.5" width="26" height="5" rx="1.5"/><path d="M16 8.5V28"/><path d="M16 8.5c-2-5-8-5-6-1 1 1.6 4 1 6 1zM16 8.5c2-5 8-5 6-1-1 1.6-4 1-6 1z"/></svg></button><div class="kick">${bk.k}</div><div class="minl">${bk.end}<small>${bk.mis}</small></div>
+ return `<div class="seg">${[0,1,2,3,4].map(()=>'<i><b></b></i>').join('')}</div><span class="xl">${bk.det}</span>${recoHTML(bk)}<button class="x" id="unflipx" aria-label="${bk.det}"><svg viewBox="0 0 32 32" fill="none" stroke="#3b0f18" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="13" width="22" height="15" rx="2"/><rect x="3" y="8.5" width="26" height="5" rx="1.5"/><path d="M16 8.5V28"/><path d="M16 8.5c-2-5-8-5-6-1 1 1.6 4 1 6 1zM16 8.5c2-5 8-5 6-1-1 1.6-4 1-6 1z"/></svg></button><div class="kick">${bk.k}</div><div class="minl"><svg class="nos" viewBox="0 0 160 76" aria-hidden="true"><defs><clipPath id="nosc"><rect x="64" y="14" width="32" height="50" rx="3"/></clipPath></defs>
+<g class="nmoon"><circle cx="80" cy="34" r="17" fill="#ede77d"/><circle cx="87" cy="28" r="15" fill="#f9f0f0" class="ncut"/></g>
+<g class="nppl"><circle cx="56" cy="62" r="5" fill="#a597ff"/><circle cx="72" cy="60" r="5" fill="#ffb8cb"/><circle cx="88" cy="62" r="5" fill="#f68686"/><circle cx="104" cy="60" r="5" fill="#b0ef8b"/></g>
+<path class="ngr" d="M30 70H130" stroke="#3b0f18" stroke-width="2.5" stroke-linecap="round"/>
+<g class="nph"><rect x="60" y="8" width="40" height="62" rx="8" fill="#3b0f18"/><rect x="64" y="14" width="32" height="50" rx="3" fill="#f9f0f0"/><g clip-path="url(#nosc)"><g class="nfeed">${[0,1,2,3,4,5,6,7].map(i=>`<rect x="67" y="${17+i*13}" width="26" height="9" rx="2" fill="${['#ffb8cb','#a597ff','#ede77d','#8bdfff'][i%4]}"/>`).join('')}</g></g></g></svg>${bk.end}<small>${(()=>{const m=bk.mis,i=m.indexOf(',');return i<0?m:`<i class="na">${m.slice(0,i)}</i>,<i class="nb">${m.slice(i+1)}</i>`})()}</small></div>
  <div class="stage" id="stage">
   <div class="scn"><div class="cap">${bk.s[0]}</div><div class="vis mapv" style="background-image:url(a/map-${S.m}.webp)">${pins.map(([n,x,y],i)=>`<img class="pin" src="a/pin-${n}.png" style="left:${x}%;top:${y}%;animation-delay:${.35+i*.22}s" alt="">`).join('')}<img class="walker" src="a/reader.png" alt=""></div></div>
   <div class="scn"><div class="cap">${bk.s[1]}</div><div class="vis"><img class="shot" src="a/tool-phone-1.webp" alt=""><span class="tapr" style="left:38%;top:62%"></span></div></div>
