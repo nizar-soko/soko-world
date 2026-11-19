@@ -52,8 +52,14 @@ function scan(){
       if(det){const r=await det.detect(v);if(r&&r[0]){hit(r[0].rawValue);return}}
       else{const w=v.videoWidth,h=v.videoHeight,k=Math.min(1,640/Math.max(w,h));cv.width=w*k|0;cv.height=h*k|0;cx.drawImage(v,0,0,cv.width,cv.height);const im=cx.getImageData(0,0,cv.width,cv.height),r=jsQR(im.data,im.width,im.height,{inversionAttempts:'dontInvert'});if(r&&r.data){hit(r.data);return}}
     }catch(e){}}setTimeout(loop,140)};
-  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false}).then(s=>{st=s;v.srcObject=s;v.play();loop()}).catch(()=>{stop();document.getElementById('er').textContent=t('cam_err')});
+  navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false}).then(s=>{st=s;v.srcObject=s;v.play();loop()}).catch(()=>{stop();photo()});
 }
+
+/* fallback when live camera is blocked (in-app browsers, embedded previews): take a photo of the QR */
+function photo(){const f=document.createElement('input');f.type='file';f.accept='image/*';f.setAttribute('capture','environment');f.style.display='none';document.body.appendChild(f);
+  f.onchange=()=>{const file=f.files&&f.files[0];f.remove();if(!file)return;const img=new Image();img.onload=()=>{const k=Math.min(1,1200/Math.max(img.width,img.height)),cv=document.createElement('canvas');cv.width=img.width*k|0;cv.height=img.height*k|0;const cx=cv.getContext('2d');cx.drawImage(img,0,0,cv.width,cv.height);const im=cx.getImageData(0,0,cv.width,cv.height),r=jsQR(im.data,im.width,im.height);URL.revokeObjectURL(img.src);
+    if(!r||!r.data){document.getElementById('er').textContent=t('notsoko');return}let d=null;try{d=new URL(r.data,location.href).searchParams.get('d')}catch(e){}const rr=d&&API.get(d);if(rr&&rr.claim){D=d;R=rr;try{history.replaceState(null,'','?d='+encodeURIComponent(d))}catch(e){}render()}else document.getElementById('er').textContent=t('notsoko')};img.src=URL.createObjectURL(file)};
+  f.click()}
 
 function render(){
   const c=R&&R.claim;
