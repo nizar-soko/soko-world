@@ -360,9 +360,9 @@ const STORIES = {
       { set: 'room', pos: { you: [-.5, 1.2, Math.PI], date: [.5, 1.2, Math.PI], host: [0, -3.4, 0] }, mood: { host: 'smug', date: 'love' }, arms: { host: [0, -1.4] },
         cam: [[0, 2.4, 4.4], [0, 1.6, -2.4], 50], at: [[1.4, A => { A.P.host.emote('♥'); A.P.date.armT = [-2.4, 0]; }], [2.2, A => A.close(A.P.host)]], wait: 2.9, r: ['host', 'date'] },
       { pos: { you: [-.6, -2.9, 0, 'up'], date: [.6, -2.9, 0, 'up'], host: [-2.6, -3.0, .8, 'up'], fans: [0, 1.6, Math.PI, 6, 1.4] }, mood: { date: 'eek', fans: 'smug' }, emote: { date: '?' }, arms: { you: [0, -1.4] },
-        cam: [[0, 2.2, 3.2], [0, 1.8, -2.9], 46], at: [[1.6, A => A.close(A.P.date)]], wait: 2.6, r: ['date', 'host'] },
+        cam: [[.5, 2.3, .5], [0, 1.8, -2.9], 50], at: [[1.6, A => A.close(A.P.date)]], wait: 2.6, r: ['date', 'host'] },
       { at: [[.2, A => { A.P.you.armT = [-.6, -2.6]; A.P.you.mood('shock'); A.P.date.mood('shock'); A.P.date.emote('!'); A.ref.screen.material.color.set('#ef8ea8'); }], [1.4, A => A.close(A.P.you)]],
-        cam: [[1.6, 1.6, 1.6], [0, 2, -2.9], 44], wait: 2.4, r: ['date', 'fans0'] },
+        cam: [[2.0, 2.2, .3], [0, 1.9, -2.9], 46], wait: 2.4, r: ['date', 'fans0'] },
       { pos: { bach: [0, -4.2, 0, 5.4, .7, 'up'] }, enter: { bach: [6.5, 1] }, mood: { bach: 'laugh' }, cam: [[0, 3.2, 4.6], [0, 1.6, -2.6], 54],
         at: [[2.3, A => { A.P.bach0.emote('♥'); A.close(A.P.bach0); }]], wait: 3.0, r: ['bach0', 'date'] },
       { pos: { host: [0, -2.2, Math.PI, 'up'] }, mood: { host: 'laugh' }, emote: { host: '?' }, cam: [[0, 3.4, 4.6], [0, 1.6, -2.4], 54], wait: 2.0, r: ['host', 'date'],
@@ -508,10 +508,10 @@ Object.assign(STORIES, {
     crowds: { aud: [10, i => rl(i + 2)] },
     beats: [
       { set: 'theatre', pos: { you: [0, 1.6, Math.PI, 'sit'], aud: [0, 2.9, Math.PI, 7, 1.4, 'sit'], actor: [0, -2.6, 0, 'up', .6] }, enter: { actor: [-3, -3] }, mood: { you: 'eek' },
-        cam: [[2.6, 2.6, 4.4], [0, 1.4, 0], 48], at: [[1.8, A => { A.P.actor.place(0, .5, Math.PI); A.P.actor.baseY = 0; A.P.actor.g.position.y = 0; A.P.actor.armT = [-1.2, -1.2]; A.P.actor.mood('sad'); A.P.actor.emote('?'); A.close(A.P.actor); }]], wait: 2.8, r: ['actor', 'you'] },
-      { pos: { you: [0, -2.4, 0, 'up', .6], actor: [-1.3, -2.8, .5, 'up', .6] }, mood: { actor: 'mad', you: 'eek' }, arms: { actor: [-.4, -2.4] }, cam: [[0, 2.2, 3.4], [0, 1.9, -2.4], 46],
+        cam: [[3.0, 2.6, 1.1], [0, 1.4, -.6], 52], at: [[1.8, A => { A.P.actor.place(0, .5, Math.PI); A.P.actor.baseY = 0; A.P.actor.g.position.y = 0; A.P.actor.armT = [-1.2, -1.2]; A.P.actor.mood('sad'); A.P.actor.emote('?'); A.close(A.P.actor); }]], wait: 2.8, r: ['actor', 'you'] },
+      { pos: { you: [0, -2.4, 0, 'up', .6], actor: [-1.3, -2.8, .5, 'up', .6] }, mood: { actor: 'mad', you: 'eek' }, arms: { actor: [-.4, -2.4] }, cam: [[0, 2.5, 1.0], [0, 1.9, -2.4], 50],
         at: [[.3, A => { A.give(A.P.you, 'sword'); A.P.you.armT = [0, -1.6]; }], [1.6, A => A.close(A.P.you)]], wait: 2.4, r: ['actor', 'you'] },
-      { pos: { lead: [-1.2, -2.9, .5, 'up', .6] }, mood: { lead: 'eek', aud: 'shock' }, emote: { lead: '?' }, cam: [[1.4, 2.0, 2.6], [-.4, 2.0, -2.6], 42], at: [[1.6, A => A.close(A.P.lead)]], wait: 2.4, r: ['lead', 'you'] },
+      { pos: { lead: [-1.2, -2.9, .5, 'up', .6] }, mood: { lead: 'eek', aud: 'shock' }, emote: { lead: '?' }, cam: [[1.4, 2.3, .8], [-.4, 2.0, -2.6], 46], at: [[1.6, A => A.close(A.P.lead)]], wait: 2.4, r: ['lead', 'you'] },
       { pos: { director: [2.4, -3.4, -1.0, 'up', .6], you: [1.5, -3.6, 1.0, 'up', .6] }, mood: { director: 'smug' }, arms: { director: [-1.4, -1.4] }, cam: [[4.2, 2.4, -.8], [2, 1.9, -3.4], 44], at: [[.1, A => { A.ref.spot.intensity = .6; }], [1.4, A => A.close(A.P.director)]], wait: 2.2, r: ['director', 'you'] },
       { pos: { you: [0, -2.4, 0, 'up', .6], actor: [-1.2, -2.6, 0, 'up', .6], lead: [1.2, -2.6, 0, 'up', .6], director: [2.3, -2.8, -.2, 'up', .6], aud: [0, 2.9, Math.PI, 7, 1.4] }, mood: { aud: 'laugh' }, arms: { aud: [-2.4, -2.4] },
         cam: [[0, 2.6, 4.6], [0, 1.8, -1.6], 52], at: [[.1, A => { A.ref.spot.intensity = 3; A.puff(0, 3.2, -1.6, '#ef8ea8', '#ede77d', 14); }], [1.4, A => A.close(A.P.aud3)]], wait: 2.2, r: ['aud3', 'you'] }
@@ -542,8 +542,8 @@ Object.assign(STORIES, {
       { pos: { you: [2.4, -1.2, Math.PI], sec: [2.4, -3.0, 0], queue: [5.4, -2.0, -Math.PI / 2, 3, 1] }, arms: { sec: [-1.3, -1.3], you: [0, 0] }, mood: { sec: 'mad' }, emote: { sec: '?' }, cam: [[0, 2.2, 2.6], [2.4, 1.6, -2.4], 46], at: [[1.4, A => A.close(A.P.sec)]], wait: 2.2, r: ['sec', 'you'] },
       { set: 'venue', pos: { you: [0, 3.2, Math.PI], pal: [-.6, -2.0, Math.PI], fans: [0, .4, Math.PI, 7, 3.2], singer: [0, -4.2, 0, 'up', 1], drummer: [0, -5.2, 0, 'up', 1], sec: null, queue: null }, arms: { pal: [-2.4, -2.4], fans: [-2.2, 0] }, mood: { you: 'eek' },
         cam: [[1.4, 3.2, 6.2], [0, 1.6, -1.4], 52], at: [[1.6, A => A.close(A.P.you)]], wait: 2.4, r: ['you', 'pal'] },
-      { pos: { pal: [-.6, -2.2, 0, 'top'], you: [.6, -1.6, Math.PI] }, arms: { pal: [-2.4, -2.4] }, mood: { pal: 'laugh', singer: 'shock' }, emote: { singer: '!' }, cam: [[2.2, 2.6, 2.4], [-.2, 2.2, -2.4], 46], at: [[1.4, A => A.close(A.P.pal)]], wait: 2.2, r: ['pal', 'singer'] },
-      { pos: { you: [-.6, -3.6, 0, 'up', 1], pal: [.6, -3.6, 0, 'up', 1], singer: [1.6, -3.8, -.6, 'up', 1] }, arms: { singer: [0, -1.4], fans: [-2.4, -2.4] }, mood: { fans: 'laugh', you: 'eek' }, cam: [[0, 2.6, 2.2], [0, 2.4, -3.6], 50], at: [[1.4, A => A.close(A.P.singer)]], wait: 2.2, r: ['singer', 'pal'] }
+      { pos: { pal: [-.6, -2.2, 0, 'top'], you: [.6, -1.6, Math.PI] }, arms: { pal: [-2.4, -2.4] }, mood: { pal: 'laugh', singer: 'shock' }, emote: { singer: '!' }, cam: [[2.6, 3.0, -4.7], [-.6, 2.3, -1.6], 58], at: [[1.4, A => A.close(A.P.pal)]], wait: 2.2, r: ['pal', 'singer'] },
+      { pos: { you: [-.6, -3.6, 0, 'up', 1], pal: [.6, -3.6, 0, 'up', 1], singer: [1.6, -3.8, -.6, 'up', 1] }, arms: { singer: [0, -1.4], fans: [-2.4, -2.4] }, mood: { fans: 'laugh', you: 'eek' }, cam: [[0, 3.0, -1.0], [0, 2.4, -3.8], 56], at: [[1.4, A => A.close(A.P.singer)]], wait: 2.2, r: ['singer', 'pal'] }
     ],
     fin(A) { A.all(p => { p.mood('laugh'); p.hop = 3; p.armT = [-2.4, -2.4]; }); A.shot([0, 3, 5], [0, 2, -2.6], 54, .1); },
     tick(dt, ref, t, A) { const L = A.sets.venue.ref.lights; if (L) L.forEach((l, i) => { l.intensity = 1.2 + Math.sin(t * 7 + i * 1.7) * .9; }); }
@@ -570,7 +570,7 @@ Object.assign(STORIES, {
     cast: { you: ME.you, crush: rl(4, { shirt: '#f68686', long: true, hair: '#160407', skin: '#947c81' }), bartender: rl(7, { shirt: '#f9f0f0', tie: '#160407' }), friend: rl(3, { shirt: '#b3261e', glasses: 1, long: true }), groom: rl(8, { shirt: '#f9f0f0', sash: '#b3261e', cap: '#160407' }) },
     crowds: { grp: [4, i => rl(i + 6)], stag: [8, i => rl(i + 2, { shirt: '#534b4d' })] },
     beats: [
-      { set: 'bar', pos: { you: [-2.6, -.4, -1.2], bartender: [-4.0, -2.6, .3], crush: [2.8, -1.0, -1.6] }, mood: { bartender: 'smug', crush: 'wink' }, emote: { crush: '♥' }, cam: [[-1.0, 2.4, 3.8], [0, 1.4, -1.2], 54], at: [[1.6, A => A.close(A.P.bartender)]], wait: 2.4, r: ['bartender', 'crush'] },
+      { set: 'bar', pos: { you: [-1.5, -.5, 1.4], bartender: [-2.7, -2.5, .3], crush: [1.5, -.9, -1.5] }, mood: { bartender: 'smug', crush: 'wink' }, emote: { crush: '♥' }, cam: [[-.5, 2.3, 4.3], [-.5, 1.35, -1.2], 56], at: [[1.6, A => A.close(A.P.bartender)]], wait: 2.4, r: ['bartender', 'crush'] },
       { pos: { you: [1.2, .2, -2.4], friend: [1.8, -.4, 1.0] }, mood: { friend: 'mad' }, arms: { friend: [-1.3, -1.3] }, cam: [[-.6, 2.2, 3], [1.6, 1.5, -.4], 46], at: [[1.4, A => A.close(A.P.friend)]], wait: 2.2, r: ['friend', 'you'] },
       { pos: { grp: [1.4, -1.2, .4, 2.6, 1.4] }, enter: { grp: [6, -3] }, mood: { grp: 'smug', crush: 'laugh' }, emote: { grp0: '?' }, cam: [[-1.4, 2.6, 3.4], [1.4, 1.4, -.6], 50], at: [[2.0, A => A.close(A.P.grp0)]], wait: 2.6, r: ['grp0', 'crush'] },
       { pos: { groom: [-.6, -.8, 1.4], stag: [-2.4, -.4, 1.4, 4, .6], crush: [.2, -.7, 1.4] }, enter: { groom: [-7, 2], stag: [-7, 2] }, arms: { stag: [-1.4, -1.4], groom: [-1.4, -1.4], crush: [-1.4, -1.4] }, mood: { groom: 'laugh', stag: 'laugh', crush: 'shock' },
@@ -598,7 +598,7 @@ Object.assign(STORIES, {
     beats: [
       { set: 'view', pos: { you: [-.4, -2.2, Math.PI], date: [.4, -2.2, Math.PI], guitar: [1.4, -2.2, -2.6, 'sit'] }, mood: { guitar: 'smug' }, arms: { guitar: [-1.0, -1.1] }, cam: [[1.6, 2.0, 2.2], [-.2, 1.4, -2.6], 50], at: [[1.6, A => A.close(A.P.guitar)]], wait: 2.4, r: ['guitar', 'date'] },
       { pos: { ppl: [-2.6, -.8, 2.4, 3, 2], kneel: [0, -.6, Math.PI, 'sit'], she: [0, -1.5, 0] }, enter: { ppl: [-8, 2] }, mood: { she: 'shock', date: 'eek' }, emote: { she: '!' }, cam: [[2.2, 2.2, 2.6], [0, 1.3, -1.2], 50], at: [[.4, A => { A.P.guitar.strum = true; }], [2.0, A => A.close(A.P.date)]], wait: 2.6, r: ['date', 'she'] },
-      { mood: { date: 'shock', you: 'eek' }, cam: [[1.8, 1.6, 2.6], [0, 2.6, -1.2], 54], at: [[.1, A => { A.ref.drone.visible = true; A.drone = true; }], [.4, A => A.puff(0, 3.4, -1.6, '#ef8ea8', '#ffdae4', 14)], [1.0, A => A.puff(-.4, 3.0, -2, '#ef8ea8', '#ffdae4', 10)], [1.6, A => A.close(A.P.date)]], wait: 2.4, r: ['date', 'you'] },
+      { mood: { date: 'shock', you: 'eek' }, cam: [[2.4, 1.8, .7], [0, 2.4, -1.4], 56], at: [[.1, A => { A.ref.drone.visible = true; A.drone = true; }], [.4, A => A.puff(0, 3.4, -1.6, '#ef8ea8', '#ffdae4', 14)], [1.0, A => A.puff(-.4, 3.0, -2, '#ef8ea8', '#ffdae4', 10)], [1.6, A => A.close(A.P.date)]], wait: 2.4, r: ['date', 'you'] },
       { pos: { tour: [3.4, 1.4, -1.6, 3, 2.4], guide: [2.2, .2, -1.6] }, enter: { tour: [9, 3], guide: [9, 3] }, arms: { tour: [0, -1.4] }, mood: { guide: 'smug', tour: 'laugh' }, cam: [[-2.2, 2.6, 4.2], [1.2, 1.4, -1.0], 54],
         at: [[.1, A => { A.busT = 1.6; }], [2.2, A => A.close(A.P.guide)]], wait: 2.8, r: ['guide', 'date'] },
       { arms: { guitar: [0, -1.6] }, mood: { guitar: 'smug' }, emote: { guitar: '$' }, cam: [[-1.2, 2.2, 3.2], [.4, 1.4, -1.6], 52], at: [[.1, A => { A.P.guitar.strum = false; A.give(A.P.guitar, 'hat'); A.sunset = 2.5; }], [1.4, A => A.close(A.P.guitar)]], wait: 2.2, r: ['guitar', 'date'] }
