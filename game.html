@@ -587,6 +587,23 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 @keyframes shd{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}@keyframes orb{50%{transform:translateY(8px) scale(1.08)}}
 .strg .glives,.strg .gtime,.strg .ggoal{visibility:hidden}
 #game.layer,#bg,#pat{transition:opacity .6s}
+.minl{display:none}
+.flip.min .stk.corner,.flip.min #how,.flip.min .lock,.flip.min #shr,.flip.min .peek,.flip.min .seg,.flip.min .xl,.flip.min #unflipx,.flip.min .stage,.flip.min #why,.flip.min #showme,.flip.min .row .pin{display:none!important}
+.flip.min .rv{padding:30px 24px 20px;text-align:center;box-shadow:0 30px 60px -18px rgba(0,0,0,.75)}
+.flip.min .rv h2.gift{font-size:38px;margin:10px 0 22px}
+.flip.min .rv .row,.flip.min .rv .row.va{background:none!important;padding:0;margin:0 0 4px;justify-content:center;text-align:center}
+.flip.min .rv .row b{display:inline;font-family:var(--f);font-size:13px;letter-spacing:0;text-transform:none;opacity:.6;margin-right:5px}
+.flip.min .rv .row span,.flip.min .rv .row.va span{font-size:14px;font-weight:500}
+.flip.min .rv #claim,.flip.min .rv #claim2{margin-top:22px!important}
+.flip.min .rv .nxt{background:none;padding:12px 0 0;margin:0;font-size:13px;text-decoration:underline;text-underline-offset:3px;opacity:.7}
+.flip.min .rv .rvb{justify-content:center;margin-top:4px}
+.flip.min .rv.back .kick{font-family:'Season Mix',serif;font-size:40px;line-height:1;margin:6px 0 8px}
+.flip.min{margin-top:0}
+.flip.min .rv.back{justify-content:center;padding:30px 24px 20px}
+.flip.min .rv.back .kick{order:1;text-align:center;padding:0}
+.flip.min .minl{order:2;display:block;font-size:18px;line-height:1.25;margin:0 0 20px}.flip.min .minl small{display:block;font-size:14px;opacity:.65;margin-top:4px}
+.flip.min .rv .vb{order:3}.flip.min .rv.back #claim2{order:4}.flip.min .rv.back .rvb{order:5}
+.flip.min .rv .vb{margin:0;background:none;padding:0;align-items:center;text-align:center}.flip.min .rv .vb b{opacity:.6}.flip.min .rv .vb span{font-size:24px}
 #game.wild:not(.strg) .gbox{animation:wscroll 5s linear infinite;transition:box-shadow .15s}
 @keyframes wscroll{to{background-position:calc(var(--cpsz,36px)*2) calc(var(--cpsz,36px)*2)}}
 #game.wild .gbox.hot{animation:wscroll 1.2s linear infinite,whot .6s linear infinite}
@@ -1293,7 +1310,7 @@ const BACK={en:{psst:'psst… wanna know more?',k:'Soko is…',s:['…your city,
 const SCD=3600;
 function recoHTML(bk){let B=null;try{B=recoB()}catch(e){}if(!B)return '';return `<div class="vb"><b>${bk.reco}</b><span>${vname(B)}${B.a?' · '+B.a:''}</span><button class="why" id="why">${bk.why}</button></div>`}
 function backHTML(bk){const pins=[['music',22,30],['eat_drink',62,20],['art',42,48],['nightlife',74,54],['outdoors',14,62],['date_worthy',58,74]];
- return `<div class="seg">${[0,1,2,3,4].map(()=>'<i><b></b></i>').join('')}</div><span class="xl">${bk.det}</span>${recoHTML(bk)}<button class="x" id="unflipx" aria-label="${bk.det}"><svg viewBox="0 0 32 32" fill="none" stroke="#3b0f18" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="13" width="22" height="15" rx="2"/><rect x="3" y="8.5" width="26" height="5" rx="1.5"/><path d="M16 8.5V28"/><path d="M16 8.5c-2-5-8-5-6-1 1 1.6 4 1 6 1zM16 8.5c2-5 8-5 6-1-1 1.6-4 1-6 1z"/></svg></button><div class="kick">${bk.k}</div>
+ return `<div class="seg">${[0,1,2,3,4].map(()=>'<i><b></b></i>').join('')}</div><span class="xl">${bk.det}</span>${recoHTML(bk)}<button class="x" id="unflipx" aria-label="${bk.det}"><svg viewBox="0 0 32 32" fill="none" stroke="#3b0f18" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="13" width="22" height="15" rx="2"/><rect x="3" y="8.5" width="26" height="5" rx="1.5"/><path d="M16 8.5V28"/><path d="M16 8.5c-2-5-8-5-6-1 1 1.6 4 1 6 1zM16 8.5c2-5 8-5 6-1-1 1.6-4 1-6 1z"/></svg></button><div class="kick">${bk.k}</div><div class="minl">${bk.end}<small>${bk.mis}</small></div>
  <div class="stage" id="stage">
   <div class="scn"><div class="cap">${bk.s[0]}</div><div class="vis mapv" style="background-image:url(a/map-${S.m}.webp)">${pins.map(([n,x,y],i)=>`<img class="pin" src="a/pin-${n}.png" style="left:${x}%;top:${y}%;animation-delay:${.35+i*.22}s" alt="">`).join('')}<img class="walker" src="a/reader.png" alt=""></div></div>
   <div class="scn"><div class="cap">${bk.s[1]}</div><div class="vis"><img class="shot" src="a/tool-phone-1.webp" alt=""><span class="tapr" style="left:38%;top:62%"></span></div></div>
@@ -1412,7 +1429,7 @@ function howRun(){clearInterval(S.howT);let i=0;const box=$('#how');if(!box)retu
  S.howT=setInterval(()=>{if(!document.body.contains(box)){clearInterval(S.howT);return}i=(i+1)%3;show(i)},3400);box.onclick=()=>{i=(i+1)%3;show(i)}}
 function showReveal(quiet){orbStop();BGM.stop();const t=UI(),a=S.age,rl=RVL[S.lang]||RVL.en;if(!S.plan){S.plan=G.pick;S.planG=G.id}if(!quiet){let vb=null;try{vb=vname(recoB())}catch(e){}track('sw_reward_shown',{game:G.id,score:G.score,persona:G.persona||null,gift:giftLabel(),venue_a:vname(S.plan||{}),venue_a_group:(S.plan||{}).g||null,venue_b:vb,answers:S.ans.map(x=>x.v).join('')})}G.on=false;$('#game').classList.remove('on');
  const dl=new Date(Date.now()+7*864e5).toLocaleDateString(rl.loc,{weekday:'short',day:'numeric',month:'short'});
- const r=$('#reveal');r.classList.add('on');const bk=BACK[S.lang]||BACK.en;r.innerHTML=`<div class="flip"><div class="fin" id="fin"><div class="rv"><span class="stk y corner">Soko knows</span><div class="gk">🎁 ${rl.you[a]}</div><h2 class="gift">${giftLabel()}</h2>
+ const r=$('#reveal');r.classList.add('on');const bk=BACK[S.lang]||BACK.en;r.innerHTML=`<div class="flip min"><div class="fin" id="fin"><div class="rv"><span class="stk y corner">Soko knows</span><div class="gk">🎁 ${rl.you[a]}</div><h2 class="gift">${giftLabel()}</h2>
  <div class="how" id="how">${HOW}<div class="dots"><i></i><i></i><i></i></div></div>
  <div class="row va"><i class="pin">📍</i><div><b>${rl.claim}</b><span>${vname(S.plan)}${S.plan.a?' · '+S.plan.a:''}</span></div></div><div class="row"><div><b>${rl.until}</b><span>${rl.days} · ${dl}</span></div></div>
  <div class="lock">🔒 ${t.lock[a]} <button class="qm" id="qm" aria-label="?">?</button></div><button class="cta" id="claim">${t.cta[a]}</button><button class="nxt" id="nxt">✨ ${rl.nxt} →</button><div class="rvb"><button class="replay" id="shr">${rl.bring[a]}</button><button class="replay" id="again">${t.again}</button></div></div>
