@@ -2091,8 +2091,18 @@ function claimDone(o,q){
  o.classList.add('on');
  o.onclick=e=>{if(e.target===o||e.target.closest('.cx'))o.classList.remove('on')};
  $('#clok').onclick=()=>{o.classList.remove('on');const w=SOKO_WA(),u=w?'https://wa.me/'+w+'?text='+encodeURIComponent(q.wa):'https://soko.fyi/get/';track('sw_claim_whatsapp',{has_number:!!w});try{window.open(u,'_blank')||(location.href=u)}catch(e){location.href=u}};
- const sm=$('#clsim');if(sm)sm.onclick=e=>{e.preventDefault();const u=SWGifts.unlock(c.code);track('sw_claim_unlock',{via:'demo'});window.open(SWGifts.giftUrl(u)+'&demo=1','_blank')};
+ const sm=$('#clsim');if(sm)sm.onclick=e=>{e.preventDefault();const u=SWGifts.unlock(c.code);track('sw_claim_unlock',{via:'demo'});giftSheet(o,u)};
 }
+/* demo: show the unlocked gift (QR for the venue) inside the game, no page change */
+const GV={pt:{ey:'A tua oferta',h:'Mostra isto no balcão',p:'O local lê o QR com a página de resgate da Soko.',exp:'Válido até',close:'Fechar'},br:{ey:'Seu presente',h:'Mostre isso no balcão',p:'O local lê o QR com a página de resgate da Soko.',exp:'Válido até',close:'Fechar'},es:{ey:'Tu regalo',h:'Muestra esto en la barra',p:'El lugar escanea el QR con la página de canje de Soko.',exp:'Válido hasta',close:'Cerrar'},en:{ey:'Your gift',h:'Show this at the counter',p:'The venue scans the QR with the Soko redeem page.',exp:'Valid until',close:'Close'}};
+function giftSheet(o,c){const q=GV[S.lang]||GV.en,go=()=>{const qr=qrcode(0,'M');qr.addData(SWGifts.redeemUrl(c));qr.make();
+  o.innerHTML=`<div class="cc" style="text-align:center;align-items:center"><div class="ce">${clEsc(q.ey)}</div><h3 style="margin:6px 0 2px">${clEsc(c.gift_title||'')}</h3><p style="margin:0 0 10px;opacity:.75">📍 ${clEsc(c.venue_name||'')}${c.venue_area?' · '+clEsc(c.venue_area):''}</p>
+  <div style="background:#fff;border-radius:14px;padding:10px;width:min(64vw,260px);margin:0 auto">${qr.createSvgTag({cellSize:6,margin:4,scalable:true})}</div>
+  <div style="font:500 22px Oswald,sans-serif;letter-spacing:.12em;margin:10px 0 2px">${clEsc(c.code)}</div><p style="margin:0 0 4px;font-size:13px;opacity:.75">${clEsc(q.exp)} ${new Date(c.expires_at).toLocaleDateString()}</p>
+  <p style="margin:6px 0 12px"><b>${clEsc(q.h)}</b><br><span style="font-size:13px;opacity:.75">${clEsc(q.p)}</span></p><button class="cb k" id="gvx" style="width:100%">${clEsc(q.close)}</button></div>`;
+  $('#gvx').onclick=()=>o.classList.remove('on')};
+ if(window.qrcode)go();else{const sc=document.createElement('script');sc.src='a/qr.js';sc.onload=go;document.head.appendChild(sc)}}
+
 function qmShow(){clearTimeout(S.autoF);track('sw_reward_info_open');let o=$('#qmpop');if(!o){o=document.createElement('div');o.id='qmpop';app.appendChild(o)}const q=QM[S.lang]||QM.en;
  o.innerHTML=`<div class="qmc"><button class="qmx" aria-label="close">×</button><b>${q.h}</b><p>${q.a}</p><p>${q.b}</p><button class="cta" id="qmwa">💬 ${q.c}</button></div>`;o.classList.add('on');
  o.onclick=e=>{if(e.target===o||e.target.closest('.qmx'))o.classList.remove('on')};$('#qmwa').onclick=()=>{blip();o.classList.remove('on');claimOpen('info_popup')}}

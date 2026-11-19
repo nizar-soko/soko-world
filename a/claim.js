@@ -162,7 +162,7 @@
     saveGift(g) { const d = load(); d.gifts[g.id] = Object.assign({ issued: 0 }, d.gifts[g.id] || {}, g); save(d); return d.gifts[g.id]; },
     saveVenue(v) { const d = load(); d.venues[v.id] = Object.assign({}, d.venues[v.id] || {}, v); save(d); return d.venues[v.id]; },
     reset() { try { localStorage.removeItem(LS); } catch (e) {} return seed(); },
-    base() { return location.href.replace(/[^/]*([?#].*)?$/, ''); },
+    base() { const h = location.hostname; if (/github\.io$|^localhost$|^127\./.test(h)) return location.href.replace(/[^/]*([?#].*)?$/, ''); return 'https://nizar-soko.github.io/soko-world/'; },
     giftUrl(c) { return API.base() + 'gift.html?d=' + pack(c); },
     redeemUrl(c) { return API.base() + 'redeem.html?d=' + pack(c); },
     track(ev, pr) {
