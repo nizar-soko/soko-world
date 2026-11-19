@@ -588,7 +588,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .strg .glives,.strg .gtime,.strg .ggoal{visibility:hidden}
 #game.layer,#bg,#pat{transition:opacity .6s}
 .minl{display:none}
-.flip.min .stk.corner,.flip.min #how,.flip.min .lock,.flip.min #shr,.flip.min .peek,.flip.min .seg,.flip.min .xl,.flip.min #unflipx,.flip.min .stage,.flip.min #why,.flip.min #showme,.flip.min .row .pin{display:none!important}
+.flip.min .stk.corner,.flip.min #how,.flip.min .lock,.flip.min #shr,.flip.min .peek,.flip.min .seg,.flip.min .xl,.flip.min #unflipx,.flip.min .stage,.flip.min #why,.flip.min .row .pin{display:none!important}
+.flip.min .rv.back>#showme{position:static;order:3;align-self:center;margin:14px 0 0;animation:none;box-shadow:0 0 0 2px var(--sk-pink)}
 .flip.min .rv{padding:30px 24px 20px;text-align:center;box-shadow:0 30px 60px -18px rgba(0,0,0,.75)}
 .flip.min .rv h2.gift{font-size:38px;margin:10px 0 22px}
 .flip.min .rv .row,.flip.min .rv .row.va{background:none!important;padding:0;margin:0 0 4px;justify-content:center;text-align:center}
@@ -599,6 +600,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .flip.min .rv .rvb{justify-content:center;margin-top:4px}
 .flip.min .rv.back .kick{font-family:'Season Mix',serif;font-size:40px;line-height:1;margin:6px 0 8px}
 .flip.min{margin-top:0}
+.flip.min .fin>.rv:not(.back){min-height:440px;display:flex;flex-direction:column;justify-content:center}
 .flip.min .rv.back{justify-content:center;padding:30px 24px 20px}
 .flip.min .rv.back .kick{order:1;text-align:center;padding:0}
 .flip.min .minl{order:2;display:block;font-size:18px;line-height:1.25;margin:0 0 20px}.flip.min .minl small{display:block;font-size:14px;opacity:.65;margin-top:4px}
@@ -1438,6 +1440,7 @@ function showReveal(quiet){orbStop();BGM.stop();const t=UI(),a=S.age,rl=RVL[S.la
  </div>`;
  {const f=$('#fin');let x0=null;f.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});f.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>60)flip()},{passive:true});
   $('#peek').onclick=()=>{PK3&&PK3.hop();setTimeout(()=>flip(!$('#fin').classList.contains('fl')),260)};$('#nxt').onclick=e=>{e.stopPropagation();flip(true)};{const w=$('#why');if(w)w.onclick=e=>{e.stopPropagation();track('sw_orb_open',{via:'why'});orbRun()}}mountPK3();$('#unflip').onclick=()=>flip(false);$('#unflipx').onclick=()=>flip(false);
+  {const sm=$('#showme'),bk_=$('.flip.min .rv.back'),c2=$('#claim2');if(sm&&bk_&&c2)bk_.insertBefore(sm,c2)}
   $('#showme').onclick=e=>{e.stopPropagation();track('sw_orb_open');orbRun()};$('#orbx').onclick=()=>{orbClose();backRun(S.bi||0)};$('#claim3').onclick=()=>$('#claim').click();
   $('#stage').onclick=e=>{if(performance.now()-(S.flipT||0)<600)return;const b=e.currentTarget.getBoundingClientRect();backRun(S.bi+((e.clientX-b.left)<b.width*.33?-1:1))};$('#claim2').onclick=()=>$('#claim').click()}
  if(!quiet){clearTimeout(S.autoF);S.autoF=setTimeout(()=>{const f=$('#fin');if(!f||f.classList.contains('fl')||!$('#reveal').classList.contains('on'))return;f.classList.add('slow');flip(true);setTimeout(()=>f.classList.remove('slow'),2600)},10000);arp([0,2,4,3,4],.07);const ar=app.getBoundingClientRect();burst(ar.width/2,ar.height*.35,0,60)}
