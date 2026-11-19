@@ -194,7 +194,7 @@ export function mount(host, opt) {
   const CREW = [[-1.75, -1.7, .6], [1.75, -1.6, -.6], [-.9, -2.2, .15], [.9, -2.25, -.15]];
   const bottle = new T.Group(); bx(.1, .42, .1, '#276a2b', 0, 0, 0, bottle); bx(.05, .14, .05, '#276a2b', 0, .27, 0, bottle); bottle.position.set(0, -.8, .12); bottle.rotation.x = 1.3; chef.arms[1].add(bottle);
   const all = [you, date, wtr, chef, ...crew], room3 = [chef, ...crew];
-  if (STYLE === 'toon') { outline(S); S.background = new T.Color('#3b0f18'); }
+  if (STYLE === 'toon') { outline(S); S.background = new T.Color(opt.eth ? opt.eth[1] : '#3b0f18'); }
   let look = new T.Vector3(), push = 0, cuts = [], ct = 0, pour = 0, billT = 0, cur = 'table';
   const setOff = v => { if (v) cam.setViewOffset(W, H, 0, Math.round(H * .24), W, H); else cam.clearViewOffset(); };
   const shot = (p, l, fov, ps) => { cam.position.set(p[0], p[1], p[2]); look.set(l[0], l[1], l[2]); cam.fov = fov || 48; cam.updateProjectionMatrix(); cam.lookAt(look); push = ps == null ? .1 : ps; };
@@ -203,7 +203,7 @@ export function mount(host, opt) {
     shot([x + Math.sin(a) * 3, y + .25, z + Math.cos(a) * 3], [x + .05, y + .06, z], fov || 30, .16);
   };
   const hideRoom = () => room3.forEach(p => { p.g.visible = false; p.tgt = null; });
-  const setScene = n => { street.visible = n === 'street'; room.visible = n !== 'street'; S.background = new T.Color(n === 'street' ? '#312228' : '#3b0f18'); S.fog = n === 'street' ? new T.Fog('#312228', 12, 30) : null; };
+  const setScene = n => { street.visible = n === 'street'; room.visible = n !== 'street'; S.background = new T.Color(opt.eth ? opt.eth[n === 'street' ? 0 : 1] : n === 'street' ? '#312228' : '#3b0f18'); S.fog = opt.eth ? new T.Fog(opt.eth[n === 'street' ? 0 : 1], 9, 30) : n === 'street' ? new T.Fog('#312228', 12, 30) : null; };
   // full table state for a beat: who is already sitting / standing there
   const stage = i => {
     you.sit(true); date.sit(true); you.place(-.95, 0, Math.PI / 2); date.place(.95, 0, -Math.PI / 2);
@@ -707,7 +707,7 @@ export function mountStory(host, id, opt) {
     if (what === 'mic') { bx(.08, .26, .08, '#312228', 0, -.82, .1, g); bx(.12, .12, .12, '#947c81', 0, -.98, .1, g); }
     if (what === 'hat') { bx(.36, .14, .36, '#312228', 0, -.86, .16, g); }
     if (toon) outline(g); Q.arms[1].add(g); Q['_' + what] = g; };
-  A.setSet = n => { Object.keys(sets).forEach(k => sets[k].G.visible = k === n); S.background = new T.Color((D.bg || {})[n] || '#312228'); cur = n; };
+  A.setSet = n => { Object.keys(sets).forEach(k => sets[k].G.visible = k === n); S.background = new T.Color(opt.eth ? opt.eth[1] : (D.bg || {})[n] || '#312228'); cur = n; };
   const one = (Q, e) => { const lay = e.includes('lay'), up = e.includes('up'), top = e.includes('top'); Q.sit(e.includes('sit')); Q.g.rotation.x = 0; Q.baseY = (up ? (typeof e[e.indexOf('up') + 1] === 'number' ? e[e.indexOf('up') + 1] : .4) : 0) + (top ? 1.35 : 0) + (Q.seated ? -.3 : 0); Q.place(e[0], e[1], e[2]); if (lay) { const h = e.includes('hi') ? 1.45 : .25; Q.g.rotation.x = -Math.PI / 2; Q.baseY = h; Q.g.position.y = h; } Q.g.visible = true; };
   A.place = (n, e) => {
     if (crowds[n]) { const [cx, cz, ry, w, d] = e, list = crowds[n], flags = e.slice(5); list.forEach((Q, i) => { const cols = Math.ceil(Math.sqrt(list.length * (w / Math.max(.5, d)))), r = Math.floor(i / cols), c = i % cols; const x = cx - w / 2 + (c + .5) * (w / cols) + ((r % 2) ? .2 : -.1), z = cz + (r - .5 * (Math.ceil(list.length / cols) - 1)) * (d / Math.max(1, Math.ceil(list.length / cols))); one(Q, [x, z, ry + rnd(-.25, .25), ...flags]); }); return; }
@@ -752,7 +752,7 @@ export function mountStory(host, id, opt) {
       names.forEach(n => { const Q = P[n]; if (Q.g.visible) { Q.tick(dt); if (A.sway) Q.body.rotation.z = Math.sin(T0 * 2 + Q.t) * .12; } });
       puffs = puffs.filter(m => { m.userData.t -= dt; const v = m.userData.v; m.position.x += v[0] * dt; m.position.y += v[1] * dt; m.position.z += v[2] * dt; m.scale.setScalar(1 + (1.6 - m.userData.t) * .8); m.material.opacity = Math.max(0, m.userData.t / 1.6) * .85; if (m.userData.t <= 0) { S.remove(m); return false; } return true; });
       amb.intensity = A.bright ? AMB0 * 1.5 : A.dark > 0 ? .08 : AMB0;
-      if (A.fog !== A._fog) { A._fog = A.fog; S.fog = A.fog ? new T.Fog(A.fog, .5, 6) : null; }
+      if (A.fog !== A._fog) { A._fog = A.fog; S.fog = A.fog ? new T.Fog(opt.eth ? opt.eth[1] : A.fog, .5, 6) : opt.eth ? new T.Fog(opt.eth[1], 7, 26) : null; }
       if (D.tick) D.tick(dt, ref, T0, A);
       if (push) { const d = look.clone().sub(cam.position).normalize(); cam.position.addScaledVector(d, push * dt); cam.lookAt(look); }
       RR.render(S, cam);
