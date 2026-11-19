@@ -639,7 +639,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
   <div class="toast" id="toast"></div>
 </div>
 
-<script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/claim.js"></script>
+<script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/sitvar.js"></script><script src="a/claim.js"></script>
 <script>
 (()=>{
 "use strict";
@@ -1163,7 +1163,9 @@ function sceneSVG(m){if(m==='lis')return`<svg viewBox="0 0 300 400" preserveAspe
 
 /* ---- shell ---- */
 const PLAYED=[];
-function gameFor(){if(S.forceGame)return S.forceGame;if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
+function mixKind(){const sur=S.ans[1]&&S.ans[1].v==='b',ppl=S.ans[2]&&S.ans[2].v==='b';const qz=qs.get('zone'),pub=!qz||qz==='fallback';const p=pub?(sur&&ppl?MIXP.match:(!sur&&!ppl?1-MIXP.match:.5)):.5;return Math.random()<p?'sit':'arc'}
+const MIXP={match:.8};
+function gameFor(){if(S.forceGame)return S.forceGame;if(S.mix&&!(G.id&&SAMEGAME)){S.classic=mixKind()==='arc'}if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
  if(!S.classic){if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}const all=Object.values(ROUTE2).map(r=>r[some?1:0]);let pool=all.filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=all}const g=pick(pool);PLAYED.push(g);return g}
  if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}let pool=(some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']).filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']}
  const g=pick(pool);PLAYED.push(g);return g}
@@ -1622,14 +1624,21 @@ const SITKO={en:['Situation','Tap to begin','Reach {n} points to unlock your sur
 const SITK={en:['situation','tap to start','Score {n}+ to unlock your surprise'],pt:['situação','toca para começar','Faz {n}+ pontos para desbloquear a tua surpresa'],br:['situação','toque para começar','Faça {n}+ pontos pra liberar sua surpresa'],es:['situación','toca para empezar','Haz {n}+ puntos para desbloquear tu sorpresa']};
 const SXL=id=>{const O=window.SITXO&&S.age==='o'&&SITXO[id];return (O&&(O[S.lang]||O.en))||SITX[id][S.lang]||SITX[id].en};
 function sitTitle(id){const o=$('#sitin');if(!o)return;const K_=S.age==='o'?SITKO:SITK,k=K_[S.lang]||K_.en;o.innerHTML=`<small>${k[0]}</small><h3>${SXL(id).title}</h3><p>${L()[0][MI[S.m]+A_()]}</p><div class="sitgoal">🎁 ${k[2].replace('{n}',PASS[id])}</div><i><b></b></i><em>${k[1]}</em>`}
+/* Free choices: every choice has extra phrasings per language and age (a/sitvar.js). Same outcome and score, different words.
+   Each play picks a phrasing the player has not seen last time for that choice. */
+const vAlts=(id,bi,k,lang,age)=>((((((window.SITV||{})[id]||{})[lang||S.lang]||{})[age||(S.age==='o'?'o':'u')]||[])[bi]||[])[k])||[];
+function vPick(id,bi,k){const n=1+Math.max(vAlts(id,bi,k).length,vAlts(id,bi,k,'en').length);let seen={};try{seen=JSON.parse(localStorage.getItem('sw_vseen')||'{}')}catch(e){}
+ const key=id+(S.age==='o'?'o':'u')+bi+k,last=seen[key];let v=Math.floor(Math.random()*n);if(n>1&&v===last)v=(v+1+Math.floor(Math.random()*(n-1)))%n;seen[key]=v;try{localStorage.setItem('sw_vseen',JSON.stringify(seen))}catch(e){}return v}
+function chTxt(id,bi,k,base){const v=(G.vv||[])[k]||0;if(!v)return base;const a=vAlts(id,bi,k);return a[v-1]||base}
+
 function sitGame(id,D,PT,mnt){return{sit:true,
  init(){Object.assign(G,{bi:-1,ph:'wait',pt:0,sty:{c:0,k:0,m:0},dur:1e9,bob:0,s3:null,w0:0});const o=document.createElement('div');o.className='sit';o.id='sit';o.style.display='none';
   o.innerHTML='<div class="sitsc"></div><div class="sitq" id="sitq"></div><div class="sitbar"><i id="sitt"></i></div><div class="sito" id="sito"></div>';$('#ginner').appendChild(o);const ac=document.createElement('div');ac.className='sitact';ac.id='sitact';$('#ginner').appendChild(ac);$('#gc').style.zIndex=1;
   o.addEventListener('click',e=>{const b=e.target.closest('button');if(b)this.choose(+b.dataset.k)})},
  act(){const o=$('#sitact');const b=D().b[G.bi];const a=b&&b[1].indexOf('||')>=0?b[1].split('||')[0]:'';if(!o)return a;o.innerHTML=a?`<span>${a}</span>`:'';o.classList.toggle('on',!!a&&G.ph==='intro');return a},
- beat(i){G.bi=i;G.ph='intro';G.pt=0;G.ch=null;G.ord=[0,1,2].sort(()=>Math.random()-.5);const w=G.s3.beat(i);const a=this.act();G.wait=Math.max(w,a?1.4+a.split(' ').length*.24:0)*(CALM()?1.25:1);this.render();swoosh(1,1,false)},
+ beat(i){G.bi=i;G.ph='intro';G.pt=0;G.ch=null;G.ord=[0,1,2].sort(()=>Math.random()-.5);G.vv=[0,1,2].map(k=>vPick(id,i,k));const w=G.s3.beat(i);const a=this.act();G.wait=Math.max(w,a?1.4+a.split(' ').length*.24:0)*(CALM()?1.25:1);this.render();swoosh(1,1,false)},
  render(anim){const o=$('#sit');if(!o)return;if(G.ph!=='ask'||G.bi<0){o.style.display='none';return}o.style.display='';const b=D().b[G.bi],q=$('#sitq'),qq=b[1].split('||').pop();q.innerHTML=`<small>${b[0]}</small>${qq.replace('{€}',{lis:'4€',cdmx:'$80',br:'R$20'}[S.m]||'4€')}`;if(anim){q.style.animation='none';void q.offsetWidth;q.style.animation=''}
-  $('#sito').innerHTML=G.ord.map(k=>`<button data-k="${k}">${b[2][k][0]}</button>`).join('')},
+  $('#sito').innerHTML=G.ord.map(k=>`<button data-k="${k}">${chTxt(id,G.bi,k,b[2][k][0])}</button>`).join('')},
  relang(){this.render();this.act();if(G.ph==='title')sitTitle(id)},
  title(){G.ph='title';G.pt=0;G.s3.establish&&G.s3.establish();cap('');const o=document.createElement('div');o.className='sitin';o.id='sitin';$('#ginner').appendChild(o);sitTitle(id);o.addEventListener('click',()=>{if(G.pt>1.2)this.untitle()});arp([0,2,4,7],.12)},
  untitle(){if(G.ph!=='title')return;const o=$('#sitin');if(o){o.classList.add('out');setTimeout(()=>o.remove(),350)}cap(null,()=>L()[0][MI[S.m]+A_()]);this.beat(0)},
@@ -2130,7 +2139,7 @@ function alphaStart(){start();alphaShow('market')}
 function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof AMB!=='undefined')AMB.stop(true);if(typeof VO!=='undefined')VO.stop();if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
  $('#done').classList.remove('on');$('#done').innerHTML='';L_off();$('#hover').style.opacity='';$('#prog').classList.add('hide');drawProg();$('#bottom').classList.add('hide');
  app.classList.remove('l1','l2','l3');side(0);applyLang(false)}
-S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';S.strange=qs.get('set')==='strange';if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
+S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';S.strange=qs.get('set')==='strange';S.mix=qs.get('admin')!=='1'&&qs.get('alpha')!=='1'&&!qs.get('game')&&!S.classic&&!S.strange;if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
 const QP={age:qs.get('age'),vibe:qs.get('vibe'),look:qs.get('look'),play:qs.get('play')==='1'};
 let rzT;addEventListener('resize',()=>{fxSize();clearTimeout(rzT);rzT=setTimeout(paintBg,150)});fxSize();drawMute();theme();drawTest();start();track('sw_qr_open',{referrer:document.referrer||null});
 if(QP.play){S.age=QP.age==='o'?'o':'u';S.ans=[{k:'c1',v:S.age==='u'?'a':'b'},{k:'c2',v:QP.vibe==='surprise'?'b':'a'},{k:'c3',v:QP.look==='someone'?'b':'a'}];S.phase='game';stack.innerHTML='';setTimeout(startGame,60)}
