@@ -27,7 +27,7 @@ document.documentElement.lang=L==='br'?'pt-BR':L;
 const t=(k,o)=>{let s=T[L][k];for(const x in (o||{}))s=s.replace('{'+x+'}',o[x]);return s};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
 const topbar=`<div class="top"><img src="a/wordmark.svg" alt="Soko" style="filter:brightness(.25)"><span class="ey">Soko World</span></div>`;
-function qrSvg(text){const q=qrcode(0,'L');q.addData(text);q.make();return q.createSvgTag({cellSize:6,margin:0,scalable:true})}
+function qrSvg(text){const q=qrcode(0,'M');q.addData(text);q.make();return q.createSvgTag({cellSize:6,margin:4,scalable:true})}
 if(!c){app.innerHTML=topbar+`<h1 class="disp" style="font-size:30px">${esc(t('inv'))}</h1>`}
 else{
   API.track('sw_gift_open',{status:c.status,code:c.code,venue:c.venue_id});

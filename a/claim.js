@@ -68,13 +68,24 @@
   const b64d = s => JSON.parse(decodeURIComponent(escape(atob(String(s).replace(/-/g, '+').replace(/_/g, '/')))));
 
   /* The link payload carries only what the venue screen shows. Phone travels masked. */
+  /* compact link payload: short pipe-joined fields, times in base36 seconds, so the QR stays small and scans from a photo */
+  const F = ['c', 'g', 'gid', 'v', 'vn', 'va', 'm', 'l', 'p', 's', 't', 'u', 'x'], TS = { t: 1, u: 1, x: 1 };
+  const u8e = str => btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const u8d = str => decodeURIComponent(escape(atob(String(str).replace(/-/g, '+').replace(/_/g, '/'))));
   function pack(c) {
     const o = { c: c.code, g: c.gift_title, gid: c.gift_id, v: c.venue_id, vn: c.venue_name, va: c.venue_area, m: c.market, l: c.lang,
       p: c.phone_masked || mask(c.phone_e164 || ''), s: c.status, t: c.created_at, u: c.unlocked_at || 0, x: c.expires_at || 0 };
-    o.h = hash(SALT + JSON.stringify(o)); return b64e(o);
+    const body = F.map(k => TS[k] ? Math.floor((o[k] || 0) / 1000).toString(36) : String(o[k] == null ? '' : o[k]).replace(/~/g, '-')).join('~');
+    return u8e('2~' + body + '~' + hash(SALT + body));
   }
   function unpack(s) {
-    try { const o = b64d(s); const h = o.h; delete o.h; if (hash(SALT + JSON.stringify(o)) !== h) return null; return o; } catch (e) { return null; }
+    try {
+      const raw = u8d(s);
+      if (raw.charAt(0) === '{') { const o = JSON.parse(raw); const h = o.h; delete o.h; if (hash(SALT + JSON.stringify(o)) !== h) return null; return o; }
+      const parts = raw.split('~'); if (parts[0] !== '2') return null; const h = parts.pop(); parts.shift(); const body = parts.join('~');
+      if (hash(SALT + body) !== h || parts.length !== F.length) return null;
+      const o = {}; F.forEach((k, i) => { o[k] = TS[k] ? parseInt(parts[i], 36) * 1000 : parts[i]; }); return o;
+    } catch (e) { return null; }
   }
 
   function ensureVenue(d, name, area, market) {
