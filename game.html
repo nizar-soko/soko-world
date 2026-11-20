@@ -718,7 +718,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
   <div class="toast" id="toast"></div>
 </div>
 
-<script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/sitvar.js"></script><script src="a/claim.js"></script>
+<script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/sitvar.js"></script>
+<script src="a/geo.js"></script><script src="a/claim.js"></script>
 <script>
 (()=>{
 "use strict";
@@ -1248,7 +1249,7 @@ function sceneSVG(m){if(m==='lis')return`<svg viewBox="0 0 300 400" preserveAspe
 const PLAYED=[];
 function mixKind(){const sur=S.ans[1]&&S.ans[1].v==='b',ppl=S.ans[2]&&S.ans[2].v==='b';const qz=qs.get('zone'),pub=!qz||qz==='fallback';const p=pub?(sur&&ppl?MIXP.match:(!sur&&!ppl?1-MIXP.match:.5)):.5;return Math.random()<p?'sit':'arc'}
 const MIXP={match:.8};
-function gameFor(){if(S.forceGame)return S.forceGame;if(S.mix&&!(G.id&&SAMEGAME)){S.classic=mixKind()==='arc'}if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
+function gameFor(){if(S.forceGame)return S.forceGame;{const pl=window.SW_PLACE;if(pl&&pl.game&&GM[pl.game])return pl.game}if(S.mix&&!(G.id&&SAMEGAME)){S.classic=mixKind()==='arc'}if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
  if(!S.classic){if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}const all=Object.values(ROUTE2).map(r=>r[some?1:0]);let pool=all.filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=all}const g=pick(pool);PLAYED.push(g);return g}
  if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}let pool=(some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']).filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']}
  const g=pick(pool);PLAYED.push(g);return g}

@@ -11,6 +11,18 @@ const STYLE = {
   u: 'The player is under 25. Their best moves are bold, playful, spontaneous and generous with the group. Slang is fine.',
   o: 'The player is 25 or older. Their best moves are warm, tactful, curious and quietly witty: grace over noise, good manners, real interest in people. React in a calm, grown-up register, no slang.',
 };
+// ---- Place lock: a game version only opens near a place's coordinates
+// Defaults live here; the admin endpoint can add or change places without a deploy.
+const PLACES = {
+  passevite: { name: 'Passevite', area: 'Graça', m: 'lis', lat: 38.7230213, lng: -9.1321238, r: 80, game: 'hunt' },
+};
+const R_EARTH = 6371000, rad = d => d * Math.PI / 180;
+const dist = (a, b, c, d) => { const x = rad(c - a), y = rad(d - b), h = Math.sin(x / 2) ** 2 + Math.cos(rad(a)) * Math.cos(rad(c)) * Math.sin(y / 2) ** 2; return 2 * R_EARTH * Math.asin(Math.sqrt(h)); };
+const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+async function hmac(env, msg) { const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.GEO_SECRET || 'dev'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']); return b64u(await crypto.subtle.sign('HMAC', k, new TextEncoder().encode(msg))); }
+async function mkPass(env, place, did) { const exp = Math.floor(Date.now() / 1000) + 20 * 60, body = `${place}.${did}.${exp}`; return `${body}.${await hmac(env, body)}`; }
+async function okPass(env, pass, place, did) { const p = String(pass || '').split('.'); if (p.length !== 4) return false; const [pl, d, exp, sig] = p; if (pl !== place || d !== did || +exp < Date.now() / 1000) return false; return sig === await hmac(env, `${pl}.${d}.${exp}`); }
+
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
 const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'Content-Type': 'application/json', ...CORS } });
 const day = () => new Date().toISOString().slice(0, 10);
@@ -19,7 +31,7 @@ const clip = (s, n) => String(s || '').replace(/\s+/g, ' ').trim().slice(0, n);
 export class Gate {
   constructor(state, env) { this.s = state.storage; this.env = env; }
   async fetch(req) {
-    const { op, did, pid, ip } = await req.json();
+    const { op, did, pid, ip, place } = await req.json();
     const d = day();
     if (op === 'play') {
       const k = 'p:' + did, rec = (await this.s.get(k)) || { n: 0, pids: [] };
@@ -38,6 +50,8 @@ export class Gate {
       await this.s.put(dk, n + 1); await this.s.put(ik, ni + 1);
       return J({ ok: true });
     }
+    if (op === 'places') return J({ ...PLACES, ...((await this.s.get('places')) || {}) });
+    if (op === 'setplace') { const all = (await this.s.get('places')) || {}; if (place === null) delete all[did]; else all[did] = place; await this.s.put('places', all); return J({ ok: true, places: { ...PLACES, ...all } }); }
     if (op === 'stats') return J({ day: d, calls: (await this.s.get('d:' + d)) || 0, cap: +this.env.MAX_CALLS_DAY });
     return J({ ok: false }, 400);
   }
@@ -84,11 +98,32 @@ export default {
     if (req.method === 'OPTIONS') return new Response(null, { headers: CORS });
     const url = new URL(req.url);
     if (req.method === 'GET' && url.pathname === '/stats') return J(await gate(env, { op: 'stats' }));
+    if (req.method === 'GET' && url.pathname === '/geo/places') { const all = await gate(env, { op: 'places' }), m = url.searchParams.get('m'); return J(Object.fromEntries(Object.entries(all).filter(([, p]) => !m || p.m === m).map(([id, p]) => [id, { name: p.name, area: p.area, m: p.m, r: p.r, game: p.game }]))); }
     if (req.method !== 'POST') return J({ ok: false }, 404);
     let b; try { b = await req.json(); } catch { return J({ fallback: true }, 400); }
     const did = clip(b.did, 40), pid = clip(b.pid, 40);
-    if (!did || !pid) return J({ fallback: true }, 400);
+    if (!did || (!pid && !url.pathname.startsWith('/geo/'))) return J({ fallback: true }, 400);
     const ip = req.headers.get('cf-connecting-ip') || '?';
+    if (url.pathname === '/geo/check') {
+      const all = await gate(env, { op: 'places' }), id = clip(b.place, 40), pl = all[id];
+      if (!pl) return J({ ok: false, why: 'unknown' });
+      const pub = { id, name: pl.name, area: pl.area, m: pl.m, r: pl.r, game: pl.game };
+      if (b.test && env.GEO_TEST_CODE && b.test === env.GEO_TEST_CODE) return J({ ok: true, test: true, place: pub, pass: await mkPass(env, id, did) });
+      const lat = +b.lat, lng = +b.lng, acc = Math.max(0, +b.acc || 0);
+      if (!isFinite(lat) || !isFinite(lng)) return J({ ok: false, why: 'nofix', place: pub });
+      if (acc > 250) return J({ ok: false, why: 'weak', acc: Math.round(acc), place: pub });
+      const d = dist(lat, lng, pl.lat, pl.lng), eff = Math.max(0, d - Math.min(acc, 60));
+      if (eff > pl.r) return J({ ok: false, why: 'far', dist: Math.round(d), place: pub });
+      return J({ ok: true, dist: Math.round(d), place: pub, pass: await mkPass(env, id, did) });
+    }
+    if (url.pathname === '/geo/verify') return J({ ok: await okPass(env, b.pass, clip(b.place, 40), did) });
+    if (url.pathname === '/geo/admin') {
+      if (!env.GEO_ADMIN_CODE || b.code !== env.GEO_ADMIN_CODE) return J({ ok: false }, 403);
+      const id = clip(b.id, 40).toLowerCase().replace(/[^a-z0-9_-]/g, ''); if (!id) return J({ ok: false }, 400);
+      if (b.remove) return J(await gate(env, { op: 'setplace', did: id, place: null }));
+      const p = b.place || {}; if (!isFinite(+p.lat) || !isFinite(+p.lng)) return J({ ok: false, why: 'coords' }, 400);
+      return J(await gate(env, { op: 'setplace', did: id, place: { name: clip(p.name, 60), area: clip(p.area, 40), m: clip(p.m, 6) || 'lis', lat: +p.lat, lng: +p.lng, r: Math.max(20, Math.min(2000, +p.r || 80)), game: clip(p.game, 30) || 'hunt' } }));
+    }
     if (url.pathname === '/gate') return J(await gate(env, { op: 'play', did, pid }));
     if (url.pathname === '/score') {
       if (!Array.isArray(b.opts) || b.opts.length !== 3 || !clip(b.a, 140)) return J({ fallback: true }, 400);
