@@ -108,11 +108,11 @@ const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 
 // ---- game
 // the ladder: one rung per character. arc = how wide a slice of the room it may use (deg), then how it moves
-const LV=[{arc:55,run:14,jump:12,wait:1.9,chain:0,fake:0,bolt:0,hold:1.4,drain:.4,wind:1.0,pant:1.4,dur:.34,idle:1.9,sway:.2},
- {arc:90,run:24,jump:17,wait:1.5,chain:.12,fake:.08,bolt:1,hold:1.6,drain:.5,wind:1.2,pant:1.3,dur:.32,idle:1.4,sway:.3},
- {arc:140,run:33,jump:22,wait:1.25,chain:.25,fake:.14,bolt:1,hold:1.8,drain:.55,wind:1.4,pant:1.2,dur:.3,idle:1.1,sway:.45},
- {arc:220,run:42,jump:27,wait:1.05,chain:.35,fake:.18,bolt:2,hold:2.0,drain:.65,wind:1.6,pant:1.05,dur:.28,idle:.9,sway:.55},
- {arc:360,run:50,jump:32,wait:.9,chain:.45,fake:.22,bolt:2,hold:2.2,drain:.75,wind:1.8,pant:.9,dur:.26,idle:.8,sway:.65}];
+const LV=[{arc:55,run:14,jump:12,wait:1.9,chain:0,fake:0,bolt:0,hold:1.4,drain:.3,wind:1.0,pant:1.4,dur:.34,idle:1.9,sway:.2},
+ {arc:90,run:24,jump:17,wait:1.5,chain:.12,fake:.08,bolt:1,hold:1.6,drain:.3,wind:1.2,pant:1.3,dur:.32,idle:1.4,sway:.3},
+ {arc:140,run:33,jump:22,wait:1.25,chain:.25,fake:.14,bolt:1,hold:1.8,drain:.28,wind:1.4,pant:1.2,dur:.3,idle:1.1,sway:.45},
+ {arc:220,run:42,jump:27,wait:1.05,chain:.35,fake:.18,bolt:2,hold:2.0,drain:.25,wind:1.6,pant:1.05,dur:.28,idle:.9,sway:.55},
+ {arc:360,run:50,jump:32,wait:.9,chain:.45,fake:.22,bolt:2,hold:2.2,drain:.22,wind:1.8,pant:.9,dur:.26,idle:.8,sway:.65}];
 const lv=()=>LV[Math.min(LV.length-1,G.i)],inArc=o=>{const h=lv().arc/2;return h>=180?o:Math.max(-h,Math.min(h,o))};
 const HD=Math.max(.5,Math.min(2,parseFloat(qs.get('hard'))||1));
 const G={on:false,i:0,pts:0,got:[],sh:null,charge:0,inRing:false,msgT:0,fly:null,parts:[],t:0,seen:false};
@@ -160,7 +160,7 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;reque
   if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const sm=s.small;s.small=false;const Lv=lv(),bk=s.back;s.back=0;if(!sm&&!bk&&Math.random()<Lv.fake){s.dT=.25+Math.random()*.3}else{const run=s.vb>0?1:-1;let dir=bk||(sm?(Math.random()<.5?-1:1):(Math.random()<.6?-run:run));const jump=sm?Math.min(Lv.jump*.5,9+Math.random()*8):Lv.jump*(bk?1.5:.85+Math.random()*.6);{const o=wrap(s.b-G.b0);if(inArc(o+dir*jump)!==o+dir*jump&&inArc(o-dir*jump)===o-dir*jump)dir=-dir}s.face=dir;s.vb=dir*30;s.wd=dir;s.hop={t:0,dur:sm?.26:Lv.dur,b0:s.b,b1:wrap(G.b0+inArc(wrap(s.b-G.b0)+dir*jump)),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=!sm&&Math.random()<Lv.chain?.1:Lv.wait+Math.random()*.6;tone(520,.18,.05,'sine',760)}}}
   if(s.land)s.land=Math.max(0,s.land-dt);
   p=body(s);const d=Math.hypot(p.x-cx,p.y-cy),was=G.inRing;G.inRing=d<R*.95;
-  if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/lv().hold;if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.charge=Math.max(0,G.charge-dt*lv().drain*HD)}
+  if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/lv().hold;if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.out=(was?0:G.out||0)+dt;if(G.out>.6)G.charge=Math.max(0,G.charge-dt*lv().drain*HD)}
   if(G.charge>=1){caught();p=null}}
  // character standing on the floor
  if(G.sh&&p){const s=G.sh,c=CH[s.k],im=c.img,on=p.x>-80&&p.x<W+80&&p.hy<H+40&&p.fy>-40,ap=Math.min(1,(G.t-s.born)/.5);
