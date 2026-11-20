@@ -43,10 +43,10 @@ html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);font-fam
 <script src="a/geo.js"></script>
 <script>
 const qs=new URLSearchParams(location.search),lang=({pt:'pt',br:'br',es:'es'})[qs.get('lang')]||'en';
-const T={en:{tk:'The hunt · demo',tl:'points',tw:"This week's pattern",ik:'Soko World · level 3',ih:'Sokemon',ip:'Soko\'s people are hiding in this room. Look around with your phone, find one standing on the floor, and keep them in the ring until they give up.',go:'Open the camera',is:'Demo. Needs camera and motion access.',find:'Look around. Someone is here…',hold:'Keep them in the ring',slip:'Soko\'s people are hiding in this room. Look around with your phone, find one standing on the floor, and keep them in the ring until they give up.',got:['Got it.','Yours now.','Clean catch.'],next:'Another one just appeared',ek:'3 of 5 collected',eh:'So close',ep:'You earned {p} points tonight. Points open more small games while you chase the full pattern.',er:'<b>Two are still missing.</b> One hides in a food spot before noon. The last one only shows up in a music spot after midnight.',again:'Play the demo again',es:'Demo only. Nothing is saved.',drag:'No motion sensor here. Drag to look around.',up:'Look up a little',down:'Look down. It is standing on the floor',turn:'Follow the arrow. Turn your phone'},
-pt:{tk:'A caça · demo',tl:'pontos',tw:'O padrão desta semana',ik:'Soko World · nível 3',ih:'Sokemon',ip:'A malta da Soko está escondida nesta sala. Olha à volta com o telemóvel, encontra uma figura no chão e mantém-na no anel até ela desistir.',go:'Abrir a câmara',is:'Demo. Precisa de acesso à câmara e ao movimento.',find:'Olha à volta. Está aqui alguém…',hold:'Mantém-na no anel',slip:'A malta da Soko está escondida nesta sala. Olha à volta com o telemóvel, encontra uma figura no chão e mantém-na no anel até ela desistir.',got:['Apanhada.','Já é tua.','Bem apanhada.'],next:'Apareceu outra',ek:'3 de 5 apanhadas',eh:'Quase',ep:'Ganhaste {p} pontos esta noite. Os pontos abrem mais jogos pequenos enquanto persegues o padrão completo.',er:'<b>Ainda faltam duas.</b> Uma esconde-se num sítio de comida antes do meio-dia. A última só aparece num sítio de música depois da meia-noite.',again:'Jogar a demo outra vez',es:'Só demo. Nada fica guardado.',drag:'Sem sensor de movimento. Arrasta para olhar à volta.',up:'Olha um pouco para cima',down:'Olha para baixo. Está no chão',turn:'Segue a seta. Roda o telemóvel'},
-br:{tk:'A caça · demo',tl:'pontos',tw:'O padrão desta semana',ik:'Soko World · nível 3',ih:'Sokemon',ip:'A galera da Soko está escondida nesta sala. Olha em volta com o celular, acha uma figura no chão e mantém ela no anel até ela desistir.',go:'Abrir a câmera',is:'Demo. Precisa de acesso à câmera e ao movimento.',find:'Olha em volta. Tem alguém aqui…',hold:'Mantém ela no anel',slip:'A galera da Soko está escondida nesta sala. Olha em volta com o celular, acha uma figura no chão e mantém ela no anel até ela desistir.',got:['Pegou.','Agora é sua.','Bela pegada.'],next:'Apareceu mais uma',ek:'3 de 5 coletadas',eh:'Quase',ep:'Você ganhou {p} pontos hoje. Os pontos liberam mais jogos pequenos enquanto você corre atrás do padrão completo.',er:'<b>Ainda faltam duas.</b> Uma se esconde num lugar de comida antes do meio-dia. A última só aparece num lugar de música depois da meia-noite.',again:'Jogar a demo de novo',es:'Só demo. Nada fica salvo.',drag:'Sem sensor de movimento. Arrasta para olhar em volta.',up:'Olha um pouco pra cima',down:'Olha pra baixo. Está no chão',turn:'Segue a seta. Vira o celular'},
-es:{tk:'La cacería · demo',tl:'puntos',tw:'El patrón de esta semana',ik:'Soko World · nivel 3',ih:'Sokemon',ip:'La gente de Soko está escondida en este lugar. Mira alrededor con tu celular, encuentra una figura en el piso y mantenla en el anillo hasta que se rinda.',go:'Abrir la cámara',is:'Demo. Necesita acceso a la cámara y al movimiento.',find:'Mira alrededor. Aquí hay alguien…',hold:'Mantenla en el anillo',slip:'La gente de Soko está escondida en este lugar. Mira alrededor con tu celular, encuentra una figura en el piso y mantenla en el anillo hasta que se rinda.',got:['Atrapada.','Ya es tuya.','Buena atrapada.'],next:'Apareció otra',ek:'3 de 5 atrapadas',eh:'Casi',ep:'Ganaste {p} puntos esta noche. Los puntos abren más juegos pequeños mientras persigues el patrón completo.',er:'<b>Todavía faltan dos.</b> Una se esconde en un lugar de comida antes del mediodía. La última solo aparece en un lugar de música después de la medianoche.',again:'Jugar la demo otra vez',es:'Solo demo. Nada se guarda.',drag:'Sin sensor de movimiento. Arrastra para mirar alrededor.',up:'Mira un poco hacia arriba',down:'Mira hacia abajo. Está en el piso',turn:'Sigue la flecha. Gira tu celular'}}[lang];
+const T={en:{cal:'Aim the ring at a clear bit of floor, then tap',low:'Lower. Aim at the floor',tk:'The hunt · demo',tl:'points',tw:"This week's pattern",ik:'Soko World · level 3',ih:'Sokemon',ip:'Soko\'s people are hiding in this room. Look around with your phone, find one standing on the floor, and keep them in the ring until they give up.',go:'Open the camera',is:'Demo. Needs camera and motion access.',find:'Look around. Someone is here…',hold:'Keep them in the ring',slip:'Soko\'s people are hiding in this room. Look around with your phone, find one standing on the floor, and keep them in the ring until they give up.',got:['Got it.','Yours now.','Clean catch.'],next:'Another one just appeared',ek:'3 of 5 collected',eh:'So close',ep:'You earned {p} points tonight. Points open more small games while you chase the full pattern.',er:'<b>Two are still missing.</b> One hides in a food spot before noon. The last one only shows up in a music spot after midnight.',again:'Play the demo again',es:'Demo only. Nothing is saved.',drag:'No motion sensor here. Drag to look around.',up:'Look up a little',down:'Look down. It is standing on the floor',turn:'Follow the arrow. Turn your phone'},
+pt:{cal:'Aponta o anel para um bocado de chão livre e toca',low:'Mais para baixo. Aponta para o chão',tk:'A caça · demo',tl:'pontos',tw:'O padrão desta semana',ik:'Soko World · nível 3',ih:'Sokemon',ip:'A malta da Soko está escondida nesta sala. Olha à volta com o telemóvel, encontra uma figura no chão e mantém-na no anel até ela desistir.',go:'Abrir a câmara',is:'Demo. Precisa de acesso à câmara e ao movimento.',find:'Olha à volta. Está aqui alguém…',hold:'Mantém-na no anel',slip:'A malta da Soko está escondida nesta sala. Olha à volta com o telemóvel, encontra uma figura no chão e mantém-na no anel até ela desistir.',got:['Apanhada.','Já é tua.','Bem apanhada.'],next:'Apareceu outra',ek:'3 de 5 apanhadas',eh:'Quase',ep:'Ganhaste {p} pontos esta noite. Os pontos abrem mais jogos pequenos enquanto persegues o padrão completo.',er:'<b>Ainda faltam duas.</b> Uma esconde-se num sítio de comida antes do meio-dia. A última só aparece num sítio de música depois da meia-noite.',again:'Jogar a demo outra vez',es:'Só demo. Nada fica guardado.',drag:'Sem sensor de movimento. Arrasta para olhar à volta.',up:'Olha um pouco para cima',down:'Olha para baixo. Está no chão',turn:'Segue a seta. Roda o telemóvel'},
+br:{cal:'Aponta o anel pra um pedaço de chão livre e toca',low:'Mais pra baixo. Aponta pro chão',tk:'A caça · demo',tl:'pontos',tw:'O padrão desta semana',ik:'Soko World · nível 3',ih:'Sokemon',ip:'A galera da Soko está escondida nesta sala. Olha em volta com o celular, acha uma figura no chão e mantém ela no anel até ela desistir.',go:'Abrir a câmera',is:'Demo. Precisa de acesso à câmera e ao movimento.',find:'Olha em volta. Tem alguém aqui…',hold:'Mantém ela no anel',slip:'A galera da Soko está escondida nesta sala. Olha em volta com o celular, acha uma figura no chão e mantém ela no anel até ela desistir.',got:['Pegou.','Agora é sua.','Bela pegada.'],next:'Apareceu mais uma',ek:'3 de 5 coletadas',eh:'Quase',ep:'Você ganhou {p} pontos hoje. Os pontos liberam mais jogos pequenos enquanto você corre atrás do padrão completo.',er:'<b>Ainda faltam duas.</b> Uma se esconde num lugar de comida antes do meio-dia. A última só aparece num lugar de música depois da meia-noite.',again:'Jogar a demo de novo',es:'Só demo. Nada fica salvo.',drag:'Sem sensor de movimento. Arrasta para olhar em volta.',up:'Olha um pouco pra cima',down:'Olha pra baixo. Está no chão',turn:'Segue a seta. Vira o celular'},
+es:{cal:'Apunta el anillo a un pedazo de piso libre y toca',low:'Más abajo. Apunta al piso',tk:'La cacería · demo',tl:'puntos',tw:'El patrón de esta semana',ik:'Soko World · nivel 3',ih:'Sokemon',ip:'La gente de Soko está escondida en este lugar. Mira alrededor con tu celular, encuentra una figura en el piso y mantenla en el anillo hasta que se rinda.',go:'Abrir la cámara',is:'Demo. Necesita acceso a la cámara y al movimiento.',find:'Mira alrededor. Aquí hay alguien…',hold:'Mantenla en el anillo',slip:'La gente de Soko está escondida en este lugar. Mira alrededor con tu celular, encuentra una figura en el piso y mantenla en el anillo hasta que se rinda.',got:['Atrapada.','Ya es tuya.','Buena atrapada.'],next:'Apareció otra',ek:'3 de 5 atrapadas',eh:'Casi',ep:'Ganaste {p} puntos esta noche. Los puntos abren más juegos pequeños mientras persigues el patrón completo.',er:'<b>Todavía faltan dos.</b> Una se esconde en un lugar de comida antes del mediodía. La última solo aparece en un lugar de música después de la medianoche.',again:'Jugar la demo otra vez',es:'Solo demo. Nada se guarda.',drag:'Sin sensor de movimiento. Arrastra para mirar alrededor.',up:'Mira un poco hacia arriba',down:'Mira hacia abajo. Está en el piso',turn:'Sigue la flecha. Gira tu celular'}}[lang];
 const $=s=>document.querySelector(s);const DBG=qs.get('dbg')==='1';
 ['tk','tl','tw','ik','ih','ip','go','is','ek','eh','again','es'].forEach(k=>$('#'+k).textContent=T[k]);$('#er').innerHTML=T.er;
 
@@ -59,14 +59,46 @@ CH.forEach((c,i)=>{const d=document.createElement('div');d.className='slot'+(i==
 // ---- view + world
 const cv=$('#cv'),ctx=cv.getContext('2d');let W=0,H=0,DPR=Math.min(2,devicePixelRatio||1);
 function fit(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}addEventListener('resize',fit);fit();
-const V={yaw:0,pitch:-20,ty:0,tp:-20,gyro:false,base:null};
-const CAMH=1.45,CHH=1.0,KK=()=>W/52,DEG=180/Math.PI;
-// a point on or above the floor: bearing (deg), distance (m), height above floor (m) -> screen
-function P3(b,d,z){const k=KK();return{x:W/2-wrap(b-V.yaw)*k,y:H*.45-(Math.atan2(z-CAMH,d)*DEG-V.pitch)*k}}
-const wrap=d=>((d+540)%360)-180;
-function onOri(e){if(e.alpha==null||e.beta==null)return;V.gyro=true;V.n=(V.n||0)+1;const d=Math.PI/180,a=e.alpha*d,b=e.beta*d,g=(e.gamma||0)*d;
+const V={yaw:0,pitch:-20,roll:0,ty:0,tp:-20,tr:0,uy:0,gyro:false,base:null,h:[]};
+const CAMH=1.45,CHH=1.0,DEG=180/Math.PI,RAD=Math.PI/180,cam=$('#cam');
+// camera lock: reads the camera picture to learn the real lens angle and the camera delay, then keeps the drawing glued to the picture
+const TR={on:qs.get('lock')!=='0',k:0,L:.07,rx:0,ry:0,ax:0,ay:0,conf:0,lum:.5,E:new Float64Array(11),En:0,sxy:0,sxx:0,pt:0,nf:false,src:null};
+const KK=()=>TR.k||W/52,wrap=d=>((d+540)%360)-180;
+// a point in the room: bearing (deg), distance (m), height above floor (m) -> screen, through a real lens model (k = px per degree at the centre)
+function PJ(b,d,z,yaw,pit,rol,k){const f=k*DEG,ph=wrap(b-yaw)*RAD,th=pit*RAD,ro=rol*RAD,xr=-d*Math.sin(ph),fw=d*Math.cos(ph),up=z-CAMH,dep=fw*Math.cos(th)+up*Math.sin(th),yc=-fw*Math.sin(th)+up*Math.cos(th);
+ if(dep<.05)return{x:ph>0?-9999:W+9999,y:H*.45,back:true};const xs=xr*Math.cos(ro)-yc*Math.sin(ro),ys=xr*Math.sin(ro)+yc*Math.cos(ro);return{x:W/2+f*xs/dep,y:H*.45-f*ys/dep}}
+function P3(b,d,z){const q=PJ(b,d,z,V.yaw,V.pitch,V.roll,KK());if(!q.back){q.x+=TR.ax;q.y+=TR.ay}return q}
+// where the phone was pointing at time t (ms), from the recent sensor history
+function samp(t){const h=V.h,n=h.length;if(!n)return{uy:V.uy,p:V.tp,r:V.tr};if(t>=h[n-1].t)return h[n-1];for(let i=n-2;i>=0;i--)if(h[i].t<=t){const a=h[i],b=h[i+1],u=(t-a.t)/(b.t-a.t||1);return{uy:a.uy+(b.uy-a.uy)*u,p:a.p+(b.p-a.p)*u,r:a.r+wrap(b.r-a.r)*u}}return h[0]}
+function onOri(e){if(e.alpha==null||e.beta==null)return;V.gyro=true;V.n=(V.n||0)+1;const d=RAD,a=e.alpha*d,b=e.beta*d,g=(e.gamma||0)*d;
  const vx=-Math.sin(g)*Math.cos(a)-Math.cos(g)*Math.sin(b)*Math.sin(a),vy=-Math.sin(g)*Math.sin(a)+Math.cos(g)*Math.sin(b)*Math.cos(a),vz=-Math.cos(g)*Math.cos(b);
- const pit=Math.asin(Math.max(-1,Math.min(1,vz)))/d;if(Math.abs(vz)<.94){const yaw=Math.atan2(-vx,vy)/d;if(V.base==null)V.base=yaw;V.ty=wrap(yaw-V.base)}V.tp=Math.max(-75,Math.min(75,pit))}
+ const pit=Math.asin(Math.max(-1,Math.min(1,vz)))/d;
+ if(Math.abs(vz)<.94){const yaw=Math.atan2(-vx,vy)/d;if(V.base==null)V.base=yaw;const ny=wrap(yaw-V.base);V.uy+=wrap(ny-V.ty);V.ty=ny;
+  // tilt of the phone against the horizon, so characters stay upright in the room
+  const n=Math.hypot(vx,vy)||1,rx=vy/n,ry=-vx/n,Yx=-Math.sin(a)*Math.cos(b),Yy=Math.cos(a)*Math.cos(b),Yz=Math.sin(b);V.tr=Math.atan2(Yx*rx+Yy*ry,(Yx*ry-Yy*rx)*vz+Yz*(rx*vy-ry*vx))/d}
+ V.tp=Math.max(-75,Math.min(75,pit));V.h.push({t:performance.now(),uy:V.uy,p:V.tp,r:V.tr});if(V.h.length>64)V.h.shift()}
+// --- picture tracker: how far did the camera picture slide since the last frame?
+const TW=80,TM=22,TRR=5;let TH=0,tcv=null,tcx=null,ga=null,gb=null;const TS=new Float64Array(121);
+function grab(){const v=TR.src||cam,vw=v.videoWidth||v.width,vh=v.videoHeight||v.height;if(!vw||!vh)return false;
+ if(!tcv||TR.w!==W||TR.hh!==H){TR.w=W;TR.hh=H;TH=Math.max(60,Math.round(TW*H/W));tcv=document.createElement('canvas');tcv.width=TW;tcv.height=TH;tcx=tcv.getContext('2d',{willReadFrequently:true});ga=new Uint8Array(TW*TH);gb=new Uint8Array(TW*TH);TR.pt=0}
+ const s=Math.max(W/vw,H/vh),sw=W/s,sh=H/s;try{tcx.drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,TW,TH)}catch(e){return false}
+ const d=tcx.getImageData(0,0,TW,TH).data,t=ga;ga=gb;gb=t;let m=0;for(let i=0,j=0;j<gb.length;i+=4,j++)m+=gb[j]=(d[i]*2+d[i+1]*5+d[i+2])>>3;TR.lum+=(m/gb.length/255-TR.lum)*.2;return true}
+function match(px,py){const lim=TM-TRR,cx0=Math.max(-lim,Math.min(lim,Math.round(px))),cy0=Math.max(-lim,Math.min(lim,Math.round(py)));let best=1e18,bi=0,bj=0,sum=0,n=0;
+ for(let j=-TRR;j<=TRR;j++)for(let i=-TRR;i<=TRR;i++){const sx=cx0+i,sy=cy0+j;let s=0;for(let y=TM;y<TH-TM;y+=2){let o=y*TW+TM,o2=(y+sy)*TW+TM+sx;for(let x=TM;x<TW-TM;x++){const q=gb[o2++]-ga[o++];s+=q<0?-q:q}}TS[(j+TRR)*11+i+TRR]=s;sum+=s;if(s<best){best=s;bi=i;bj=j}}
+ n=(TW-2*TM)*Math.ceil((TH-2*TM)/2);const mean=sum/121;let c=mean/n<1.2?0:Math.max(0,Math.min(1,((1-best/mean)-.12)/.3));if(Math.abs(bi)===TRR||Math.abs(bj)===TRR)c*=.3;
+ let fx=0,fy=0;const id=(bj+TRR)*11+bi+TRR;if(Math.abs(bi)<TRR){const l=TS[id-1],r=TS[id+1],dn=l-2*best+r;if(dn>0)fx=.5*(l-r)/dn}if(Math.abs(bj)<TRR){const l=TS[id-11],r=TS[id+11],dn=l-2*best+r;if(dn>0)fy=.5*(l-r)/dn}
+ return{x:cx0+bi+fx,y:cy0+bj+fy,c}}
+// how far the picture should have slid between two moments, for a given camera delay (in px at k=1)
+function shiftU(t0,t1,lg){const a=samp(t0-lg),b=samp(t1-lg),c=Math.cos(a.p*RAD),q=PJ(a.uy,1e3*c,CAMH+1e3*Math.sin(a.p*RAD),b.uy,b.p,b.r,1);return q.back?[0,0]:[q.x-W/2,q.y-H*.45]}
+function track(now){if(!TR.on||!V.gyro||V.h.length<4)return;if(!grab())return;const t0=TR.pt;TR.pt=now;if(!t0||now-t0>180)return;
+ const sc=W/TW,k=KK(),u=shiftU(t0,now,TR.L*1000),m=match(u[0]*k/sc,u[1]*k/sc);TR.conf+=(m.c-TR.conf)*.2;if(m.c<.35)return;const mx=m.x*sc,my=m.y*sc,w=m.c;
+ // 1) learn the camera delay: which delay makes the sensors explain the picture best
+ let hi=0,bj=0;for(let j=0;j<11;j++){const v=shiftU(t0,now,j*20),ex=mx-v[0]*k,ey=my-v[1]*k;TR.E[j]=TR.E[j]*.985+(ex*ex+ey*ey)*w;if(TR.E[j]<TR.E[bj])bj=j;if(TR.E[j]>hi)hi=TR.E[j]}
+ TR.En=TR.En*.985+(mx*mx+my*my)*w;if(TR.En>1500&&hi>0&&(hi-TR.E[bj])/hi>.3){let l=bj;if(bj>0&&bj<10){const a=TR.E[bj-1],b=TR.E[bj],c=TR.E[bj+1],dn=a-2*b+c;if(dn>0)l+=.5*(a-c)/dn}TR.L+=(l*.02-TR.L)*.04}
+ // 2) learn the real lens angle: px of picture slide per degree of turn
+ TR.sxy=TR.sxy*.985+(mx*u[0]+my*u[1])*w;TR.sxx=TR.sxx*.985+(u[0]*u[0]+u[1]*u[1])*w;if(TR.sxx>30){const kn=Math.max(W/85,Math.min(W/34,TR.sxy/TR.sxx));TR.k=k+(kn-k)*.05}
+ // 3) whatever is left over, nudge the drawing so it stays glued to the picture
+ const ex=mx-u[0]*k,ey=my-u[1]*k;if(Math.hypot(ex,ey)>.7){const lm=W*.12;TR.rx=Math.max(-lm,Math.min(lm,TR.rx+ex*.5*w));TR.ry=Math.max(-lm,Math.min(lm,TR.ry+ey*.5*w))}}
 let drag=null;cv.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY]});addEventListener('pointerup',()=>drag=null);
 addEventListener('pointermove',e=>{if(!drag||V.gyro)return;V.ty=wrap(V.ty+(e.clientX-drag[0])*.22);V.tp=Math.max(-50,Math.min(50,V.tp+(e.clientY-drag[1])*.18));drag=[e.clientX,e.clientY]});
 
@@ -77,10 +109,13 @@ const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 // ---- game
 const G={on:false,i:0,pts:0,got:[],sh:null,charge:0,inRing:false,msgT:0,fly:null,parts:[],t:0,seen:false};
 function hint(s){const h=$('#hint');h.style.opacity=0;setTimeout(()=>{h.textContent=s;h.style.opacity=1},180)}
-function spawn(){const far=G.i===0?12:G.i===1?40:60+Math.random()*25,dir=Math.random()<.5?-1:1;
- G.sh={k:G.i,b:wrap(V.yaw+dir*far),d:G.i===0?2.3:1.9+Math.random()*1.5,z:0,hop:null,ph:Math.random()*9,born:G.t,face:dir,tell:0,dT:1.4};G.charge=0;G.seen=false;G.aSide=null;hint(G.i?T.next:T.find)}
-function body(s){const f=P3(s.b,s.d,s.z),h=P3(s.b,s.d,s.z+CHH);return{fx:f.x,fy:f.y,hy:h.y,ht:f.y-h.y,x:f.x,y:(f.y+h.y)/2}}
+function spawn(){const far=G.i===1?40:60+Math.random()*25,dir=Math.random()<.5?-1:1,d0=G.d0||2.3,first=G.i===0;
+ G.sh={k:G.i,b:first?(G.b0!=null?G.b0:wrap(V.yaw+dir*12)):wrap(V.yaw+dir*far),d:first?d0:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,d0*(.8+Math.random()*.55))),z:0,hop:null,ph:Math.random()*9,born:G.t,face:dir,tell:0,dT:1.4};G.charge=0;G.seen=false;G.aSide=null;hint(G.i?T.next:T.find)}
+function body(s){const f=P3(s.b,s.d,s.z),h=P3(s.b,s.d,s.z+CHH);if(f.back||h.back)return{fx:f.x,fy:f.y,hy:f.y,ht:0,x:f.x,y:f.y,ang:0,back:true};const ht=Math.hypot(h.x-f.x,h.y-f.y);return{fx:f.x,fy:f.y,hy:h.y,ht,x:(f.x+h.x)/2,y:(f.y+h.y)/2,ang:Math.atan2(h.x-f.x,f.y-h.y)}}
 function proj(s){return body(s)}
+function blob(x,y,r,sl,rot,a){if(a<=0||r<1)return;ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(1,sl);const g=ctx.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,'rgba(22,4,7,'+a+')');g.addColorStop(.55,'rgba(22,4,7,'+a*.55+')');g.addColorStop(1,'rgba(22,4,7,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.restore()}
+const OC=document.createElement('canvas'),ocx=OC.getContext('2d');
+function lit(im,dk){if(dk<.03)return im;const w=OC.width=Math.min(im.naturalWidth,360),h=OC.height=Math.round(w*im.naturalHeight/im.naturalWidth);ocx.drawImage(im,0,0,w,h);ocx.globalCompositeOperation='source-atop';ocx.fillStyle='rgba(22,4,7,'+dk+')';ocx.fillRect(0,0,w,h);ocx.globalCompositeOperation='source-over';return OC}
 function caught(){const s=G.sh,p=body(s);G.fly={k:s.k,x:p.x,y:p.y,ht:p.ht,t:0};G.sh=null;const add=50+G.i*25;G.pts+=add;$('#pts').textContent=G.pts;G.got.push(s.k);
  for(let i=0;i<26;i++){const a=Math.random()*7,sp=1+Math.random()*5;G.parts.push({x:p.x,y:p.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,l:1,c:['#ffb8cb','#ede77d','#f9f0f0','#a597ff'][i%4]})}
  [0,4,7,12].forEach((n,i)=>setTimeout(()=>tone(440*Math.pow(2,n/12),.5,.12),i*70));buzz([20,40,60]);hint(T.got[G.i%3]+'  +'+add);
@@ -90,30 +125,35 @@ function floor(){ // faint dots on the floor plane, fixed in the room: they are 
  const k=KK();ctx.fillStyle='#fff';for(let r=1.2;r<=5.2;r+=.8){const n=Math.round(r*7);for(let i=0;i<n;i++){const b=i*360/n+(r*37%20),dy=wrap(b-V.yaw);if(Math.abs(dy)>34)continue;const q=P3(b,r,0);if(q.y<H*.2||q.y>H-150)continue;ctx.globalAlpha=.16*(1-r/6.5);ctx.beginPath();ctx.ellipse(q.x,q.y,2.6-r*.3,(2.6-r*.3)*.45,0,0,7);ctx.fill()}}ctx.globalAlpha=1}
 let last=performance.now();
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;requestAnimationFrame(loop);
- V.yaw=wrap(V.yaw+wrap(V.ty-V.yaw)*Math.min(1,dt*12));V.pitch+=(V.tp-V.pitch)*Math.min(1,dt*12);
+ if(V.gyro){const q=samp(now-Math.max(0,TR.L-.03)*1000),e=Math.min(1,dt*35);V.yaw=wrap(V.yaw+wrap(q.uy-V.yaw)*e);V.pitch+=(q.p-V.pitch)*e;V.roll+=wrap(q.r-V.roll)*e}
+ else{V.yaw=wrap(V.yaw+wrap(V.ty-V.yaw)*Math.min(1,dt*12));V.pitch+=(V.tp-V.pitch)*Math.min(1,dt*12)}
  ctx.clearRect(0,0,W,H);const cx=W/2,cy=H*.45,R=Math.min(W,H)*.2,k=KK();
- if(G.on)floor();
+ if(G.on&&!G.cal)floor();
+ if(TR.poll){const ct=cam.currentTime;if(ct!==TR.ct){TR.ct=ct;TR.nf=true}}if(TR.nf){TR.nf=false;track(now)}
+ {const lk=Math.exp(-dt/.6),e=Math.min(1,dt*20);TR.rx*=lk;TR.ry*=lk;TR.ax+=(TR.rx-TR.ax)*e;TR.ay+=(TR.ry-TR.ay)*e}
+ if(G.cal&&G.on){const dep=-V.pitch,ok=dep>8,sl=Math.sin(Math.max(8,Math.min(80,dep))*RAD),rr=R*.85;ctx.save();ctx.translate(cx,cy);ctx.rotate(-V.roll*RAD);ctx.setLineDash([6,8]);ctx.lineDashOffset=-G.t*16;ctx.lineWidth=2.5;ctx.strokeStyle=ok?'#ffb8cb':'rgba(255,255,255,.5)';ctx.beginPath();ctx.ellipse(0,0,rr,rr*sl,0,0,7);ctx.stroke();if(ok){ctx.globalAlpha=.18+.08*Math.sin(G.t*4);ctx.fillStyle='#ffb8cb';ctx.fill()}ctx.restore();if(ok!==G.calOk){G.calOk=ok;hint(ok?T.cal:T.low)}}
  const s=G.sh;let p=null;
  if(s&&G.on){p=body(s);const vis=p.x>-40&&p.x<W+40&&p.hy<H&&p.fy>0;
   // hop: shake first (the tell), then one readable jump across the floor
-  if(s.hop){const h=s.hop;h.t+=dt/h.dur;const e=Math.min(1,h.t),ee=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;s.b=wrap(h.b0+wrap(h.b1-h.b0)*ee);s.d=h.d0+(h.d1-h.d0)*ee;s.z=Math.sin(e*Math.PI)*h.lift;if(e>=1){s.hop=null;s.z=0;s.land=.22;tone(180,.12,.06,'sine',110);buzz(8)}}
+  if(s.hop){const h=s.hop;h.t+=dt/h.dur;const e=Math.min(1,h.t),ee=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;s.b=wrap(h.b0+wrap(h.b1-h.b0)*ee);s.d=h.d0+(h.d1-h.d0)*ee;s.z=Math.sin(e*Math.PI)*h.lift;if(e>=1){s.hop=null;s.z=0;s.land=.22;{const q=body(s);if(!q.back)for(let i=0;i<7;i++)G.parts.push({x:q.fx+(i-3)*5,y:q.fy,vx:(i-3)*.45,vy:.5+Math.random()*.4,l:.45,c:'#f9f0f0'})}tone(180,.12,.06,'sine',110);buzz(8)}}
   else if(vis&&G.inRing){s.dT-=dt;if(s.dT<=0&&!s.tell){s.tell=.38;tone(900,.08,.04,'triangle')}}
   if(!vis){s.tell=0;s.dT=1.2}
-  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const dir=Math.random()<.5?-1:1,jump=(13+G.i*6)*(.8+Math.random()*.5);s.face=dir;s.hop={t:0,dur:.5-G.i*.04,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(1.8,Math.min(3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=Math.max(.9,2.3-G.i*.45)+Math.random()*.9;tone(520,.18,.05,'sine',760)}}
+  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const dir=Math.random()<.5?-1:1,jump=(13+G.i*6)*(.8+Math.random()*.5);s.face=dir;s.hop={t:0,dur:.5-G.i*.04,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=Math.max(.9,2.3-G.i*.45)+Math.random()*.9;tone(520,.18,.05,'sine',760)}}
   if(s.land)s.land=Math.max(0,s.land-dt);
   p=body(s);const d=Math.hypot(p.x-cx,p.y-cy),was=G.inRing;G.inRing=d<R*.95;
   if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/(1.5+G.i*.35);if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.charge=Math.max(0,G.charge-dt*.5)}
   if(G.charge>=1){caught();p=null}}
  // character standing on the floor
  if(G.sh&&p){const s=G.sh,c=CH[s.k],im=c.img,on=p.x>-80&&p.x<W+80&&p.hy<H+40&&p.fy>-40,ap=Math.min(1,(G.t-s.born)/.5);
-  if(on&&im.complete&&im.naturalWidth){const gf=P3(s.b,s.d,0),ht=p.ht*1.12,wd=ht*im.naturalWidth/im.naturalHeight,up=s.z/.5,sl=Math.abs(Math.sin(Math.atan2(CAMH,s.d)));
-   // landing pad + contact shadow on the floor
-   ctx.save();ctx.globalAlpha=.5*ap;ctx.strokeStyle=c.c;ctx.lineWidth=2;ctx.setLineDash([5,7]);ctx.lineDashOffset=-G.t*14;const pr=Math.atan2(.55,s.d)*DEG*k;ctx.beginPath();ctx.ellipse(gf.x,gf.y,pr,pr*sl,0,0,7);ctx.stroke();ctx.restore();
-   ctx.save();ctx.globalAlpha=.42*ap*(1-up*.55);ctx.fillStyle='#160407';ctx.filter='blur(5px)';ctx.beginPath();ctx.ellipse(gf.x,gf.y,wd*.36*(1-up*.3),wd*.36*sl*(1-up*.3),0,0,7);ctx.fill();ctx.restore();
-   // the character: breathes, leans into hops, squashes on landing
+  if(on&&im.complete&&im.naturalWidth){const gf=P3(s.b,s.d,0),ht=p.ht*1.12,wd=ht*im.naturalWidth/im.naturalHeight,up=Math.min(1,s.z/.5),sl=CAMH/Math.hypot(CAMH,s.d),rot=p.ang,ppm=p.ht/CHH,lt=.5+.7*TR.lum;
+   // landing pad on the floor
+   ctx.save();ctx.translate(gf.x,gf.y);ctx.rotate(rot);ctx.globalAlpha=.5*ap;ctx.strokeStyle=c.c;ctx.lineWidth=2;ctx.setLineDash([5,7]);ctx.lineDashOffset=-G.t*14;const pr=.55*ppm;ctx.beginPath();ctx.ellipse(0,0,pr,pr*sl,0,0,7);ctx.stroke();ctx.restore();
+   // shadows follow the room's light: a soft pool that widens and fades in the air, and a tight one where the feet touch
+   blob(gf.x,gf.y,wd*(.46+up*.25),sl,rot,.34*ap*lt*(1-up*.6));blob(gf.x,gf.y,wd*.24,sl,rot,.5*ap*lt*(1-up));
+   // the character: breathes, leans into hops, squashes on landing, stands upright in the room even when the phone is tilted
    const sq=s.land?1-Math.sin(s.land/.22*Math.PI)*.14:1+Math.sin(G.t*2.6+s.ph)*.025,st=s.hop?1+Math.sin(Math.min(1,s.hop.t)*Math.PI)*.08:1;
-   ctx.save();ctx.translate(p.fx,p.fy);ctx.globalAlpha=ap;ctx.rotate((s.tell?Math.sin(G.t*55)*.07:Math.sin(G.t*1.7+s.ph)*.025)+(s.hop?-s.face*.12*Math.sin(Math.min(1,s.hop.t)*Math.PI):0));ctx.scale((s.face<0?-1:1)*(2-sq*st),sq*st);
-   ctx.shadowColor='rgba(0,0,0,.4)';ctx.shadowBlur=14;ctx.shadowOffsetY=4;ctx.drawImage(im,-wd/2,-ht,wd,ht);ctx.restore()}
+   ctx.save();ctx.translate(p.fx,p.fy);ctx.globalAlpha=ap;ctx.rotate(rot+(s.tell?Math.sin(G.t*55)*.07:Math.sin(G.t*1.7+s.ph)*.025)+(s.hop?-s.face*.12*Math.sin(Math.min(1,s.hop.t)*Math.PI):0));ctx.scale((s.face<0?-1:1)*(2-sq*st),sq*st);
+   ctx.shadowColor='rgba(0,0,0,.4)';ctx.shadowBlur=14;ctx.shadowOffsetY=4;ctx.drawImage(lit(im,Math.max(0,Math.min(.42,(.42-TR.lum)*1.2))),-wd/2,-ht,wd,ht);ctx.restore()}
   else if(!on){const dy=wrap(s.b-V.yaw);if(G.aSide==null||Math.abs(dy)<150)G.aSide=dy>0?-1:1;const horiz=p.x<-60||p.x>W+60,a=horiz?(G.aSide<0?Math.PI:0):(p.y<cy?-Math.PI/2:Math.PI/2),ex=horiz?(G.aSide<0?40:W-40):cx,ey=horiz?cy:(p.y<cy?130:H-200);ctx.save();ctx.translate(ex,ey);ctx.rotate(a);ctx.globalAlpha=.6+.4*Math.sin(G.t*6);ctx.fillStyle=c.c;ctx.beginPath();ctx.moveTo(26,0);ctx.lineTo(-14,-19);ctx.lineTo(-5,0);ctx.lineTo(-14,19);ctx.closePath();ctx.shadowColor='rgba(0,0,0,.5)';ctx.shadowBlur=10;ctx.fill();ctx.restore();if(!G.offT||G.t-G.offT>4){G.offT=G.t;hint(horiz?T.turn:(p.y<cy?T.up:T.down))}}}
  // ring
  ctx.lineWidth=2;ctx.strokeStyle='rgba(255,255,255,'+(G.inRing?.9:.45)+')';ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.stroke();
@@ -121,16 +161,22 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;reque
  // fly to tray
  if(G.fly){const f=G.fly,im=CH[f.k].img;f.t+=dt/.7;const el=slots.children[f.k].getBoundingClientRect(),tx=el.left+el.width/2,ty=el.top+el.height/2,e=1-Math.pow(1-Math.min(1,f.t),3),x=f.x+(tx-f.x)*e,y=f.y+(ty-f.y)*e-Math.sin(e*Math.PI)*60,ht=f.ht*(1-e)+el.height*.86*e,wd=ht*im.naturalWidth/im.naturalHeight;ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(e*Math.PI)*.5);ctx.drawImage(im,-wd/2,-ht/2,wd,ht);ctx.restore();if(f.t>=1){slots.children[f.k].classList.add('got');$('#tc').textContent=G.got.length+' / 5';tone(880,.3,.08);G.fly=null}}
  G.parts=G.parts.filter(q=>(q.l-=dt*1.4)>0);for(const q of G.parts){q.x+=q.vx;q.y+=q.vy;q.vy-=.04;ctx.globalAlpha=q.l;ctx.fillStyle=q.c;ctx.beginPath();ctx.arc(q.x,q.y,3+q.l*4,0,7);ctx.fill()}ctx.globalAlpha=1
- if(DBG)$('#dbg').textContent='gyro '+V.gyro+' n'+(V.n||0)+' perm '+(V.perm||'-')+'\nyaw '+V.yaw.toFixed(0)+' pit '+V.pitch.toFixed(0)+(G.sh?'\nch b'+G.sh.b.toFixed(0)+' d'+G.sh.d.toFixed(1):'')+'\n'+W+'x'+H+(window.SW_PLACE?'\nplace '+window.SW_PLACE.id:'')}
+ if(DBG)$('#dbg').textContent='gyro '+V.gyro+' n'+(V.n||0)+' perm '+(V.perm||'-')+'\nyaw '+V.yaw.toFixed(0)+' pit '+V.pitch.toFixed(0)+' roll '+V.roll.toFixed(0)+(G.sh?'\nch b'+G.sh.b.toFixed(0)+' d'+G.sh.d.toFixed(1):'')+'\nlock '+(TR.on?'on':'off')+' fov '+(2*Math.atan(W/2/(KK()*DEG))*DEG).toFixed(0)+' lag '+(TR.L*1000|0)+'ms\nconf '+TR.conf.toFixed(2)+' lum '+TR.lum.toFixed(2)+' fix '+TR.ax.toFixed(0)+','+TR.ay.toFixed(0)+(G.d0?'\nfloor d'+G.d0.toFixed(1):'')+'\n'+W+'x'+H+(window.SW_PLACE?'\nplace '+window.SW_PLACE.id:'')}
 requestAnimationFrame(loop);
 
 async function start(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){}
  try{const D=window.DeviceOrientationEvent;if(D&&D.requestPermission){const r=await D.requestPermission();V.perm=r;if(r==='granted')addEventListener('deviceorientation',onOri)}else addEventListener('deviceorientation',onOri)}catch(e){V.perm='err'}
- try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('#cam').srcObject=st;await $('#cam').play().catch(()=>{})}catch(e){$('#cam').style.display='none';$('#fb').style.display='block'}
+ try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});cam.srcObject=st;await cam.play().catch(()=>{});
+  if(cam.requestVideoFrameCallback){const vf=()=>{TR.nf=true;cam.requestVideoFrameCallback(vf)};cam.requestVideoFrameCallback(vf)}else TR.poll=true}catch(e){cam.style.display='none';$('#fb').style.display='block';TR.on=false}
  $('#intro').classList.add('off');reset();setTimeout(()=>{if(!V.gyro)hint(T.drag)},2600)}
-function reset(){G.on=true;G.i=0;G.pts=0;G.got=[];G.parts=[];G.fly=null;$('#pts').textContent='0';$('#tc').textContent='0 / 5';[...slots.children].forEach(c=>c.classList.remove('got'));$('#end').classList.add('off');spawn()}
+function reset(){G.on=true;G.i=0;G.pts=0;G.got=[];G.parts=[];G.fly=null;G.sh=null;$('#pts').textContent='0';$('#tc').textContent='0 / 5';[...slots.children].forEach(c=>c.classList.remove('got'));$('#end').classList.add('off');if(G.d0)spawn();else{G.cal=true;G.calOk=null}}
+// the player marks the floor once: aim the ring at a clear bit of floor and tap. Characters then stand there, at that distance.
+function setFloor(){const dep=-V.pitch;if(dep<=8){hint(T.low);buzz(30);return}G.d0=Math.max(1.3,Math.min(4.5,CAMH/Math.tan(dep*RAD)));G.b0=V.yaw;G.dmin=Math.max(1.3,G.d0*.75);G.dmax=Math.min(5,G.d0*1.4);G.cal=false;tone(660,.2,.08);buzz(15);spawn()}
+if(qs.get('cal')==='0'){G.d0=2.3;G.b0=null;G.dmin=1.8;G.dmax=3.6}
+let tap=null;addEventListener('pointerdown',e=>{tap=[e.clientX,e.clientY,performance.now()]});
+addEventListener('pointerup',e=>{if(tap&&G.cal&&G.on&&Math.hypot(e.clientX-tap[0],e.clientY-tap[1])<12&&performance.now()-tap[2]<600)setFloor();tap=null});
 if(DBG)$('#dbg').style.display='block';$('#go').onclick=start;
 if(qs.get('admin')==='1'){const b=document.createElement('a');b.href='game.html?admin=1';b.textContent='⚙ panel';b.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 12px);z-index:9;font:500 12px "Zalando Sans",sans-serif;color:#160407;background:#ede77d;padding:6px 12px;border-radius:999px;text-decoration:none';document.body.appendChild(b)}
 const setPlace=()=>{const pl=window.SW_PLACE;$('#tp').textContent=pl?pl.name+(pl.area?' · '+pl.area:''):''};if(window.SW_GEO_READY)window.SW_GEO_READY.then(setPlace);else addEventListener('DOMContentLoaded',()=>{if(window.SW_GEO_READY)window.SW_GEO_READY.then(setPlace)});$('#again').onclick=reset;$('#tc').textContent='0 / 5';
-window.__h={G,V,proj,onOri,body};
+window.__h={G,V,TR,proj,onOri,body,PJ,samp,track};
 </script></body></html>
