@@ -74,6 +74,12 @@ function emo(s) {
   });
 }
 
+// close-ups: hide whoever stands between the camera and the person being filmed, so nobody's back fills the frame
+function clearView(cam, cx, cz, x, z, subject, people, hid) {
+  const dx = x - cx, dz = z - cz, L = Math.hypot(dx, dz) || 1, ux = dx / L, uz = dz / L, th = Math.tan(cam.fov * Math.PI / 360) * Math.max(.6, cam.aspect);
+  people.forEach(q => { if (q === subject || !q.g.visible) return; const px = q.g.position.x - cx, pz = q.g.position.z - cz, d = px * ux + pz * uz, e = Math.abs(px * uz - pz * ux);
+    if (d > -.4 && d < L - .45 && e < Math.max(0, d) * th + .6) { q.g.visible = false; hid.push(q); } });
+}
 function bx(w, h, d, c, x, y, z, p, map) { const m = new T.Mesh(new T.BoxGeometry(w, h, d), M(c, map)); m.position.set(x, y, z); p.add(m); return m; }
 
 function person(S, o) {
@@ -197,11 +203,15 @@ export function mount(host, opt) {
   if (STYLE === 'toon') { outline(S); S.background = new T.Color(opt.eth ? opt.eth[1] : '#3b0f18'); }
   let look = new T.Vector3(), push = 0, cuts = [], ct = 0, pour = 0, billT = 0, cur = 'table';
   const setOff = v => { if (v) cam.setViewOffset(W, H, 0, Math.round(H * .24), W, H); else cam.clearViewOffset(); };
-  const shot = (p, l, fov, ps) => { cam.position.set(p[0], p[1], p[2]); look.set(l[0], l[1], l[2]); cam.fov = fov || 48; cam.updateProjectionMatrix(); cam.lookAt(look); push = ps == null ? .1 : ps; };
+  const shot = (p, l, fov, ps) => { cam.position.set(p[0], p[1], p[2]); look.set(l[0], l[1], l[2]); cam.fov = fov || 48; cam.near = .1; cam.updateProjectionMatrix(); cam.lookAt(look); push = ps == null ? .1 : ps; };
   const close = (P, fov) => {
     const x = P.g.position.x, z = P.g.position.z, y = P.baseY + 1.76, ry = P.g.rotation.y, o = (P === wtr || P === chef) ? 0 : .8, a = Math.cos(ry + o) > Math.cos(ry - o) ? ry + o : ry - o;
-    shot([x + Math.sin(a) * 3, y + .25, z + Math.cos(a) * 3], [x + .05, y + .06, z], fov || 30, .16);
+    // a slumped person tips their head at the lens: film them from lower and a touch further, aimed at where the face really is
+    unhide(); const ln = Math.max(0, P.lean || 0), cx = x + Math.sin(a) * (3 + ln * 1.3), cz = z + Math.cos(a) * (3 + ln * 1.3);
+    shot([cx, y + .25 - ln * 1.5, cz], [x + .05 + Math.sin(ry) * ln * .9, y + .06 - ln * .25, z + Math.cos(ry) * ln * .9], fov || 30, .16); clearView(cam, cx, cz, x, z, P, all, tmpHid);
+    cam.near = (3 + ln * 1.3) * .5; cam.updateProjectionMatrix(); // nothing in the near half of the shot is drawn: no counter or prop across the face
   };
+  let tmpHid = []; const unhide = () => { tmpHid.forEach(q => q.g.visible = true); tmpHid = []; };
   const hideRoom = () => room3.forEach(p => { p.g.visible = false; p.tgt = null; });
   const setScene = n => { street.visible = n === 'street'; room.visible = n !== 'street'; S.background = new T.Color(opt.eth ? opt.eth[n === 'street' ? 0 : 1] : n === 'street' ? '#312228' : '#3b0f18'); S.fog = opt.eth ? new T.Fog(opt.eth[n === 'street' ? 0 : 1], 9, 30) : n === 'street' ? new T.Fog('#312228', 12, 30) : null; };
   // full table state for a beat: who is already sitting / standing there
@@ -214,7 +224,7 @@ export function mount(host, opt) {
   };
   const CAM = { door: [[.2, 2.3, 3.6], [0, 1.5, -2.8], 48], table: [[-1.2, 3.1, 4.6], [.1, 1.25, -.6], 48], wide: [[0, 3.6, 4.4], [0, 1.2, -1.1], 50], bill: [[.1, 4.3, 2.9], [0, .8, -.3], 46] };
   const api = {
-    beat(i) {
+    beat(i) { unhide();
       all.forEach(p => p.reset()); cuts = []; ct = 0; pour = 0; setOff(false); ref.bill.visible = false;
       if (i === 0) {
         setScene('street'); hideRoom(); cur = 'door'; you.sit(false); date.sit(false); wtr.sit(false);
@@ -247,10 +257,10 @@ export function mount(host, opt) {
       cuts = [[.5, () => { you.mood('shock'); date.mood('shock'); you.emote('$'); }], [1.5, () => { wtr.armT = [0, 0]; }]];
       return 2.2;
     },
-    establish() { api.beat(0); cuts = []; [you, date].forEach(p => { p.tgt = null; p.g.rotation.y = -Math.PI / 2; }); shot([5.5, 3.6, 11.5], [1.2, 2.2, -3], 44, .35); },
-    ask() { setOff(true); shot(...CAM[cur], .04); },
+    establish() { unhide(); api.beat(0); cuts = []; [you, date].forEach(p => { p.tgt = null; p.g.rotation.y = -Math.PI / 2; }); shot([5.5, 3.6, 11.5], [1.2, 2.2, -3], 44, .35); },
+    ask() { unhide(); setOff(true); shot(...CAM[cur], .04); },
     react(i, k, q) {
-      setOff(false); cuts = []; ct = 0; date.lean = 0;
+      unhide(); setOff(false); cuts = []; ct = 0; date.lean = 0;
       const guests = all.filter(p => p !== you && p !== date && p.g.visible);
       if (q === 'good') { guests.forEach(p => { p.mood('laugh'); }); wtr.emote('!'); date.mood('laugh'); date.hop = .9; date.emote('♥'); you.mood('smug'); you.armT = [0, i >= 2 ? -2.2 : 0]; crew.forEach(p => p.hop = .8); }
       else if (q === 'mid') { guests.forEach(p => p.mood('wink')); wtr.mood('mad'); wtr.emote('…'); date.mood('wink'); date.nod = .8; you.mood(''); }
@@ -267,7 +277,7 @@ export function mount(host, opt) {
       if (i === 4) { shot(...CAM.wide, .1); cuts = [[1.35, () => close(date)]]; return; }
       close(first); cuts = [[1.35, () => close(second)]];
     },
-    fin() {
+    fin() { unhide();
       cuts = []; setScene('room'); stage(4); all.forEach(p => p.reset()); ref.bill.visible = false;
       all.forEach(p => { p.mood('laugh'); p.hop = 3; }); date.mood('love'); wtr.mood('wink'); you.armT = [0, -2.3]; date.armT = [-2.3, 0]; crew[0].strum = true; date.emote('♥'); shot(...CAM.wide, .12);
     },
@@ -687,17 +697,17 @@ export function mountStory(host, id, opt) {
   const A = { P, ref, sets, dark: 0, bright: false, sway: false };
   const look = new T.Vector3(); let push = 0, cuts = [], ct = 0, cur = null, pos = {}, puffs = [], T0 = 0;
   A.all = f => names.forEach(n => { if (P[n].g.visible) f(P[n], n); });
-  A.shot = (p, l, fov, ps) => { if (typeof unhide === 'function' && !A._inClose) {} cam.position.set(...p); look.set(...l); cam.fov = fov || 48; cam.updateProjectionMatrix(); cam.lookAt(look); push = ps == null ? .1 : ps; };
+  A.shot = (p, l, fov, ps) => { if (typeof unhide === 'function' && !A._inClose) {} cam.position.set(...p); look.set(...l); cam.fov = fov || 48; cam.near = .1; cam.updateProjectionMatrix(); cam.lookAt(look); push = ps == null ? .1 : ps; };
   let tmpHid = [];
   const unhide = () => { tmpHid.forEach(q => q.g.visible = true); tmpHid = []; };
   A.close = (Q, fov) => {
     unhide();
     if (Q.g.rotation.x === 0 && Math.cos(Q.face) < .2) { Q.face = Q.g.position.x > 0 ? -.4 : .4; Q.g.rotation.y = Q.face; Q.tgt = null; }
     const x = Q.g.position.x, z = Q.g.position.z, y = Q.g.position.y + (Q.g.rotation.x ? .3 : Q.seated ? 1.76 : 2.06), ry = Q.face, o = .3;
-    const a = Math.cos(ry + o) > Math.cos(ry - o) ? ry + o : ry - o, cx = x + Math.sin(a) * 2, cz = z + Math.cos(a) * 2;
-    A.shot([cx, y + .08, cz], [x, y, z], fov || 34, .12);
-    const dx = x - cx, dz = z - cz, L2 = dx * dx + dz * dz;
-    names.forEach(n => { const q = P[n]; if (q === Q || !q.g.visible) return; const px = q.g.position.x - cx, pz = q.g.position.z - cz, t = (px * dx + pz * dz) / L2; if (t <= 0 || t >= 1) return; const ex = px - t * dx, ez = pz - t * dz; if (ex * ex + ez * ez < .36) { q.g.visible = false; tmpHid.push(q); } });
+    const ln = Q.g.rotation.x ? 0 : Math.max(0, Q.lean || 0), a = Math.cos(ry + o) > Math.cos(ry - o) ? ry + o : ry - o, cx = x + Math.sin(a) * (2 + ln * 1.3), cz = z + Math.cos(a) * (2 + ln * 1.3);
+    A.shot([cx, y + .08 - ln * 1.4, cz], [x + Math.sin(ry) * ln * .9, y - ln * .25, z + Math.cos(ry) * ln * .9], fov || 34, .12);
+    cam.near = (2 + ln * 1.3) * .5; cam.updateProjectionMatrix(); // nothing in the near half of the shot is drawn: no counter or prop across the face
+    clearView(cam, cx, cz, x, z, Q, names.map(n => P[n]), tmpHid);
   };
   A.puff = (x, y, z, c1, c2, n) => { for (let i = 0; i < (n || 9); i++) { const m = new T.Mesh(new T.BoxGeometry(.22, .22, .22), new T.MeshLambertMaterial({ color: i % 2 ? (c1 || '#b0ef8b') : (c2 || '#b0ef8b'), transparent: true, opacity: .85 })); m.position.set(x + rnd(-.3, .3), y + rnd(-.2, .2), z + rnd(-.3, .3)); m.userData.v = [rnd(-.4, .4), rnd(.4, .9), rnd(-.4, .4)]; m.userData.t = 1.6; S.add(m); puffs.push(m); } };
   A.give = (Q, what) => { if (Q['_' + what]) return; const g = new T.Group();
@@ -729,7 +739,7 @@ export function mountStory(host, id, opt) {
   const setOff = v => { if (v) cam.setViewOffset(W, H, 0, Math.round(H * .24), W, H); else cam.clearViewOffset(); };
   let bi = 0;
   const api = {
-    beat(i) { bi = i; setOff(false); apply(i); return D.beats[i].wait || 2.5; },
+    beat(i) { bi = i; unhide(); setOff(false); apply(i); return D.beats[i].wait || 2.5; },
     establish() { setOff(false); apply(0); cuts = []; names.forEach(n => { P[n].tgt = null; }); const c = D.beats[0].cam; A.shot([c[0][0] * 1.4, c[0][1] + .8, c[0][2] * 1.5 + 1], c[1], c[2] + 6, .3); },
     ask() { setOff(true); unhide(); const B = D.beats[bi]; A.shot(...(B.ask || B.cam), .04); },
     react(i, k, q, pts) {
