@@ -525,7 +525,25 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 /* unknown path activity slider */.usl .ul{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-bottom:6px;font-family:'Oswald',var(--f);font-weight:400}.usl button.on{opacity:1;transform:scale(1.08);background:var(--sk-pink);color:#160407}.usl.lock button.on{box-shadow:0 0 0 3px #ede77d}
 .alpha #test,.noadm #test{display:none!important}
 #alpha{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:#170408;padding:24px}
-#alpha.on{display:flex}#alpha .alw{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;animation:situp .35s both}
+#alpha.on{display:flex}
+#admp{position:absolute;inset:0;z-index:70;display:none;background:#170408;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(env(safe-area-inset-top) + 18px) 18px 120px;color:var(--sk-paper)}
+#admp.on{display:block}#admp .w{max-width:440px;margin:0 auto}
+#admp .alb{font-weight:500;font-size:11px;letter-spacing:.22em;color:var(--sk-yellow);display:flex;justify-content:space-between;align-items:center}
+#admp .alb button{background:none;border:0;color:var(--sk-paper);font-size:22px;opacity:.7;padding:0 4px}
+#admp h2{margin:4px 0 14px;font-family:'Season Mix',serif;font-weight:400;font-size:36px;line-height:1;color:var(--sk-pink)}
+#admp h3{margin:18px 0 7px;font-family:Oswald,sans-serif;font-weight:400;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.65}
+#admp .ch{display:flex;flex-wrap:wrap;gap:6px}
+#admp .ch button{font:inherit;font-size:14px;font-weight:500;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:transparent;color:var(--sk-paper)}
+#admp .ch button.on{background:var(--sk-pink);border-color:var(--sk-pink);color:var(--sk-ink)}
+#admp .md{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#admp .md button{font:inherit;text-align:left;padding:12px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:var(--sk-paper)}
+#admp .md button b{display:block;font-family:'Season Mix',serif;font-weight:400;font-size:22px;line-height:1.05}#admp .md button small{display:block;font-size:12px;opacity:.65;margin-top:3px}
+#admp .md button.on{background:var(--sk-paper);color:var(--sk-ink);border-color:var(--sk-paper)}
+#admp select,#admp input{font:inherit;font-size:15px;width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:#2a0b12;color:var(--sk-paper)}
+#admp .tl{display:grid;grid-template-columns:1fr 1fr;gap:6px}#admp .tl a,#admp .tl button{font:inherit;font-size:13px;font-weight:500;text-align:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:none;color:var(--sk-paper);text-decoration:none}
+#admp .go{position:fixed;left:0;right:0;bottom:0;padding:12px 18px calc(env(safe-area-inset-bottom) + 12px);background:linear-gradient(180deg,transparent,#170408 30%);display:flex;gap:8px;justify-content:center}
+#admp .go button{font:inherit;font-weight:500;border:0;border-radius:12px;padding:15px 14px;font-size:15px;background:rgba(255,255,255,.14);color:var(--sk-paper)}#admp .go button.main{flex:1;max-width:240px;background:var(--sk-pink);color:var(--sk-ink);font-size:18px}
+#admp .note{font-size:12px;opacity:.6;margin-top:6px;line-height:1.3}#alpha .alw{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;animation:situp .35s both}
 #alpha .alb{font-weight:500;font-size:11px;letter-spacing:.22em;color:var(--sk-yellow)}
 #alpha h2{margin:0 0 8px;font-family:'Season Mix',serif;font-weight:400;font-size:40px;line-height:1;color:var(--sk-pink)}
 #alpha button{font:inherit;text-align:left;padding:15px 16px;border-radius:6px;border:0;background:var(--sk-paper);color:var(--sk-ink);font-weight:500;font-size:17px;box-shadow:0 4px 0 rgba(0,0,0,.35);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
@@ -994,10 +1012,10 @@ async function paintBg(){const tok=++bgTok,m=MK[S.m],cv=$('#bg'),W=app.clientWid
 
 /* ---------- Top bar & test bar ---------- */
 function drawLangs(){$('#langs').innerHTML=LANGS.map(([k,l])=>`<button data-l='${k}' class='${k===S.lang?'on':''}' aria-pressed='${k===S.lang}'>${l}</button>`).join('')}
-function drawTest(){$('#test').innerHTML=`<span>Test only · v55 · market</span>`+Object.keys(MK).map(k=>`<button data-m='${k}' class='${k===S.m?'on':''}'>${MK[k].name}</button>`).join('')+`<select id='zsel'><option value=''>zone: shuffle</option>${['culture','food','music','night','after','fallback'].map(z=>`<option value='${z}' ${S.zone===z?'selected':''}>zone: ${z}</option>`).join('')}</select><select id='gsel'><option value=''>game: auto</option>${['restore','fog','pour','seat','beat','echo','ride','crowd','sun','signal','waiter','museum','karaoke','club','flea','tasting','play','gig','barcrush','sunset','blinddate','groupchat'].map((g,i)=>`<option value='${g}' ${S.forceGame===g?'selected':''}>${i+1}. ${({restore:'forgery',fog:'one line',echo:'rescue',crowd:'dont spill',waiter:'★ waiter',museum:'★ museum',karaoke:'★ karaoke',club:'★ club',flea:'★ flea market',tasting:'★ tasting menu',play:'★ the play',gig:'★ the gig',barcrush:'★ bar crush',sunset:'★ sunset',blinddate:'★ blind date',groupchat:'★ group chat'})[g]||g}</option>`).join('')}</select><button data-r='1'>↺</button><button data-i='1' class='${S.inv?'on':''}'>invert ${S.inv?'ON':'off'}</button><button data-e='1'>end screen ▸</button><button data-px='1' class='${S.px?'':'on'}'>look: ${S.px?'pixel':'cartoon'}</button><button data-cl='1' class='${S.classic?'':'on'}'>games: ${S.classic?'classic':'situations'}</button><button data-tt='1' class='${S.ttm?'on':''}'>talk to me: ${S.ttm?'ON':'off'}</button><span id='diag' style='flex-basis:100%;text-align:center;opacity:.7'></span>`}
+function drawTest(){$('#test').innerHTML=`<span>Test only · v55 · market</span>`+Object.keys(MK).map(k=>`<button data-m='${k}' class='${k===S.m?'on':''}'>${MK[k].name}</button>`).join('')+`<select id='zsel'><option value=''>zone: shuffle</option>${['culture','food','music','night','after','fallback'].map(z=>`<option value='${z}' ${S.zone===z?'selected':''}>zone: ${z}</option>`).join('')}</select><select id='gsel'><option value=''>game: auto</option>${['restore','fog','pour','seat','beat','echo','ride','crowd','sun','signal','waiter','museum','karaoke','club','flea','tasting','play','gig','barcrush','sunset','blinddate','groupchat'].map((g,i)=>`<option value='${g}' ${S.forceGame===g?'selected':''}>${i+1}. ${({restore:'forgery',fog:'one line',echo:'rescue',crowd:'dont spill',waiter:'★ waiter',museum:'★ museum',karaoke:'★ karaoke',club:'★ club',flea:'★ flea market',tasting:'★ tasting menu',play:'★ the play',gig:'★ the gig',barcrush:'★ bar crush',sunset:'★ sunset',blinddate:'★ blind date',groupchat:'★ group chat'})[g]||g}</option>`).join('')}</select><button data-r='1'>↺</button><button data-i='1' class='${S.inv?'on':''}'>invert ${S.inv?'ON':'off'}</button><button data-e='1'>end screen ▸</button><button data-px='1' class='${S.px?'':'on'}'>look: ${S.px?'pixel':'cartoon'}</button><button data-cl='1' class='${S.classic?'':'on'}'>games: ${S.classic?'classic':'situations'}</button><button data-tt='1' class='${S.ttm?'on':''}'>talk to me: ${S.ttm?'ON':'off'}</button><button data-pn='1' class='on'>⚙ panel</button><span id='diag' style='flex-basis:100%;text-align:center;opacity:.7'></span>`}
 $('#langs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.l===S.lang)return;track('sw_lang_switch',{from:S.lang,to:b.dataset.l,phase:S.phase});S.lang=b.dataset.l;audio();blip();buzz(6);applyLang(true)});
 $('#test').addEventListener('change',e=>{if(e.target.id==='zsel'){S.zone=e.target.value||null;return}if(e.target.id!=='gsel')return;S.forceGame=e.target.value||null;start();if(S.forceGame){S.phase='game';stack.innerHTML='';startGame()}});
-$('#test').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.i){S.inv=!S.inv;drawTest();return}if(b.dataset.e){jumpEnd();return}if(b.dataset.px){S.px=!S.px;drawTest();return}if(b.dataset.cl){S.classic=!S.classic;drawTest();return}if(b.dataset.tt){S.ttm=!S.ttm;drawTest();return}if(b.dataset.m){S.m=b.dataset.m;S.lang=MK[S.m].lang;theme();drawTest()}start()});
+$('#test').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.i){S.inv=!S.inv;drawTest();return}if(b.dataset.e){jumpEnd();return}if(b.dataset.px){S.px=!S.px;drawTest();return}if(b.dataset.cl){S.classic=!S.classic;drawTest();return}if(b.dataset.tt){S.ttm=!S.ttm;drawTest();return}if(b.dataset.pn){admPanel();return}if(b.dataset.m){S.m=b.dataset.m;S.lang=MK[S.m].lang;theme();drawTest()}start()});
 $('#mute').addEventListener('click',()=>{audio();setMute(!S.muted);if(!S.muted)blip()});
 
 function applyLang(anim){root.lang=LANGS.find(l=>l[0]===S.lang)[2];drawLangs();
@@ -1737,7 +1755,9 @@ function sitTitle(id){const o=$('#sitin');if(!o)return;const K_=S.age==='o'?SITK
 const vAlts=(id,bi,k,lang,age)=>((((((window.SITV||{})[id]||{})[lang||S.lang]||{})[age||(S.age==='o'?'o':'u')]||[])[bi]||[])[k])||[];
 function vPick(id,bi,k){const n=1+Math.max(vAlts(id,bi,k).length,vAlts(id,bi,k,'en').length);let seen={};try{seen=JSON.parse(localStorage.getItem('sw_vseen')||'{}')}catch(e){}
  const key=id+(S.age==='o'?'o':'u')+bi+k,last=seen[key];let v=Math.floor(Math.random()*n);if(n>1&&v===last)v=(v+1+Math.floor(Math.random()*(n-1)))%n;seen[key]=v;try{localStorage.setItem('sw_vseen',JSON.stringify(seen))}catch(e){}return v}
-function chTxt(id,bi,k,base){const v=(G.vv||[])[k]||0;if(!v)return base;const a=vAlts(id,bi,k);return a[v-1]||base}
+function chAlt(id,bi,k){const v=(G.vv||[])[k]||0;if(!v)return null;return vAlts(id,bi,k)[v-1]||null}
+function chTxt(id,bi,k,base){const a=chAlt(id,bi,k);return a?(Array.isArray(a)?a[0]:a):base}
+function chRes(id,bi,k,base){const a=chAlt(id,bi,k);return Array.isArray(a)&&a[1]?a[1]:base}
 
 const TTM={url:'https://soko-world-ttm.soko-world.workers.dev',
  L:{en:['Say it your way…','or pick an option','thinking…'],pt:['Diz à tua maneira…','ou escolhe uma opção','a pensar…'],br:['Fala do seu jeito…','ou escolhe uma opção','pensando…'],es:['Dilo a tu manera…','o elige una opción','pensando…']},
@@ -1766,7 +1786,7 @@ function sitGame(id,D,PT,mnt){return{sit:true,
  pts(p){if(p>0){hit(p,G.W/2,G.H*.12);arp(p>=150?[0,2,4]:[0,2],.07)}
   else{G.score=Math.max(0,G.score+p);$('#gscore').innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:String(p).replace('-','−'),x:G.W/2,y:G.H*.12,t:1.2,big:true,c:'#f68686'});
    G.lives--;G.lost++;drawLives();buzz([25,40,25]);whoomp();G.shake=.35;if(G.lives<=0)setTimeout(()=>endGame('out'),2300)}},
- choose(k,re){if(G.ph!=='ask'||G.ended)return;G.tbusy=false;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);cap(null,re?(()=>re):(()=>D().b[bi][2][k][1]));this.render();if(WILD()){if(p>=150){wSticker(['🔥','✨','👑','💅'][Math.floor(Math.random()*4)]+' +'+p);wRain(8);wPulse('hotp',300)}else if(p<=0)wMiss()}},
+ choose(k,re){if(G.ph!=='ask'||G.ended)return;G.tbusy=false;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);{const vr=chRes(id,bi,k,null);cap(null,re?(()=>re):vr?(()=>vr):(()=>D().b[bi][2][k][1]))}this.render();if(WILD()){if(p>=150){wSticker(['🔥','✨','👑','💅'][Math.floor(Math.random()*4)]+' +'+p);wRain(8);wPulse('hotp',300)}else if(p<=0)wMiss()}},
  update(dt){G.grace=false;G.bob+=dt;if(!G.s3){G.w0+=dt;if(SIT3D){try{G.s3=mnt(SIT3D)}catch(e){console.warn(e);G.s3=SITSTUB}}else if(SIT3D===false||G.w0>6)G.s3=SITSTUB;return}
   if(G.bi<0&&G.ph!=='title'){this.title();return}G.pt+=dt;
   if(G.ph==='title'){if(G.pt>=6.5)this.untitle();return}
@@ -2257,6 +2277,43 @@ function alphaShow(step){let o=$('#alpha');if(!o){o=document.createElement('div'
   else if(b.dataset.at){S.classic=b.dataset.at==='arcade';S.strange=b.dataset.at==='strange';S.ttm=false;alphaShow(b.dataset.at==='sit'?'answer':'venue')}
   else if(b.dataset.aa){S.ttm=b.dataset.aa==='talk';alphaShow('venue')}
   else if(b.dataset.az){S.zone=b.dataset.az;S.forceGame=null;o.classList.remove('on');start();applyLang()}}}
+/* ---------- Admin panel: everything the test bar does, on one screen, plus player profile, Talk to Me, place lock and Sokemon ---------- */
+const ADM={m:'lis',lang:'pt',mode:'sit',age:'u',vibe:'bored',look:'something',zone:'',game:'',ttm:false,story:true,inv:false,px:false,geo:'',geotest:''};
+const ADMG={arcade:['restore','fog','pour','seat','beat','echo','ride','crowd','sun','signal'],sit:['waiter','museum','karaoke','club','flea','tasting','play','gig','barcrush','sunset','blinddate','groupchat'],strange:['corridor','ether']};
+const ADMN={restore:'Forgery',fog:'One line',pour:'Pour',seat:'Seat',beat:'Beat',echo:'Rescue',ride:'Ride',crowd:"Don't spill",sun:'Sun',signal:'Signal',waiter:'Waiter',museum:'Museum',karaoke:'Karaoke',club:'Club',flea:'Flea market',tasting:'Tasting menu',play:'The play',gig:'The gig',barcrush:'Bar crush',sunset:'Sunset',blinddate:'Blind date',groupchat:'Group chat',corridor:'Corridor',ether:'Zen'};
+function admUrl(end){const a=ADM,p=new URLSearchParams();p.set('lang',a.lang);
+ if(a.mode==='hunt'){p.set('admin','1');if(a.geo){p.set('geo',a.geo);if(a.geotest)p.set('geotest',a.geotest)}return 'hunt.html?'+p}
+ p.set('m',a.m);
+ if(a.mode==='real'){p.set('set','sit');p.set('zone',a.zone||'fallback');if(a.geo){p.set('geo',a.geo);if(a.geotest)p.set('geotest',a.geotest)}return 'game.html?'+p}
+ p.set('admin','1');p.set('play','1');p.set('set',a.mode==='arcade'?'classic':a.mode==='strange'?'strange':'sit');p.set('age',a.age);p.set('vibe',a.vibe);p.set('look',a.look);
+ if(a.zone)p.set('zone',a.zone);if(a.game)p.set('game',a.game);p.set('ttm',a.ttm&&a.mode==='sit'?'1':'0');if(!a.story)p.set('story','0');p.set('inv',a.inv?'1':'0');if(a.px)p.set('px','1');
+ if(a.geo){p.set('geo',a.geo);if(a.geotest)p.set('geotest',a.geotest)}if(end)p.set('end',end);return 'game.html?'+p}
+function admPanel(){let o=$('#admp');if(!o){o=document.createElement('div');o.id='admp';app.appendChild(o);try{Object.assign(ADM,JSON.parse(localStorage.getItem('sw_admp')||'{}'))}catch(e){}
+  if(qs.get('m'))ADM.m=S.m;if(qs.get('lang'))ADM.lang=S.lang;
+  fetch(TTM.url+'/geo/places').then(r=>r.json()).then(j=>{ADM._pl=j;draw()}).catch(()=>{});
+  o.addEventListener('click',e=>{const b=e.target.closest('[data-k],[data-act]');if(!b)return;const k=b.dataset.k,v=b.dataset.v;
+   if(k){ADM[k]=(v==='true'?true:v==='false'?false:v);if(k==='m')ADM.lang=MK[v].lang;if(k==='mode')ADM.game='';draw();return}
+   const act=b.dataset.act;if(act==='close'){o.classList.remove('on');return}
+   if(act==='reset'){try{['sw_vseen','sw_did','sw_admp'].forEach(x=>localStorage.removeItem(x))}catch(e){}toast('Device data cleared');return}
+   save();location.href=admUrl(act==='win'?'win':act==='fail'?'fail':'')});
+  o.addEventListener('change',e=>{const t=e.target;if(t.dataset.f){ADM[t.dataset.f]=t.value.trim();save();if(t.tagName==='SELECT')draw()}})}
+ const save=()=>{try{const c=Object.assign({},ADM);delete c._pl;localStorage.setItem('sw_admp',JSON.stringify(c))}catch(e){}};
+ const chips=(k,opts)=>`<div class="ch">${opts.map(([v,l])=>`<button data-k="${k}" data-v="${v}" class="${String(ADM[k])===String(v)?'on':''}">${l}</button>`).join('')}</div>`;
+ function draw(){const a=ADM,g=a.mode==='hunt'||a.mode==='real',games=ADMG[a.mode]||[],pl=a._pl||{};
+  o.innerHTML=`<div class="w"><div class="alb"><span>SOKO WORLD · ADMIN</span><button data-act="close" aria-label="close">×</button></div><h2>Control panel</h2>
+  <h3>Market</h3>${chips('m',Object.keys(MK).map(k=>[k,MK[k].name]))}
+  <h3>Language</h3>${chips('lang',[['pt','PT'],['br','PT-BR'],['es','ES'],['en','EN']])}
+  <h3>Mode</h3><div class="md">${[['arcade','Simple','Arcade games'],['sit','Spicy','Situational games'],['strange','Strange','Corridor and Zen'],['hunt','Sokemon','Camera hunt, level 3'],['real','Real path','As a player sees it, no test tools']].map(([v,t,d])=>`<button data-k="mode" data-v="${v}" class="${a.mode===v?'on':''}"><b>${t}</b><small>${d}</small></button>`).join('')}</div>
+  ${a.mode==='hunt'?'':`<h3>Venue type</h3>${chips('zone',[['','Shuffle'],['culture','Culture'],['food','Food'],['music','Music'],['night','Night'],['after','Outdoors'],['fallback','Public QR']])}`}
+  ${g?'':`<h3>Game</h3><select data-f="game"><option value="">Auto (by venue type)</option>${games.map(x=>`<option value="${x}" ${a.game===x?'selected':''}>${ADMN[x]||x}</option>`).join('')}</select>
+  <h3>Player profile (skips the pregame cards)</h3>${chips('age',[['u','Under 25'],['o','25+']])}<div style="height:6px"></div>${chips('vibe',[['bored','Bored'],['surprise','Surprise me']])}<div style="height:6px"></div>${chips('look',[['something','A new spot'],['someone','New faces']])}
+  <h3>Options</h3><div class="ch">${[['ttm','Talk to Me',a.mode==='sit'],['story','Intro story',true],['inv','Inverted controls',true],['px','Pixel look',a.mode==='sit']].filter(x=>x[2]).map(([k,l])=>`<button data-k="${k}" data-v="${!a[k]}" class="${a[k]?'on':''}">${l}: ${a[k]?'on':'off'}</button>`).join('')}</div>`}
+  <h3>Place lock</h3><select data-f="geo"><option value="">Off (opens anywhere)</option>${Object.keys(pl).map(id=>`<option value="${id}" ${a.geo===id?'selected':''}>${pl[id].name}${pl[id].area?' · '+pl[id].area:''} (${pl[id].r} m)</option>`).join('')}</select>
+  ${a.geo?`<div style="height:6px"></div><input data-f="geotest" placeholder="Test code to skip the location check" value="${clEsc(a.geotest||'')}"><div class="note">With a place selected, the game only opens within its radius. The test code lets you in from anywhere.</div>`:''}
+  <h3>Tools</h3><div class="tl"><a href="redeem.html" target="_blank">Venue redeem page</a><a href="backoffice.html" target="_blank">Backoffice</a><a href="game.html?alpha=1">Alpha path</a><button data-act="reset">Reset this device</button></div>
+  <div class="note">Reset clears this device's wording memory and Talk to Me device id. Win and fail screens include the gift and claim demo.</div>
+  </div><div class="go">${g?'':'<button data-act="fail">Fail screen</button><button data-act="win">Win screen</button>'}<button class="main" data-act="play">Play ▸</button></div>`}
+ o.classList.add('on');draw()}
 function alphaStart(){start();alphaShow('market')}
 
 function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);if(typeof AMB!=='undefined')AMB.stop(true);if(typeof VO!=='undefined')VO.stop();if(typeof G!=='undefined'){G.on=false;G.ended=true;G.finT=null}$('#game').classList.remove('on');$('#game').innerHTML='';$('#reveal').classList.remove('on');$('#reveal').innerHTML='';S.phase='intro';S.i=0;S.ans=[];S.giftP=null;S.plan=null;S.planG=null;S.recB=null;orbStop();clearInterval(S.howT);clearTimeout(S.backT);S.age='u';S.busy=false;S.cards=[];D=null;stack.innerHTML='';
@@ -2265,7 +2322,9 @@ function start(){clearTimeout(idleT);if(typeof BGM!=='undefined')BGM.stop(true);
 S.zone=qs.get('zone')||null;S.classic=qs.get('set')==='classic';S.strange=qs.get('set')==='strange';S.mix=qs.get('admin')!=='1'&&qs.get('alpha')!=='1'&&!qs.get('game')&&!S.classic&&!S.strange;if(qs.get('admin')!=='1')document.documentElement.classList.add('noadm');if(qs.get('alpha')==='1'){document.documentElement.classList.add('alpha');setTimeout(()=>alphaShow('market'),30)}S.forceGame=qs.get('game')||null;
 const QP={age:qs.get('age'),vibe:qs.get('vibe'),look:qs.get('look'),play:qs.get('play')==='1'};
 let rzT;addEventListener('resize',()=>{fxSize();clearTimeout(rzT);rzT=setTimeout(paintBg,150)});fxSize();drawMute();theme();drawTest();start();track('sw_qr_open',{referrer:document.referrer||null});
-if(QP.play){S.age=QP.age==='o'?'o':'u';S.ans=[{k:'c1',v:S.age==='u'?'a':'b'},{k:'c2',v:QP.vibe==='surprise'?'b':'a'},{k:'c3',v:QP.look==='someone'?'b':'a'}];S.phase='game';stack.innerHTML='';setTimeout(startGame,60)}
+if(qs.get('px')==='1')S.px=true;if(qs.get('story')==='0')SKIPSTORY=true;
+if(qs.get('admin')==='1'&&!QP.play&&!qs.get('game')&&qs.get('panel')!=='0')admPanel();
+if(QP.play){S.age=QP.age==='o'?'o':'u';S.ans=[{k:'c1',v:S.age==='u'?'a':'b'},{k:'c2',v:QP.vibe==='surprise'?'b':'a'},{k:'c3',v:QP.look==='someone'?'b':'a'}];S.phase='game';stack.innerHTML='';setTimeout(startGame,60);const en=qs.get('end');if(en==='win')setTimeout(jumpEnd,700);if(en==='fail')setTimeout(()=>{G.ended=true;G.on=false;BGM.stop();AMB.stop(true);G.score=Math.max(0,(PASS[G.id]||600)-450);showFail()},700)}
 })();
 </script>
 </body></html>
