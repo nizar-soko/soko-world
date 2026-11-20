@@ -1,6 +1,6 @@
 // Soko World · Talk to Me scorer
 // POST /gate  {did,pid}            -> {ok, left}   (claims one open-field play for this device)
-// POST /score {did,pid,lang,age,who,q,opts:[[text,score]x3],a} -> {k, react} | {fallback:true}
+// POST /score {did,pid,lang,age,logic,sty:[c|k|m x3],who,q,opts:[[text,score]x3],a} -> {k, react} | {fallback:true}
 const LANG = {
   en: 'English',
   pt: 'European Portuguese (Portugal, PT-PT: "tu", "estás", never Brazilian forms)',
@@ -62,21 +62,44 @@ async function gate(env, body) {
   return (await stub.fetch('https://gate/', { method: 'POST', body: JSON.stringify(body) })).json();
 }
 
+// The four start questions set "dials" on the client. The judge follows the same ones:
+// logic g = no wrong answers (the answer is sorted into a kind of move, never marked down); s = scored.
+const MOVE = { c: 'bold (takes the lead, makes something happen)', k: 'smooth (reads the room, tactful, charming)', m: 'low-key (easygoing, keeps it simple, lets others lead)' };
 function prompt(b) {
+  const who = clip(b.who, 30), lang = LANG[b.lang] || LANG.en, age = STYLE[b.age] || STYLE.u;
+  const tail = `Make it specific to what the player said and human, never generic praise. Correct spelling. No em dashes, no emojis, no hashtags. No English words unless the language is English.
+Return only JSON: {"k":0,"react":"..."}`;
+  if (b.logic === 'g') {
+    const sty = Array.isArray(b.sty) ? b.sty : [];
+    const opts = b.opts.map((o, i) => `${i}: "${clip(o[0], 90)}" (${MOVE[sty[i]] || 'a fair move'})`).join('\n');
+    return `You are the scene engine of a short social story game. The player answers a moment in their own words.
+This player chose a game with no wrong answers. You never judge, rank or correct the answer. You only sort it into a kind of move.
+Scene speaker: ${who}
+Moment: ${clip(b.q, 200)}
+The three kinds of move here:
+${opts}
+
+Pick k = the option whose kind of move is closest to how the player answered. A shy, short, careful or literal answer is a low-key move, not a bad one.
+${age}
+Then write "react": what ${who} says back to the player, max 10 words, in ${lang}.
+The react is always friendly and follows on plainly from what the player said, so it is clear why ${who} answers that way. No sarcasm, no side-eye, no teasing, no inside jokes, no verdict on the answer.
+Only if the answer is hateful or abusive to people: pick the low-key option and have ${who} calmly change the subject.
+${tail}`;
+  }
   const opts = b.opts.map((o, i) => `${i}: "${clip(o[0], 90)}" (score ${o[1]})`).join('\n');
   return `You are the scene engine of a short social story game. The player answers a moment in their own words.
-Scene speaker: ${clip(b.who, 30)}
+Scene speaker: ${who}
 Moment: ${clip(b.q, 200)}
 Scripted options (higher score = better social move):
 ${opts}
 
 Pick k = the option whose intent and social effect is closest to the player's answer.
-${STYLE[b.age] || STYLE.u}
+${age}
 If the answer is rude to people, hateful, empty or off-topic, pick the lowest-score option.
-Then write "react": what ${clip(b.who, 30)} says back to the player, max 10 words, in ${LANG[b.lang] || LANG.en}.
+Then write "react": what ${who} says back to the player, max 10 words, in ${lang}.
 The react must match how good the chosen option is: top score = delighted or charmed, middle = amused, lowest = annoyed, side-eye or teasing. If the player was rude, call it out with dry humour.
-Make it specific to what the player said, funny and human, never generic praise. Correct spelling. No em dashes, no emojis, no hashtags. No English words unless the language is English.
-Return only JSON: {"k":0,"react":"..."}`;
+${b.age === 'o' ? 'Keep the react clear on its own: someone who missed the joke should still understand it.' : 'Keep the react punchy and funny.'}
+${tail}`;
 }
 
 async function score(env, b) {
