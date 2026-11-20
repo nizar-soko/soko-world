@@ -712,7 +712,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
       <div class="langs" id="langs" role="group" aria-label="Language"></div>
       <button class="mute" id="mute" aria-label="Sound"></button>
     </div>
-    <div class="prog hide" id="prog"><i></i><i></i><i></i></div>
+    <div class="prog hide" id="prog"><i></i><i></i><i></i><i></i></div>
 
     <div class="stage" id="stage">
       <div class="inner" id="inner">
@@ -737,6 +737,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 </div>
 
 <script src="a/sitx.js"></script><script src="a/sitxo.js"></script><script src="a/sitvar.js"></script>
+<script src="a/sitgentle.js"></script>
 <script src="a/geo.js"></script><script src="a/claim.js"></script>
 <script>
 (()=>{
@@ -791,6 +792,7 @@ const BASE={
     hint:'Swipe left or right. Or tap.',
     c1:{q:'How old are you?',a:'Under 25',b:'25+',ta:'out till sunrise',tb:'Home at a decent hour.'},
     c2:{a:'Bored',b:'Surprise me',u:{q:'Your mood right now?',ta:'low battery',tb:'up for anything'},o:{q:'Your mood right now?',ta:'Need a change.',tb:'Up for something new.'}},
+    c4:{a:'Just throw me in',b:'Tell me how this works',u:{q:'Before we start',ta:'',tb:''},o:{q:'Before we start',ta:'',tb:''}},
     c3:{a:'A new spot',b:'New faces',u:{q:'What are you after today?',ta:'somewhere you haven\'t been',tb:'people worth meeting'},o:{q:'What are you after today?',ta:'Somewhere you haven\'t been.',tb:'People worth meeting.'}},
     load:{u:['reading your answers...','almost there'],o:['Reading your answers.','One moment.']},
     done:{u:{h:'your game is ready.',cta:'play'},o:{h:'Your game is ready.',cta:'Play'},you:'your swipes',replay:'Replay the pre-game'}},
@@ -798,6 +800,7 @@ const BASE={
     hint:'Desliza para a esquerda ou direita. Ou toca.',
     c1:{q:'Que idade tens?',a:'Menos de 25',b:'25 ou mais',ta:'na rua até de manhã',tb:'Em casa a horas.'},
     c2:{a:'Na seca',b:'Surpreende-me',u:{q:'Como estás agora?',ta:'sem bateria',tb:'para o que der e vier'},o:{q:'Como estás agora?',ta:'A precisar de mudar.',tb:'Com vontade de algo novo.'}},
+    c4:{a:'Atira-me lá para dentro',b:'Explica-me como funciona',u:{q:'Antes de começar',ta:'',tb:''},o:{q:'Antes de começar',ta:'',tb:''}},
     c3:{a:'Um sítio novo',b:'Caras novas',u:{q:'O que procuras hoje?',ta:'onde nunca foste',tb:'gente que vale a pena'},o:{q:'O que procuras hoje?',ta:'Onde nunca foste.',tb:'Gente que vale a pena.'}},
     load:{u:['a ler as tuas respostas...','quase'],o:['A ler as tuas respostas.','Um momento.']},
     done:{u:{h:'o teu jogo está pronto.',cta:'bora'},o:{h:'O teu jogo está pronto.',cta:'Jogar'},you:'os teus swipes',replay:'Repetir o pré-jogo'}},
@@ -805,6 +808,7 @@ const BASE={
     hint:'Arrasta pra esquerda ou direita. Ou toca.',
     c1:{q:'Qual a sua idade?',a:'Menos de 25',b:'25 ou mais',ta:'na rua até o sol nascer',tb:'Em casa num horário decente.'},
     c2:{a:'De bobeira',b:'Me surpreende',u:{q:'Como você está agora?',ta:'sem bateria',tb:'topando tudo'},o:{q:'Como você está agora?',ta:'Precisando mudar de ares.',tb:'A fim de algo novo.'}},
+    c4:{a:'Me joga lá dentro',b:'Me explica como funciona',u:{q:'Antes de começar',ta:'',tb:''},o:{q:'Antes de começar',ta:'',tb:''}},
     c3:{a:'Um lugar novo',b:'Gente nova',u:{q:'O que você procura hoje?',ta:'onde você nunca foi',tb:'gente que vale conhecer'},o:{q:'O que você procura hoje?',ta:'Onde você nunca foi.',tb:'Gente que vale conhecer.'}},
     load:{u:['lendo suas respostas...','quase lá'],o:['Lendo suas respostas.','Um momento.']},
     done:{u:{h:'seu jogo está pronto.',cta:'bora'},o:{h:'Seu jogo está pronto.',cta:'Jogar'},you:'seus swipes',replay:'Repetir o pré-jogo'}},
@@ -812,6 +816,7 @@ const BASE={
     hint:'Desliza a la izquierda o derecha. O toca.',
     c1:{q:'¿Cuántos años tienes?',a:'Menos de 25',b:'25 o más',ta:'de fiesta hasta el amanecer',tb:'En casa a una hora decente.'},
     c2:{a:'Aburrimiento',b:'Sorpréndeme',u:{q:'¿Cómo estás ahora?',ta:'sin batería',tb:'con ganas de todo'},o:{q:'¿Cómo estás ahora?',ta:'Necesito un cambio.',tb:'Con ganas de algo nuevo.'}},
+    c4:{a:'Aviéntame de una',b:'Explícame cómo funciona',u:{q:'Antes de empezar',ta:'',tb:''},o:{q:'Antes de empezar',ta:'',tb:''}},
     c3:{a:'Un lugar nuevo',b:'Caras nuevas',u:{q:'¿Qué buscas hoy?',ta:'donde nunca has ido',tb:'gente que vale la pena'},o:{q:'¿Qué buscas hoy?',ta:'Donde nunca has ido.',tb:'Gente que vale la pena.'}},
     load:{u:['leyendo tus respuestas...','casi'],o:['Leyendo tus respuestas.','Un momento.']},
     done:{u:{h:'tu juego está listo.',cta:'vamos'},o:{h:'Tu juego está listo.',cta:'Jugar'},you:'tus swipes',replay:'Repetir el pre-juego'}},
@@ -1022,7 +1027,7 @@ function applyLang(anim){root.lang=LANGS.find(l=>l[0]===S.lang)[2];drawLangs();
  if(S.phase==='intro')drawIntro(anim);
  else if(S.phase==='cards'){S.cards.forEach((c,k)=>fill(c,S.i+k,anim&&k===0));drawActs(anim)}
  else if(S.phase==='done')drawDone();
- if(typeof G!=='undefined'){if(G.on&&$('#gcap')){if(G.capFn){const v=G.capFn();if(v.indexOf('<em>')>=0)$('#gcap').innerHTML=v;else $('#gcap').textContent=v}$('#ghint').textContent=L()[1][A_()];GM[G.id].relang&&GM[G.id].relang();if($('#gpl'))$('#gpl').textContent=(RVL[S.lang]||RVL.en).real}
+ if(typeof G!=='undefined'){if(G.on&&$('#gcap')){if(G.capFn){const v=G.capFn();if(v.indexOf('<em>')>=0)$('#gcap').innerHTML=v;else $('#gcap').textContent=v}$('#ghint').textContent=hintTxt();GM[G.id].relang&&GM[G.id].relang();if($('#gpl'))$('#gpl').textContent=(RVL[S.lang]||RVL.en).real}
   if($('#reveal').classList.contains('on')){if(!G.pass){showFail();return}const f=$('#fin'),fl=f&&f.classList.contains('fl'),bi=S.bi||0,rv=$('#reveal'),ov=$('#orbv'),oon=ov&&ov.classList.contains('on'),oel=oon?performance.now()-(S.orbT0||0):0;rv.classList.add('qk');clearTimeout(S.backT);showReveal(true);
    if(fl){$('#fin').classList.add('fl');rv.classList.add('flipped');backRun(bi);PK3&&PK3.setHidden(true);if(oon)orbRun(Math.max(1,oel))}requestAnimationFrame(()=>requestAnimationFrame(()=>rv.classList.remove('qk')))}}}
 
@@ -1036,18 +1041,18 @@ function enter(){if(S.phase!=='intro')return;clearInterval(S.uslT);track('sw_pre
  setTimeout(()=>{p.remove();buildCards()},380)}
 
 /* ---------- Cards ---------- */
-const KEYS=['c1','c2','c3'];
+const KEYS=['c1','c2','c3','c4'];
 function cardCopy(k){const t=T(),c=t[KEYS[k]];if(k===0)return{q:c.q,a:c.a,b:c.b,ta:c.ta,tb:c.tb};const v=c[S.age];return{q:v.q,a:c.a,b:c.b,ta:v.ta,tb:v.tb}}
 function fill(el,k,anim){const c=cardCopy(k),m=MK[S.m];el.setAttribute('aria-label',c.q);
- el.innerHTML=`<div class='face${anim?' swap':''}'><div class='ctop'><span class='num'>${k+1} / 3</span><img class="emb" alt="" src="${uri(m.emb)}"></div><div class='q'>${c.q}</div>
+ el.innerHTML=`<div class='face${anim?' swap':''}'><div class='ctop'><span class='num'>${k+1} / 4</span><img class="emb" alt="" src="${uri(m.emb)}"></div><div class='q'>${c.q}</div>
   <div class='rail a'><i class='line'></i></div><div class='rail b'><i class='line'></i></div>
   <div class='lab a' data-s='a'>${c.a}${c.ta?`<span class='tip a'>${c.ta}</span>`:''}</div><div class='lab b' data-s='b'>${c.b}${c.tb?`<span class='tip b'>${c.tb}</span>`:''}</div></div>`}
 function buildCards(){stack.innerHTML='';S.cards=[];S.i=0;S.ans=[];S.age='u';
- for(let k=0;k<3;k++){const el=document.createElement('div');el.className='card enter';fill(el,k);stack.prepend(el);S.cards.push(el)}
+ for(let k=0;k<4;k++){const el=document.createElement('div');el.className='card enter';fill(el,k);stack.prepend(el);S.cards.push(el)}
  $('#prog').classList.remove('hide');drawProg();$('#bottom').classList.remove('hide');drawActs();
  S.cards.slice().reverse().forEach((el,j)=>setTimeout(()=>{el.classList.remove('enter');restack()},90+j*110));
  setTimeout(()=>{note(0);S.busy=false;idle()},520)}
-function restack(){S.cards.forEach((el,k)=>{el.classList.toggle('back1',k===1);el.classList.toggle('back2',k===2);el.style.zIndex=10-k;if(k===0){el.style.transform='';el.style.opacity=''}})}
+function restack(){S.cards.forEach((el,k)=>{el.classList.toggle('back1',k===1);el.classList.toggle('back2',k>=2);el.style.zIndex=10-k;if(k===0){el.style.transform='';el.style.opacity=''}})}
 function drawProg(){[...$('#prog').children].forEach((b,k)=>b.classList.toggle('on',k<S.i))}
 function drawActs(){$('#hint').textContent=S.i===0?T().hint:''}
 function top(){return S.cards[0]}
@@ -1097,7 +1102,7 @@ function commit(dir,dy){if(S.busy)return;S.busy=true;clearTimeout(idleT);const e
  el.style.transition=slow?'transform .7s cubic-bezier(.05,.9,.2,1),opacity .6s ease-in':'transform .26s cubic-bezier(.2,.6,.35,1),opacity .26s';
  el.style.transform=`translate(${dir*(w+el.offsetWidth)}px,${dy*.3-50}px) rotate(${dir*32}deg)`;el.style.opacity='0';
  swoosh(dir,lvl,slow);buzz(lvl===3?[14,40,24]:lvl===2?[10,30,10]:10);
- const ar=app.getBoundingClientRect();burst(dir>0?ar.width*.85:ar.width*.55*.27,ar.height*.5,dir,[22,36,56][S.i]);
+ const ar=app.getBoundingClientRect();burst(dir>0?ar.width*.85:ar.width*.55*.27,ar.height*.5,dir,[22,36,56,56][S.i]);
  app.style.setProperty('--pc',dir<0?MK[S.m].ca:MK[S.m].cb);
  if(lvl>=2){const p=$('#pulse');p.classList.remove('go');void p.offsetWidth;p.classList.add('go')}
  if(lvl===3){whoomp();if(!RM){app.classList.remove('shake');void app.offsetWidth;app.classList.add('shake')}const f=$('#flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');burst(ar.width/2,ar.height*.45,0,44)}
@@ -1105,8 +1110,8 @@ function commit(dir,dy){if(S.busy)return;S.busy=true;clearTimeout(idleT);const e
  // next card moves up right away
  S.cards.shift();S.i++;drawProg();side(0);if(S.i===1)S.cards.forEach((c2,k)=>fill(c2,S.i+k));restack();
  setTimeout(()=>el.remove(),slow?750:300);
- const next=()=>{if(S.i<3){drawActs();note(S.i*2,0,dir*-.3);S.busy=false;idle()}else loading()};
- if(slow)slowmo(line,dir,next);else setTimeout(next,S.i<3?90:300)}
+ const next=()=>{if(S.i<4){drawActs();note(S.i*2,0,dir*-.3);S.busy=false;idle()}else loading()};
+ if(slow)slowmo(line,dir,next);else setTimeout(next,S.i<4?90:300)}
 let smT,smDone=null;
 function slowmo(line,dir,then){const sm=$('#slowmo');clearTimeout(smT);fx.k=.28;app.classList.add('slowing');app.style.setProperty('--sc',dir<0?MK[S.m].ca:MK[S.m].cb);sm.style.setProperty('--sd',dir);sm.classList.remove('out');
  const words=line.split(' '),hold=Math.max(2000,140+words.length*140+900+800);sm.style.setProperty('--hold',hold+'ms');
@@ -1212,6 +1217,24 @@ const SITHINT={en:['pick fast. nobody tells you what\'s right','Choose a reply. 
 SITIDS.forEach(id=>{GL[id]={};['en','pt','br','es'].forEach(l=>{const d=SITX[id][l]||SITX[id].en,o=d.open,dO=(window.SITXO&&SITXO[id]&&SITXO[id][l]),O=dO?dO.open:o.charAt(0).toUpperCase()+o.slice(1)+'.';GL[id][l]=[[o,O,o,O,o,O],SITHINT[l],['…','…'],['',''],['',''],{match:['','',''],chaos:['','',''],host:['','','']}]})});
 const L=()=>GL[G.id][S.lang];const UI=()=>GC[S.lang].ui;const A_=()=>S.age==='u'?0:1;const CALM=()=>S.age==='o';
 const rnd=(a,b)=>a+Math.random()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[Math.floor(Math.random()*a.length)],wpick=a=>{const w=a.map(p=>.35+(p.p||0));let r=Math.random()*w.reduce((x,y)=>x+y,0);for(let i=0;i<a.length;i++){r-=w[i];if(r<=0)return a[i]}return a[a.length-1]};
+// four start answers, four dials. age -> look and voice (already wired). the other three:
+// logic: 'Tell me how this works' -> rule stated, no wrong answers.  pace: 'Bored' -> shorter and slower.  content: 'A new spot' / 'New faces' -> place-led or people-led scenes.
+const QA=i=>S.ans[i]&&S.ans[i].v,GENTLE=()=>qs.get('logic')?qs.get('logic')==='g':QA(3)==='b',SLOWP=()=>qs.get('pace')?qs.get('pace')==='slow':(S.ans.length>=4&&QA(1)==='a'), // only a real four-question start sets the pace; test links use &pace=slow
+ SHORT=()=>SLOWP()&&!(S.age!=='o'&&!GENTLE()), // under 25 + 'throw me in' keeps today's full game whatever the mood
+ PSCALE=()=>SHORT()?5/3:1,SITSEQ=()=>SHORT()?[0,2,4]:[0,1,2,3,4];
+const PLACE_LED=['museum','flea','tasting','sunset','gig','play'],PEOPLE_LED=['barcrush','blinddate','groupchat','karaoke','club','waiter'];
+const RULE={en:['no wrong answers here. every move changes how the night goes.','There are no wrong answers. Each choice shapes how the night goes.'],pt:['aqui não há respostas erradas. cada escolha muda a noite.','Não há respostas erradas. Cada escolha muda o rumo da noite.'],br:['aqui não tem resposta errada. cada escolha muda a noite.','Não existe resposta errada. Cada escolha muda o rumo da noite.'],es:['aquí no hay respuestas malas. cada elección cambia la noche.','No hay respuestas incorrectas. Cada elección cambia el rumbo de la noche.']};
+// the result line when there are no wrong answers: what kind of night the player's choices add up to
+const KIND={en:{c:['your kind of night: bold. you make things happen.','Your kind of night: bold. You make things happen.'],k:['your kind of night: smooth. you read the room.','Your kind of night: smooth. You read the room.'],m:['your kind of night: low-key. good company, no fuss.','Your kind of night: low-key. Good company, no fuss.']},
+ pt:{c:['a tua noite: atrevida. fazes as coisas acontecer.','A tua noite: atrevida. Fazes as coisas acontecer.'],k:['a tua noite: com classe. sabes ler a sala.','A tua noite: com classe. Sabes ler a sala.'],m:['a tua noite: discreta. boa companhia, sem confusões.','A tua noite: discreta. Boa companhia, sem confusões.']},
+ br:{c:['sua noite: ousada. você faz acontecer.','Sua noite: ousada. Você faz acontecer.'],k:['sua noite: com classe. você sabe ler o ambiente.','Sua noite: com classe. Você sabe ler o ambiente.'],m:['sua noite: na calma. boa companhia, sem complicação.','Sua noite: na calma. Boa companhia, sem complicação.']},
+ es:{c:['tu noche: atrevida. haces que las cosas pasen.','Tu noche: atrevida. Haces que las cosas pasen.'],k:['tu noche: con estilo. sabes leer el ambiente.','Tu noche: con estilo. Sabes leer el ambiente.'],m:['tu noche: tranquila. buena compañía, sin complicaciones.','Tu noche: tranquila. Buena compañía, sin complicaciones.']}};
+const HINTG={en:['pick what feels right. no wrong answers.','Choose a reply. There are no wrong answers.'],pt:['escolhe o que te apetecer. não há respostas erradas.','Escolhe uma resposta. Não há respostas erradas.'],br:['escolhe o que der vontade. não tem resposta errada.','Escolha uma resposta. Não existe resposta errada.'],es:['elige lo que se te antoje. no hay respuestas malas.','Elige una respuesta. No hay respuestas incorrectas.']};
+function hintTxt(){const b=L()[1][A_()];if(!GM[G.id]||!GM[G.id].sit)return b;if(GENTLE())return (HINTG[S.lang]||HINTG.en)[A_()];return SLOWP()?b.replace('22','40'):b}
+const STYL={en:{c:'bold move',k:'smooth move',m:'low-key move'},pt:{c:'jogada atrevida',k:'jogada com classe',m:'jogada discreta'},br:{c:'jogada ousada',k:'jogada com classe',m:'jogada na calma'},es:{c:'jugada atrevida',k:'jugada con estilo',m:'jugada tranquila'}};
+// how a comeback reads under each dial: gentle swaps the score for the kind of move; a short game shows the scaled score
+function dialRes(txt,st,p,id,bi,k){if(!txt)return txt;const m=/^\s*[+−-]\d+\.\s*/;if(GENTLE()){const g=window.SITG&&SITG[id]&&SITG[id][S.lang]&&SITG[id][S.lang][S.age==='o'?'o':'u'],own=st==='m'&&g&&g[bi]&&g[bi][k];let lab=(STYL[S.lang]||STYL.en)[st]||'';lab=S.age==='o'?lab.charAt(0).toUpperCase()+lab.slice(1):lab;return lab+'. '+(own||txt.replace(m,''))}
+ if(PSCALE()!==1)return txt.replace(/^(\s*)([+−-])(\d+)/,(a,sp,sg,n)=>sp+sg+Math.round(n*PSCALE()/10)*10);return txt}
 const bored=()=>S.ans[1]&&S.ans[1].v==='a',surprise=()=>S.ans[1]&&S.ans[1].v==='b';
 /* emoji + svg sprite caches */
 const EC={};function emo(ch,sz){const k=ch+'|'+sz;if(EC[k])return EC[k];const d=Math.min(2,devicePixelRatio||1),c=document.createElement('canvas'),s=Math.ceil(sz*1.35);c.width=c.height=Math.ceil(s*d);const x=c.getContext('2d');x.scale(d,d);x.font=`${sz}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(ch,s/2,s/2+sz*.05);return EC[k]={c,s}}
@@ -1265,15 +1288,15 @@ function sceneSVG(m){if(m==='lis')return`<svg viewBox="0 0 300 400" preserveAspe
 
 /* ---- shell ---- */
 const PLAYED=[];
-function mixKind(){const sur=S.ans[1]&&S.ans[1].v==='b',ppl=S.ans[2]&&S.ans[2].v==='b';const qz=qs.get('zone'),pub=!qz||qz==='fallback';const p=pub?(sur&&ppl?MIXP.match:(!sur&&!ppl?1-MIXP.match:.5)):.5;return Math.random()<p?'sit':'arc'}
+function mixKind(){const sur=S.ans[1]&&S.ans[1].v==='b',ppl=S.ans[2]&&S.ans[2].v==='b';const qz=qs.get('zone'),pub=!qz||qz==='fallback';const p=.5;return Math.random()<p?'sit':'arc'}
 const MIXP={match:.8};
 function gameFor(){if(S.forceGame)return S.forceGame;{const pl=window.SW_PLACE;if(pl&&pl.game&&GM[pl.game])return pl.game}if(S.mix&&!(G.id&&SAMEGAME)){S.classic=mixKind()==='arc'}if(S.strange){const sm=S.ans[2]&&S.ans[2].v==='b';return ROUTE3[S.zone||'culture'][sm?1:0]}const some=S.ans[2]&&S.ans[2].v==='b';const RT=S.classic?ROUTE:ROUTE2;if(S.zone){const r=RT[S.zone];return some?r[1]:r[0]}
- if(!S.classic){if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}const all=Object.values(ROUTE2).map(r=>r[some?1:0]);let pool=all.filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=all}const g=pick(pool);PLAYED.push(g);return g}
+ if(!S.classic){if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}const all=(some?PEOPLE_LED:PLACE_LED).filter(g=>GM[g]);let pool=all.filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=all}const g=pick(pool);PLAYED.push(g);return g}
  if(G.id&&SAMEGAME){SAMEGAME=false;return G.id}let pool=(some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']).filter(g=>!PLAYED.includes(g));if(!pool.length){PLAYED.length=0;pool=some?['fog','seat','echo','crowd','sun','signal']:['restore','pour','beat','ride','sun','signal']}
  const g=pick(pool);PLAYED.push(g);return g}
 let SAMEGAME=false;
 function cap(txt,fn){G.capFn=fn||null;const c=$('#gcap');if(!c)return;{const v=fn?fn():txt;if(v&&v.indexOf('<em>')>=0)c.innerHTML=v;else c.textContent=v}c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop')}
-function startGame(){const id=gameFor();track('sw_game_start',{game:id,replay:!!S.plan});Object.keys(G).forEach(k=>{if(k!=='on')delete G[k]});Object.assign(G,{id,on:true,score:0,combo:0,lastHit:0,lives:4,t0:0,el:0,twisted:false,ended:false,dur:S.age==='o'?34000:30000,inv:0,shake:0,goalHit:false,lost:0,hits:0,taps:0,fl:[]});G.pick=(S.plan&&S.planG===id)?S.plan:wpick(grp(S.m,PGRP[id]));
+function startGame(){const id=gameFor();track('sw_game_start',{game:id,replay:!!S.plan,logic:GENTLE()?'gentle':'scored',pace:SHORT()?'short':SLOWP()?'slow':'full',after:QA(2)||null,age:S.age||null});Object.keys(G).forEach(k=>{if(k!=='on')delete G[k]});Object.assign(G,{id,on:true,score:0,combo:0,lastHit:0,lives:4,t0:0,el:0,twisted:false,ended:false,dur:S.age==='o'?34000:30000,inv:0,shake:0,goalHit:false,lost:0,hits:0,taps:0,fl:[]});G.pick=(S.plan&&S.planG===id)?S.plan:wpick(grp(S.m,PGRP[id]));
  $('#done').classList.remove('on');$('#hover').style.opacity='0';$('#prog').classList.add('hide');$('#reveal').classList.remove('on');
  const gm=$('#game');gm.classList.add('on');gm.classList.toggle('sitg',!!GM[id].sit);gm.classList.toggle('calm',S.age==='o');gm.classList.toggle('wild',S.age!=='o');{const e=ETH[S.m]||ETH.lis;['--e0','--e1','--e2'].forEach((k,i)=>app.style.setProperty(k,e[i]))}gm.classList.toggle('strg',id==='corridor'||id==='ether');if(id==='corridor'||id==='ether')fsGo();gm.innerHTML=`<div class="ghud"><div class="gscore" id="gscore">0<small>PTS</small></div><div class="glives" id="glives"></div><div class="gtime"><i id="gtime"></i></div><div class="ggoal" id="ggoal">🎁 ${PASS[id]}</div></div><div class="gcap" id="gcap"></div><div class="gbox"><div class="ginner" id="ginner"><canvas id="gc"></canvas></div></div><div class="ghint" id="ghint"></div>`;
  drawLives();cap('');$('#ghint').textContent='';arp([0,2,4],.06);
@@ -1286,7 +1309,7 @@ function startGame(){const id=gameFor();track('sw_game_start',{game:id,replay:!!
  GM[id].init();G.last=performance.now();BGM.play(id);
  if(SKIPSTORY||GM[id].sit){SKIPSTORY=false;endStory()}else{G.mode='story';G.s0=performance.now();G.story=STORY[id](S.m);const st=ST(S.m);G.ds=new Set(['💣','⏰','👻','🕴️','🏴‍☠️','💃','🕺',st.obs])}requestAnimationFrame(loop)}
 let SKIPSTORY=false;
-function endStory(){if(G.mode==='play')return;G.mode='play';G.t0=performance.now();G.g0=G.t0;G.grace=true;G.lv=0;cap(null,()=>L()[0][MI[S.m]+A_()]);$('#ghint').textContent=L()[1][A_()];note(2,0,0)}
+function endStory(){if(G.mode==='play')return;G.mode='play';G.t0=performance.now();G.g0=G.t0;G.grace=true;G.lv=0;cap(null,()=>L()[0][MI[S.m]+A_()]);$('#ghint').textContent=hintTxt();note(2,0,0)}
 function drawStory(ctx,now){const W=G.W,H=G.H,D=1500,el=Math.max(0,now-G.s0),i=Math.floor(el/D);if(i>=G.story.length){endStory();return}let t=(el%D)/D;t=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;sky(ctx,W,H);
  G.story[i].forEach(([e,x0,y0,x1,y1,a,b])=>{const x=(x0+(x1-x0)*t)*W,y=(y0+(y1-y0)*t)*H,z=a+(b-a)*t;const d=G.ds&&G.ds.has(e);(e==='🏃'?dEf:dE)(ctx,e,x+(d?jit(.6):0),y,z);if(d&&z>20)warn(ctx,x,y,z*.62)});
  {ctx.save();ctx.translate(W/2,34);ctx.rotate(-.06);const tx='Soko knows';ctx.font='500 15px \"Zalando Sans\",sans-serif';const tw=ctx.measureText(tx).width+18;ctx.fillStyle='#ede77d';ctx.fillRect(-tw/2,-13,tw,26);ctx.fillStyle='#3b0f18';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tx,0,1);ctx.restore()}
@@ -1299,7 +1322,7 @@ function loop(now){if(!G.on||G.ended&&G.finT==null)return;let dt=Math.min(.05,(n
  if(G.t0&&!G.ended){G.el=now-G.t0;const p=Math.min(1,G.el/G.dur);$('#gtime').style.transform=`scaleX(${1-p})`;if(G.inv>0)G.inv-=dt;
   {const lv=Math.min(2,Math.floor(p*3));if(lv!==G.lv){G.lv=lv;whoomp();G.shake=.3;G.fl.push({s:UI().lvl+' '+(lv+1),x:G.W/2,y:G.H*.3,t:1.6,big:true,c:'#ede77d'})}}
   if(!G.twisted&&p>(surprise()?1/3:2/3)){G.twisted=true;cap(null,()=>L()[3][A_()]);swoosh(1,3,false);GM[G.id].twist&&GM[G.id].twist()}
-  GM[G.id].update(CALM()&&!GM[G.id].sit?dt*.88:dt,p*.6);if(p>=1)endGame('time')}
+  GM[G.id].update((CALM()&&!GM[G.id].sit?dt*.88:dt)*(SLOWP()&&!GM[G.id].sit?.88:1),p*.6);if(p>=1)endGame('time')}
  ctx.save();if(G.shake>0){G.shake-=dt;const sk=CALM()?.5:4;ctx.translate(rnd(-5,5)*G.shake*sk,rnd(-5,5)*G.shake*sk)}
  GM[G.id].draw(ctx,G.W,G.H,dt);if(!GM[G.id].sit)comp(ctx,G.W,G.H,dt);
  G.fl=G.fl.filter(f=>(f.t-=dt)>0);G.fl.forEach(f=>label(ctx,f.s,f.x,f.y-(1-f.t)*(WILD()?58:40),(f.big?22:17)*(WILD()?1.25+Math.max(0,f.t-.55)*1.2:1),f.c||(WILD()?['#fff','#ede77d','#ffb8cb','#b0ef8b','#8bdfff'][(G.combo||0)%5]:'#fff'),Math.min(1,f.t*2)));
@@ -1749,7 +1772,7 @@ const SITSTUB={beat:()=>.4,ask(){},react(){},fin(){},tick(){},stub:true};
 const SITKO={en:['Situation','Tap to begin','Reach {n} points to unlock your surprise'],pt:['Situação','Toca para começar','Chega aos {n} pontos para desbloquear a tua surpresa'],br:['Situação','Toque para começar','Chegue a {n} pontos pra liberar sua surpresa'],es:['Situación','Toca para empezar','Llega a {n} puntos para desbloquear tu sorpresa']};
 const SITK={en:['situation','tap to start','Score {n}+ to unlock your surprise'],pt:['situação','toca para começar','Faz {n}+ pontos para desbloquear a tua surpresa'],br:['situação','toque para começar','Faça {n}+ pontos pra liberar sua surpresa'],es:['situación','toca para empezar','Haz {n}+ puntos para desbloquear tu sorpresa']};
 const SXL=id=>{const O=window.SITXO&&S.age==='o'&&SITXO[id];return (O&&(O[S.lang]||O.en))||SITX[id][S.lang]||SITX[id].en};
-function sitTitle(id){const o=$('#sitin');if(!o)return;const K_=S.age==='o'?SITKO:SITK,k=K_[S.lang]||K_.en;o.innerHTML=`<small>${k[0]}</small><h3>${SXL(id).title}</h3><p>${L()[0][MI[S.m]+A_()]}</p><div class="sitgoal">🎁 ${k[2].replace('{n}',PASS[id])}</div><i><b></b></i><em>${k[1]}</em>`}
+function sitTitle(id){const o=$('#sitin');if(!o)return;const K_=S.age==='o'?SITKO:SITK,k=K_[S.lang]||K_.en;o.innerHTML=`<small>${k[0]}</small><h3>${SXL(id).title}</h3><p>${L()[0][MI[S.m]+A_()]}</p><div class="sitgoal">${GENTLE()?(RULE[S.lang]||RULE.en)[A_()]:'🎁 '+k[2].replace('{n}',PASS[id])}</div><i><b></b></i><em>${k[1]}</em>`}
 /* Free choices: every choice has extra phrasings per language and age (a/sitvar.js). Same outcome and score, different words.
    Each play picks a phrasing the player has not seen last time for that choice. */
 const vAlts=(id,bi,k,lang,age)=>((((((window.SITV||{})[id]||{})[lang||S.lang]||{})[age||(S.age==='o'?'o':'u')]||[])[bi]||[])[k])||[];
@@ -1773,7 +1796,7 @@ function sitGame(id,D,PT,mnt){return{sit:true,
  act(){const o=$('#sitact');const b=D().b[G.bi];const a=b&&b[1].indexOf('||')>=0?b[1].split('||')[0]:'';if(!o)return a;o.innerHTML=a?`<span>${a}</span>`:'';o.classList.toggle('on',!!a&&G.ph==='intro');return a},
  beat(i){G.bi=i;G.ph='intro';G.pt=0;G.ch=null;G.ord=[0,1,2].sort(()=>Math.random()-.5);G.vv=[0,1,2].map(k=>vPick(id,i,k));G.toff=false;G.tbusy=false;const w=G.s3.beat(i);const a=this.act();G.wait=Math.max(w,a?1.4+a.split(' ').length*.24:0)*(CALM()?1.25:1);this.render();swoosh(1,1,false)},
  render(anim){const o=$('#sit');if(!o)return;if(G.ph!=='ask'||G.bi<0){o.style.display='none';return}o.style.display='';const b=D().b[G.bi],q=$('#sitq'),qq=b[1].split('||').pop();q.innerHTML=`<small>${b[0]}</small>${qq.replace('{€}',{lis:'4€',cdmx:'$80',br:'R$20'}[S.m]||'4€')}`;if(anim){q.style.animation='none';void q.offsetWidth;q.style.animation=''}
-  const btns=G.ord.map(k=>`<button data-k="${k}">${chTxt(id,G.bi,k,b[2][k][0])}</button>`).join(''),tl=TTM.L[S.lang]||TTM.L.en;
+  const btns=G.ord.map(k=>`<button data-k="${k}">${GENTLE()&&b[2][k][2]<0?b[2][k][0]:chTxt(id,G.bi,k,b[2][k][0])}</button>`).join(''),tl=TTM.L[S.lang]||TTM.L.en;
   if(G.ttm&&!G.toff){const keep=$('#ttmin'),v=keep?keep.value:'';$('#sito').innerHTML=`<form class="ttm"><input id="ttmin" maxlength="140" autocomplete="off" enterkeyhint="send" placeholder="${tl[0]}"${G.tbusy?' disabled':''}><button type="submit" class="ttmgo"${G.tbusy?' disabled':''}>${G.tbusy?'…':'↑'}</button></form><a class="ttmalt">${G.tbusy?tl[2]:tl[1]}</a>`;const i=$('#ttmin');if(i){i.value=v;if(!G.tbusy&&anim)setTimeout(()=>{try{i.focus({preventScroll:true})}catch(e){}},250)}}
   else $('#sito').innerHTML=btns},
  async say(){if(G.ph!=='ask'||G.tbusy)return;const i=$('#ttmin'),a=(i&&i.value||'').trim();if(!a)return;G.tbusy=true;this.render();const b=D().b[G.bi],bi=G.bi;
@@ -1786,16 +1809,16 @@ function sitGame(id,D,PT,mnt){return{sit:true,
  pts(p){if(p>0){hit(p,G.W/2,G.H*.12);arp(p>=150?[0,2,4]:[0,2],.07)}
   else{G.score=Math.max(0,G.score+p);$('#gscore').innerHTML=Math.floor(G.score)+'<small>PTS</small>';G.fl.push({s:String(p).replace('-','−'),x:G.W/2,y:G.H*.12,t:1.2,big:true,c:'#f68686'});
    G.lives--;G.lost++;drawLives();buzz([25,40,25]);whoomp();G.shake=.35;if(G.lives<=0)setTimeout(()=>endGame('out'),2300)}},
- choose(k,re){if(G.ph!=='ask'||G.ended)return;G.tbusy=false;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p,st]=PT(bi,k);G.sty[st]++;G.s3.react(bi,k,p>=150?'good':p>0?'mid':'bad',p);this.pts(p);{const vr=chRes(id,bi,k,null);cap(null,re?(()=>re):vr?(()=>vr):(()=>D().b[bi][2][k][1]))}this.render();if(WILD()){if(p>=150){wSticker(['🔥','✨','👑','💅'][Math.floor(Math.random()*4)]+' +'+p);wRain(8);wPulse('hotp',300)}else if(p<=0)wMiss()}},
+ choose(k,re){if(G.ph!=='ask'||G.ended)return;G.tbusy=false;BGM.duck(0);G.taps++;G.ph='res';G.pt=0;G.ch=k;const bi=G.bi,[p0,st]=PT(bi,k),gen=GENTLE(),p=gen?Math.round(150*PSCALE()):Math.round(p0*PSCALE()/10)*10;G.sty[st]++;G.s3.react(bi,k,gen?(st==='c'?'good':'mid'):p0>=150?'good':p0>0?'mid':'bad',p);this.pts(p);{const vr=gen&&st==='m'?null:chRes(id,bi,k,null);cap(null,re&&!gen?(()=>re):(()=>dialRes(vr||D().b[bi][2][k][1],st,p,id,bi,k)))}this.render();if(WILD()){if(p0>=150){wSticker(['🔥','✨','👑','💅'][Math.floor(Math.random()*4)]+' +'+p);wRain(8);wPulse('hotp',300)}else if(p0<=0&&!gen)wMiss()}},
  update(dt){G.grace=false;G.bob+=dt;if(!G.s3){G.w0+=dt;if(SIT3D){try{G.s3=mnt(SIT3D)}catch(e){console.warn(e);G.s3=SITSTUB}}else if(SIT3D===false||G.w0>6)G.s3=SITSTUB;return}
   if(G.bi<0&&G.ph!=='title'){this.title();return}G.pt+=dt;
   if(G.ph==='title'){if(G.pt>=6.5)this.untitle();return}
   if(G.ph==='intro'){if(G.pt>=G.wait){G.ph='ask';G.pt=0;BGM.duck(1);const o=$('#sitact');if(o)o.classList.remove('on');G.s3.ask();this.render(true);note(G.bi%5)}}
-  else if(G.ph==='ask'){if(G.tbusy){G.pt-=dt;return}const T=(G.ttm&&!G.toff)?(CALM()?40:32):CALM()?22:16,e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to);this.render()}}
-  else if(G.ph==='res'&&G.pt>(CALM()?4.2:3)&&G.lives>0){if(G.bi>=4){G.ph='end';endGame('time');if(G.pass)G.s3.fin()}else this.beat(G.bi+1)}},
+  else if(G.ph==='ask'){if(G.tbusy){G.pt-=dt;return}const T=((G.ttm&&!G.toff)?(CALM()?40:32):CALM()?22:16)*(SLOWP()?1.8:1),e=$('#sitt');if(e)e.style.transform=`scaleX(${Math.max(0,1-G.pt/T)})`;if(G.pt>=T){G.ph='res';G.pt=0;G.ch=-1;if(GENTLE()){G.s3.react(G.bi,-1,'none',0);cap(null,()=>D().to.replace(/^\s*[+−-]\d+\.\s*/,''))}else{G.s3.react(G.bi,-1,'none',-50);this.pts(-50);cap(null,()=>D().to)}this.render()}}
+  else if(G.ph==='res'&&G.pt>(CALM()?4.2:3)+(SLOWP()?1:0)&&G.lives>0){const sq=SITSEQ(),nx=sq[sq.indexOf(G.bi)+1];if(nx==null){G.ph='end';endGame('time');if(G.pass)G.s3.fin()}else this.beat(nx)}},
  draw(ctx,W,H,dt){if(G.s3&&!G.s3.stub){ctx.clearRect(-20,-20,W+40,H+40);G.s3.tick(dt);return}sky(ctx,W,H)},
  hint(){return null},
- endLine(){const s=G.sty;return D().end[s.c>=s.k&&s.c>=s.m?'c':s.k>=s.m?'k':'m']},
+ endLine(){const s=G.sty,st=s.c>=s.k&&s.c>=s.m?'c':s.k>=s.m?'k':'m';if(GENTLE())return (KIND[S.lang]||KIND.en)[st][A_()];return D().end[st]},
  persona(){const s=G.sty||{c:0,k:1,m:0};return s.c>=s.k&&s.c>=s.m?'chaos':s.k>=s.m?'match':'host'}}}
 const SXP=id=>(bi,k)=>{const o=SXL(id).b[bi][2],p=o[k][2],mx=Math.max(...o.map(x=>x[2]));return[p,p<0?'m':p===mx?'c':'k']};
 window.__pts=(id,bi)=>SXL(id).b[bi][2].map(x=>x[2]);
