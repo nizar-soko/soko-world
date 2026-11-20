@@ -16,6 +16,6 @@ new_sqlite_classes = ["Gate"]
 
 [vars]
 MAX_CALLS_DAY = "2500"   # whole-world daily cap on model calls (spend cap)
-PLAYS_PER_DEVICE = "5"   # open-field plays per device, ever
-CALLS_PER_IP_DAY = "60"  # abuse guard
+PLAYS_PER_DEVICE = "100000"   # no practical per-device limit: typing stays on for every play (was 5)
+CALLS_PER_IP_DAY = "600"  # abuse guard, sized so a busy venue on one wifi is not cut off (was 60)
 MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
