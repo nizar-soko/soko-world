@@ -60,7 +60,7 @@ CH.forEach((c,i)=>{const d=document.createElement('div');d.className='slot'+(i==
 const cv=$('#cv'),ctx=cv.getContext('2d');let W=0,H=0,DPR=Math.min(2,devicePixelRatio||1);
 function fit(){W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}addEventListener('resize',fit);fit();
 const V={yaw:0,pitch:-20,roll:0,ty:0,tp:-20,tr:0,uy:0,gyro:false,base:null,h:[]};
-const CAMH=1.45,CHH=1.0,DEG=180/Math.PI,RAD=Math.PI/180,cam=$('#cam');
+const CAMH=1.45,CHH=.62,DEG=180/Math.PI,RAD=Math.PI/180,cam=$('#cam');
 // camera lock: reads the camera picture to learn the real lens angle and the camera delay, then keeps the drawing glued to the picture
 const TR={on:qs.get('lock')!=='0',k:0,L:.07,rx:0,ry:0,ax:0,ay:0,conf:0,lum:.5,E:new Float64Array(11),En:0,sxy:0,sxx:0,pt:0,nf:false,src:null};
 const KK=()=>TR.k||W/52,wrap=d=>((d+540)%360)-180;
@@ -110,7 +110,7 @@ const buzz=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 const G={on:false,i:0,pts:0,got:[],sh:null,charge:0,inRing:false,msgT:0,fly:null,parts:[],t:0,seen:false};
 function hint(s){const h=$('#hint');h.style.opacity=0;setTimeout(()=>{h.textContent=s;h.style.opacity=1},180)}
 function spawn(){const far=G.i===1?40:60+Math.random()*25,dir=Math.random()<.5?-1:1,d0=G.d0||2.3,first=G.i===0;
- G.sh={k:G.i,b:first?(G.b0!=null?G.b0:wrap(V.yaw+dir*12)):wrap(V.yaw+dir*far),d:first?d0:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,d0*(.8+Math.random()*.55))),z:0,hop:null,ph:Math.random()*9,born:G.t,face:dir,tell:0,dT:1.4};G.charge=0;G.seen=false;G.aSide=null;hint(G.i?T.next:T.find)}
+ G.sh={k:G.i,b:first?(G.b0!=null?G.b0:wrap(V.yaw+dir*12)):wrap(V.yaw+dir*far),d:first?d0:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,d0*(.8+Math.random()*.55))),z:0,hop:null,ph:Math.random()*9,born:G.t,face:dir,tell:0,dT:.9,wT:1.2+Math.random()};G.charge=0;G.seen=false;G.aSide=null;hint(G.i?T.next:T.find)}
 function body(s){const f=P3(s.b,s.d,s.z),h=P3(s.b,s.d,s.z+CHH);if(f.back||h.back)return{fx:f.x,fy:f.y,hy:f.y,ht:0,x:f.x,y:f.y,ang:0,back:true};const ht=Math.hypot(h.x-f.x,h.y-f.y);return{fx:f.x,fy:f.y,hy:h.y,ht,x:(f.x+h.x)/2,y:(f.y+h.y)/2,ang:Math.atan2(h.x-f.x,f.y-h.y)}}
 function proj(s){return body(s)}
 function blob(x,y,r,sl,rot,a){if(a<=0||r<1)return;ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(1,sl);const g=ctx.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,'rgba(22,4,7,'+a+')');g.addColorStop(.55,'rgba(22,4,7,'+a*.55+')');g.addColorStop(1,'rgba(22,4,7,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.restore()}
@@ -136,9 +136,10 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;reque
  if(s&&G.on){p=body(s);const vis=p.x>-40&&p.x<W+40&&p.hy<H&&p.fy>0;
   // hop: shake first (the tell), then one readable jump across the floor
   if(s.hop){const h=s.hop;h.t+=dt/h.dur;const e=Math.min(1,h.t),ee=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;s.b=wrap(h.b0+wrap(h.b1-h.b0)*ee);s.d=h.d0+(h.d1-h.d0)*ee;s.z=Math.sin(e*Math.PI)*h.lift;if(e>=1){s.hop=null;s.z=0;s.land=.22;{const q=body(s);if(!q.back)for(let i=0;i<7;i++)G.parts.push({x:q.fx+(i-3)*5,y:q.fy,vx:(i-3)*.45,vy:.5+Math.random()*.4,l:.45,c:'#f9f0f0'})}tone(180,.12,.06,'sine',110);buzz(8)}}
-  else if(vis&&G.inRing){s.dT-=dt;if(s.dT<=0&&!s.tell){s.tell=.38;tone(900,.08,.04,'triangle')}}
-  if(!vis){s.tell=0;s.dT=1.2}
-  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const dir=Math.random()<.5?-1:1,jump=(13+G.i*6)*(.8+Math.random()*.5);s.face=dir;s.hop={t:0,dur:.5-G.i*.04,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=Math.max(.9,2.3-G.i*.45)+Math.random()*.9;tone(520,.18,.05,'sine',760)}}
+  else if(vis&&G.inRing){s.dT-=dt;if(!s.tell&&(s.dT<=0||(G.charge>.55&&!s.fled))){if(G.charge>.55)s.fled=true;s.tell=.26;tone(900,.08,.04,'triangle')}}
+  else if(vis&&!s.tell){s.wT-=dt;if(s.wT<=0){s.wT=1.3+Math.random()*1.4;s.small=true;s.tell=.2}}
+  if(!vis){s.tell=0;s.dT=.8}if(G.charge<.1)s.fled=false;
+  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const dir=Math.random()<.5?-1:1,sm=s.small,jump=sm?7+Math.random()*6:(17+G.i*6)*(.85+Math.random()*.6);s.small=false;s.face=dir;s.hop={t:0,dur:sm?.3:.34-G.i*.03,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=!sm&&Math.random()<.35+G.i*.1?.12:Math.max(.45,1.5-G.i*.3)+Math.random()*.6;tone(520,.18,.05,'sine',760)}}
   if(s.land)s.land=Math.max(0,s.land-dt);
   p=body(s);const d=Math.hypot(p.x-cx,p.y-cy),was=G.inRing;G.inRing=d<R*.95;
   if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/(1.5+G.i*.35);if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.charge=Math.max(0,G.charge-dt*.5)}
@@ -147,7 +148,7 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;reque
  if(G.sh&&p){const s=G.sh,c=CH[s.k],im=c.img,on=p.x>-80&&p.x<W+80&&p.hy<H+40&&p.fy>-40,ap=Math.min(1,(G.t-s.born)/.5);
   if(on&&im.complete&&im.naturalWidth){const gf=P3(s.b,s.d,0),ht=p.ht*1.12,wd=ht*im.naturalWidth/im.naturalHeight,up=Math.min(1,s.z/.5),sl=CAMH/Math.hypot(CAMH,s.d),rot=p.ang,ppm=p.ht/CHH,lt=.5+.7*TR.lum;
    // landing pad on the floor
-   ctx.save();ctx.translate(gf.x,gf.y);ctx.rotate(rot);ctx.globalAlpha=.5*ap;ctx.strokeStyle=c.c;ctx.lineWidth=2;ctx.setLineDash([5,7]);ctx.lineDashOffset=-G.t*14;const pr=.55*ppm;ctx.beginPath();ctx.ellipse(0,0,pr,pr*sl,0,0,7);ctx.stroke();ctx.restore();
+   ctx.save();ctx.translate(gf.x,gf.y);ctx.rotate(rot);ctx.globalAlpha=.5*ap;ctx.strokeStyle=c.c;ctx.lineWidth=2;ctx.setLineDash([5,7]);ctx.lineDashOffset=-G.t*14;const pr=.38*ppm;ctx.beginPath();ctx.ellipse(0,0,pr,pr*sl,0,0,7);ctx.stroke();ctx.restore();
    // shadows follow the room's light: a soft pool that widens and fades in the air, and a tight one where the feet touch
    blob(gf.x,gf.y,wd*(.46+up*.25),sl,rot,.34*ap*lt*(1-up*.6));blob(gf.x,gf.y,wd*.24,sl,rot,.5*ap*lt*(1-up));
    // the character: breathes, leans into hops, squashes on landing, stands upright in the room even when the phone is tilted
