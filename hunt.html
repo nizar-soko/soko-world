@@ -128,7 +128,7 @@ let last=performance.now();
 function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;requestAnimationFrame(loop);
  if(V.gyro){const q=samp(now-Math.max(0,TR.L-.03)*1000),e=Math.min(1,dt*35);V.yaw=wrap(V.yaw+wrap(q.uy-V.yaw)*e);V.pitch+=(q.p-V.pitch)*e;V.roll+=wrap(q.r-V.roll)*e}
  else{V.yaw=wrap(V.yaw+wrap(V.ty-V.yaw)*Math.min(1,dt*12));V.pitch+=(V.tp-V.pitch)*Math.min(1,dt*12)}
- ctx.clearRect(0,0,W,H);const cx=W/2,cy=H*.45,R=Math.min(W,H)*.17,k=KK();
+ ctx.clearRect(0,0,W,H);const cx=W/2,cy=H*.45,R=Math.min(W,H)*.185,k=KK();
  if(G.on&&!G.cal)floor();
  if(TR.poll){const ct=cam.currentTime;if(ct!==TR.ct){TR.ct=ct;TR.nf=true}}if(TR.nf){TR.nf=false;track(now)}
  {const lk=Math.exp(-dt/.6),e=Math.min(1,dt*20);TR.rx*=lk;TR.ry*=lk;TR.ax+=(TR.rx-TR.ax)*e;TR.ay+=(TR.ry-TR.ay)*e}
@@ -139,19 +139,19 @@ function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;reque
   if(s.hop){const h=s.hop;h.t+=dt/h.dur;const e=Math.min(1,h.t),ee=e<.5?2*e*e:1-Math.pow(-2*e+2,2)/2;s.b=wrap(h.b0+wrap(h.b1-h.b0)*ee);s.d=h.d0+(h.d1-h.d0)*ee;s.z=Math.sin(e*Math.PI)*h.lift;if(e>=1){s.hop=null;s.z=0;s.land=.22;{const q=body(s);if(!q.back)for(let i=0;i<7;i++)G.parts.push({x:q.fx+(i-3)*5,y:q.fy,vx:(i-3)*.45,vy:.5+Math.random()*.4,l:.45,c:'#f9f0f0'})}tone(180,.12,.06,'sine',110);buzz(8)}}
   else{ // never still: drifts when left alone, runs from the ring as it closes in, changes its distance, and jukes
    const db=wrap(s.b-V.yaw),near=vis?Math.max(0,1-Math.abs(db)/24):0;if(Math.random()<dt*.5)s.wd=-s.wd;
-   const away=Math.abs(db)<1.5?s.wd:(db>0?1:-1),sprint=s.tired>0?.3:1,vt=near>0?away*(12+(44+G.i*10)*HD*near)*sprint:s.wd*12;
+   const away=Math.abs(db)<1.5?s.wd:(db>0?1:-1),sprint=s.tired>0?.3:1,vt=near>0?away*(12+(31+G.i*7)*HD*near)*sprint:s.wd*12;
    // it runs out of breath after a long sprint: that short pant is your opening
-   if(s.tired>0){s.tired-=dt;if(s.tired<=0)s.st=1}else if(Math.abs(s.vb)>26){s.st-=dt/(1.5+G.i*.15);if(s.st<=0){s.tired=1.0-G.i*.12;tone(240,.2,.04,'sine',170)}}else s.st=Math.min(1,s.st+dt*.4);
+   if(s.tired>0){s.tired-=dt;if(s.tired<=0)s.st=1}else if(Math.abs(s.vb)>26){s.st-=dt/(1.25+G.i*.15);if(s.st<=0){s.tired=1.2-G.i*.12;tone(240,.2,.04,'sine',170)}}else s.st=Math.min(1,s.st+dt*.4);
    s.vb+=(vt-s.vb)*Math.min(1,dt*6);s.b=wrap(s.b+s.vb*dt);if(Math.abs(s.vb)>4)s.face=s.vb>0?1:-1;
    s.d=Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+Math.sin(G.t*1.1+s.ph)*.45*dt*(near>0?1.6:1)));
    s.z=Math.abs(Math.sin(G.t*15+s.ph))*.035*Math.min(1,Math.abs(s.vb)/30);
-   if(vis&&G.inRing){s.dT-=dt;const ch=G.charge;if(!s.tell&&s.tired<=0&&(s.dT<=0||(ch>.45&&s.fled<1)||(ch>.78&&s.fled<2))){if(ch>.45)s.fled=ch>.78?2:1;s.tell=.2;tone(900,.08,.04,'triangle')}}
+   if(vis&&G.inRing){s.dT-=dt;const ch=G.charge;if(!s.tell&&s.tired<=0&&(s.dT<=0||(ch>.5&&s.fled<1)||(G.i>1&&ch>.8&&s.fled<2))){if(ch>.5)s.fled=ch>.8?2:1;s.tell=.2;tone(900,.08,.04,'triangle')}}
    else if(vis&&!s.tell){s.wT-=dt;if(s.wT<=0){s.wT=.9+Math.random()*1.2;s.small=true;s.tell=.16}}}
   if(!vis){s.tell=0;s.dT=.6}if(G.charge<.1)s.fled=0;
-  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const sm=s.small;s.small=false;if(!sm&&Math.random()<.22){s.dT=.25+Math.random()*.3}else{const run=s.vb>0?1:-1,dir=sm?(Math.random()<.5?-1:1):(Math.random()<.6?-run:run),jump=sm?9+Math.random()*8:(24+G.i*4)*(.85+Math.random()*.6);s.face=dir;s.vb=dir*30;s.wd=dir;s.hop={t:0,dur:sm?.26:.3-G.i*.025,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=!sm&&Math.random()<.4+G.i*.05?.1:Math.max(.5,1.1-G.i*.15)+Math.random()*.5;tone(520,.18,.05,'sine',760)}}}
+  if(s.tell){s.tell-=dt;if(s.tell<=0){s.tell=0;const sm=s.small;s.small=false;if(!sm&&Math.random()<.15){s.dT=.25+Math.random()*.3}else{const run=s.vb>0?1:-1,dir=sm?(Math.random()<.5?-1:1):(Math.random()<.6?-run:run),jump=sm?9+Math.random()*8:(20+G.i*4)*(.85+Math.random()*.6);s.face=dir;s.vb=dir*30;s.wd=dir;s.hop={t:0,dur:sm?.26:.3-G.i*.025,b0:s.b,b1:wrap(s.b+dir*jump),d0:s.d,d1:Math.max(G.dmin||1.8,Math.min(G.dmax||3.6,s.d+(Math.random()-.5)*1.2)),lift:.38+Math.random()*.15};s.dT=!sm&&Math.random()<.25+G.i*.05?.1:Math.max(.6,1.3-G.i*.15)+Math.random()*.6;tone(520,.18,.05,'sine',760)}}}
   if(s.land)s.land=Math.max(0,s.land-dt);
   p=body(s);const d=Math.hypot(p.x-cx,p.y-cy),was=G.inRing;G.inRing=d<R*.95;
-  if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/(1.6+G.i*.2);if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.charge=Math.max(0,G.charge-dt*.7*HD)}
+  if(G.inRing){if(!was){tone(520,.12,.05);if(!G.seen){G.seen=true;hint(T.hold)}}G.charge+=dt/(1.6+G.i*.2);if(Math.random()<dt*14)buzz(6)}else{if(was&&G.charge>.15){hint(T.slip);tone(300,.25,.05,'sine',180)}G.charge=Math.max(0,G.charge-dt*.55*HD)}
   if(G.charge>=1){caught();p=null}}
  // character standing on the floor
  if(G.sh&&p){const s=G.sh,c=CH[s.k],im=c.img,on=p.x>-80&&p.x<W+80&&p.hy<H+40&&p.fy>-40,ap=Math.min(1,(G.t-s.born)/.5);
